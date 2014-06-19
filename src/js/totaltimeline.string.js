@@ -10,4 +10,5 @@ iddqd.ns('totaltimeline.string',{
 	,mousemove: 'mousemove'
 	,mousedown: 'mousedown'
 	,mouseup: 'mouseup'
+	,drag: 'drag'
 });

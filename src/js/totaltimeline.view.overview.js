@@ -17,7 +17,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,fRangeStart
 		,bOver = false
 		,iMouseXOffset = 0
-		,bMouseDown = false
+		,bRangeMouseDown = false
 	;
 
 	function init(span,range){
@@ -30,11 +30,11 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mSpan.appendChild(mRange);
 		//
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
-			mSpan.addEventListener(event,handleSpanMouseMove,false);
+			mSpan.addEventListener(event,handleSpanMouse,false);
 		});
-		mRange.addEventListener(s.mousedown,handleMouseClick,false);
+		mRange.addEventListener(s.mousedown,handleRangeMouseClick,false);
 		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
-		mBody.addEventListener(s.mouseup,handleMouseClick,false);
+		mBody.addEventListener(s.mouseup,handleRangeMouseClick,false);
 		signals.mousewheel.add(handleWheel);
 		signals.keypress.add(iddqd.fn).detach();
 		oRange.change.add(handleRangeChange);
@@ -46,26 +46,45 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
 	}
 
-	function handleSpanMouseMove(e){
+	/**
+	 * Handles mouse events on mSpan to see when the mouse is inside mSpan.
+	 * @param e
+	 */
+	function handleSpanMouse(e){
 		bOver = e.type!==s.mouseout;
 	}
 
+	/**
+	 * Handles click event. Determines when the mouse is down and stores the offset with mSpan.
+	 * @param e
+	 */
+	function handleRangeMouseClick(e){
+		bRangeMouseDown = e.type===s.mousedown;
+		if (bRangeMouseDown) iMouseXOffset = e.offsetX;
+	}
+
+	/**
+	 * Handles move event and moves mRange if the mouse is down.
+	 * @param e
+	 */
 	function handleBodyMouseMove(e){
-		bMouseDown&&rangeMove(e.clientX);
+		bRangeMouseDown&&rangeMove(e.clientX);
 	}
 
-	function handleMouseClick(e){
-		bMouseDown = e.type===s.mousedown;
-		if (bMouseDown) iMouseXOffset = e.offsetX;
-	}
-
+	/**
+	 * Handles the wheel event to zoom or move mRange.
+	 * @param direction
+	 */
 	function handleWheel(direction){
 		if (bOver) {
 			if (keys[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);
-			else rangeChange(direction>0);
+			else rangeZoom(direction>0);
 		}
 	}
 
+	/**
+	 * Changes view to reflect changes in the 'range' object.
+	 */
 	function handleRangeChange(){
 		fRangeWidth = oRange.duration/oSpan.duration;
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
@@ -75,7 +94,11 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mRange.setAttribute(s.dataAfter,oRange.end.toString());
 	}
 
-	function rangeChange(plusmin){
+	/**
+	 * Zooms the 'range' object.
+	 * @param plusmin
+	 */
+	function rangeZoom(plusmin){
 		var fRangeGrowRate = 0.01111*oSpan.duration<<0
 			,iStart = oRange.start.ago
 			,iEnd = oRange.end.ago
@@ -92,6 +115,10 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		oRange.end.set(iNewEnd);
 	}
 
+	/**
+	 * Moves the 'range' object.
+	 * @param x
+	 */
 	function rangeMove(x){
 		var iSpanWidth = mSpan.offsetWidth
 			,iRangeWidth = mRange.offsetWidth
@@ -101,6 +128,11 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		oRange.moveStart(iNewStart);
 	}
 
+	/**
+	 * Turns a floating point into a percentage.
+	 * @param float
+	 * @returns {string}
+	 */
 	function getPercentage(float){
 		return 100*float+'%';
 	}

@@ -6,6 +6,7 @@
 				"src/iddqd.js"
 				,"src/iddqd.math.color.js"
 				,"src/iddqd.math.vector.js"
+				,"src/iddqd.math.prng.js"
 				,"src/iddqd.internal.js"
 				,"src/iddqd.internal.native.string.js"
 				,"src/iddqd.network.xhttp.js"

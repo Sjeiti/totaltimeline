@@ -12,5 +12,5 @@ iddqd.ns('totaltimeline.time.event',	function(moment,info){
 		toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}
 		,moment: moment
 		,info: info
-	}
+	};
 });

@@ -11,5 +11,5 @@ iddqd.ns('totaltimeline.time.eventInfo',	function(name,explanation,importance,ex
 		,link: link
 		,remark: remark
 		,accuracy: accuracy
-	}
+	};
 });

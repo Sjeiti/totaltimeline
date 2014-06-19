@@ -1,0 +1,26 @@
+{
+	"name": "totaltimeline",
+  	"description": "Total Timeline",
+	"version": "0.0.1",
+	"repository": "https://xp-dev.com/git/totaltimeline",
+	"dependencies": {
+		"load-grunt-tasks": "~0.4.0",
+		"time-grunt": "~0.3.1",
+		"grunt": "~0.4.2",
+		"grunt-contrib-jshint": "~0.8.0",
+		"grunt-contrib-copy": "~0.4.1",
+		"grunt-contrib-clean": "~0.5.0",
+		"grunt-contrib-less": "~0.8.3",
+		"grunt-contrib-concat": "~0.3.0",
+		"grunt-contrib-uglify": "~0.2.7",
+		"grunt-contrib-rename": "0.0.3",
+		"grunt-google-cdn": "~0.2.0",
+    	"google-cdn-data": "~0.1.2",
+		"grunt-usemin": "~2.1.1",
+		"glob": "~3.2.7",
+    	"node-zip": "~1.1.0",
+    	"grunt-bower-install": "~1.4.0",
+		"grunt-version-git": "~0.1.5",
+		"grunt-include-file": "~0.1.1"
+	}
+}

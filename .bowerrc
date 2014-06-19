@@ -1,0 +1,23 @@
+{
+    "directory": "src/vendor"
+	,"overrides": {
+		"iddqd": {
+			"main":[
+				"src/iddqd.js"
+				,"src/iddqd.math.color.js"
+				,"src/iddqd.math.vector.js"
+				,"src/iddqd.internal.js"
+				,"src/iddqd.internal.native.string.js"
+				,"src/iddqd.network.xhttp.js"
+				,"src/iddqd.image.js"
+				,"src/iddqd.style.js"
+				,"src/iddqd.capabilities.js"
+				,"src/iddqd.signals.js"
+				,"src/iddqd.animate.js"
+			]
+		}
+		,"devicejs": {
+			"main": ["lib/device.min.js"]
+		}
+	}
+}

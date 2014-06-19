@@ -9,60 +9,43 @@ iddqd.ns('totaltimeline',(function(iddqd){
 	'use strict';
 
 	var totaltimeline = {
-			YEAR_NOW: (new Date).getFullYear()
+			YEAR_NOW: (new Date()).getFullYear()
 			,UNIVERSE: 13798000000
 		}
+		// namespaces
 		,moment,range,event,period,eventInfo
-		,oRangeOverview;
+		// ranges
+		,oSpan
+		,oRange
+	;
 
 	iddqd.onDOMReady(init);
 
 	function init(){
-		moment = totaltimeline.time.moment;
-		range = totaltimeline.time.range;
-		event = totaltimeline.time.event;
-		period = totaltimeline.time.period;
-		eventInfo = totaltimeline.time.eventInfo;
-
-//		var oBegin = event(
-//			moment(13798000000)
-//			,eventInfo('Big bang')
-//		);
-//		var oNow = event(
-//			moment(0)
-//			,eventInfo('Now')
-//		);
-//		var oBirth = event(
-//			moment(1974,moment.YEAR)
-//			,eventInfo('Birth')
-//		);
-//		console.log('oBegin',''+oBegin,oBegin); // log
-//		console.log('oNow',''+oNow,oNow); // log
-//		console.log('oBirth',''+oBirth,oBirth); // log
-//		for (var i=0,l=10;i<l;i++) {
-//			var year = Math.random()*Math.pow(5,i)<<0;
-//			console.log('moment('+year+').toString()',moment(year).toString()); // log
-//		}
-
+		// normalise namespaces
+		var time = totaltimeline.time;
+		moment = time.moment;
+		range = time.range;
+		event = time.event;
+		period = time.period;
+		eventInfo = time.eventInfo;
+		//
 		initModel();
 		initView();
 	}
 
 	function initModel(){
-		totaltimeline.start = moment(13798000000);
-		totaltimeline.end = moment(0);
-		oRangeOverview = range(moment(5.3E9),moment(4.3E8));
+		// async get timeline data
+		// range data
+		totaltimeline.start = moment(totaltimeline.UNIVERSE); //?
+		totaltimeline.end = moment(0); //?
+		oSpan = range(moment(totaltimeline.UNIVERSE),moment(0));
+		oRange = range(moment(5.3E9),moment(4.3E8));
 	}
 
 	function initView(){
-		totaltimeline.view.overview(
-			range(moment(13798000000),moment(0))
-//			,range(moment(13798000000-10),moment(10))
-			,oRangeOverview
-		);
-		totaltimeline.view.timeline(
-			oRangeOverview
-		);
+		totaltimeline.view.overview(oSpan,oRange);
+		totaltimeline.view.timeline(oRange);
 	}
 
 	return totaltimeline;

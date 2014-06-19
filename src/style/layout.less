@@ -67,12 +67,18 @@ footer {
 	}
 		.range {
 			.lt;
+			z-index: 1;
 			.size(100%);
-			background-color: fade(red,30%);
+			background-color: #a2c937;
+			overflow: hidden;
+			&:before, &:after {
+				background-color: inherit;
+			}
 		}
 		.show-range {
 			&:before, &:after {
 				font: bold .75rem/1rem Arial, Verdana;
+				white-space: nowrap;
 			}
 			&:before { .lt; }
 			&:after { .rt; }

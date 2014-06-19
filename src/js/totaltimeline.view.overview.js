@@ -21,14 +21,33 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	;
 
 	function init(span,range){
+		initVariables(span,range);
+		initEvents();
+		initView();
+	}
+
+	/**
+	 * Initialise Variables
+	 * @param span
+	 * @param range
+	 */
+	function initVariables(span,range){
+		// span and range
 		oSpan = span;
 		oRange = range;
-		//
+		// view elements
 		mBody = document.body;
 		mSpan = document.getElementById('overview');
 		mRange = zen('div.range.show-range').pop();
-		mSpan.appendChild(mRange);
-		//
+		// init and detach keypress so keys exist
+		signals.keypress.add(iddqd.fn).detach();
+		keys = signals.keypress.keys;
+	}
+
+	/**
+	 * Initialise event listeners (and signals).
+	 */
+	function initEvents(){
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
 			mSpan.addEventListener(event,handleSpanMouse,false);
 		});
@@ -36,14 +55,17 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
 		mBody.addEventListener(s.mouseup,handleRangeMouseClick,false);
 		signals.mousewheel.add(handleWheel);
-		signals.keypress.add(iddqd.fn).detach();
 		oRange.change.add(handleRangeChange);
-		//
-		keys = signals.keypress.keys;
-		handleRangeChange();
-		//
+	}
+
+	/**
+	 * Initialise view changes
+	 */
+	function initView(){
+		mSpan.appendChild(mRange);
 		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
 		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
+		handleRangeChange();
 	}
 
 	/**
@@ -73,12 +95,13 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 
 	/**
 	 * Handles the wheel event to zoom or move mRange.
-	 * @param direction
+	 * @param {number} direction Corresponds to wheelDelta
+	 * @param {WheelEvent} e
 	 */
-	function handleWheel(direction){
+	function handleWheel(direction,e){
 		if (bOver) {
 			if (keys[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);
-			else rangeZoom(direction>0);
+			else rangeZoom(direction>0,e.clientX);
 		}
 	}
 
@@ -95,15 +118,25 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	}
 
 	/**
-	 * Zooms the 'range' object.
-	 * @param plusmin
+	 * Zooms the 'range' object relative to the duration of the 'span' object and accounting for the mouse position relative to the mSpan element.
+	 * @param {boolean} plusmin Zoom in or out.
+	 * @param {number} mouseX Mouse offset
 	 */
-	function rangeZoom(plusmin){
+	function rangeZoom(plusmin,mouseX){
 		var fRangeGrowRate = 0.01111*oSpan.duration<<0
 			,iStart = oRange.start.ago
 			,iEnd = oRange.end.ago
-			,iNewStart = iStart + (plusmin?fRangeGrowRate:-fRangeGrowRate)
-			,iNewEnd = iEnd + (plusmin?-fRangeGrowRate:fRangeGrowRate)
+			// offset calculations
+			,iRangeL = mRange.offsetLeft
+			,iRangeR = iRangeL+mRange.offsetWidth
+			,iDeltaL = iRangeL-mouseX
+			,iDeltaR = mouseX-iRangeR
+			,iDeltaTotal = Math.abs(iDeltaL) + Math.abs(iDeltaR)
+			,fDeltaL = iDeltaL/iDeltaTotal
+			,fDeltaR = iDeltaR/iDeltaTotal
+			// new positions
+			,iNewStart = iStart + fDeltaL*(plusmin?fRangeGrowRate:-fRangeGrowRate)
+			,iNewEnd = iEnd + fDeltaR*(plusmin?-fRangeGrowRate:fRangeGrowRate)
 		;
 		if (iNewEnd<0) iNewEnd = 0;
 		if (iNewStart>totaltimeline.UNIVERSE) iNewStart = totaltimeline.UNIVERSE;
@@ -117,7 +150,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 
 	/**
 	 * Moves the 'range' object.
-	 * @param x
+	 * @param {number} x The amount of pixels to move.
 	 */
 	function rangeMove(x){
 		var iSpanWidth = mSpan.offsetWidth

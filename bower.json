@@ -1,0 +1,11 @@
+{
+  "name": "totaltimeline",
+  "version": "0.0.1",
+  "dependencies": {
+    "es5-shim": "*",
+    "signals": "~1.0.0",
+    "iddqd": "git://github.com/Sjeiti/iddqd.git",
+    "zen": "git://github.com/Sjeiti/zen.git",
+    "hammerjs": "*"
+  }
+}

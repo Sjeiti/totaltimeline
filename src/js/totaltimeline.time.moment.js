@@ -1,4 +1,5 @@
 /**
+ * A single moment in time
  * @name moment
  * @namespace totaltimeline.time
  */
@@ -6,13 +7,11 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 	'use strict';
 
 	// todo: refactor
-	var YEAR_NOW = totaltimeline.YEAR_NOW
-		,UNIVERSE = totaltimeline.UNIVERSE;
+	var time = totaltimeline.time;
 
 	/**
-	 *
-	 * @param value
-	 * @param type
+	 * @param {number} value The time value.
+	 * @param {string} [type=moment.AGO] Denotes what type of value is parsed: moment.AGO, moment.SINCE or moment.YEAR.
 	 */
 	function moment(value,type){
 		var iAgo
@@ -60,12 +59,12 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 	}
 
 	// todo: refactor
-	function agoToYear(value){		return YEAR_NOW-value; }
-	function agoToSince(value){		return UNIVERSE-value; }
-	function yearToAgo(value){		return YEAR_NOW-value; }
-	function yearToSince(value){	return UNIVERSE-value; }
-	function sinceToAgo(value){		return UNIVERSE-value; }
-	function sinceToYear(value){	return YEAR_NOW-(UNIVERSE-value); }
+	function agoToYear(value){		return time.YEAR_NOW-value; }
+	function agoToSince(value){		return time.UNIVERSE-value; }
+	function yearToAgo(value){		return time.YEAR_NOW-value; }
+	function yearToSince(value){	return time.UNIVERSE-value; }
+	function sinceToAgo(value){		return time.UNIVERSE-value; }
+	function sinceToYear(value){	return time.YEAR_NOW-(time.UNIVERSE-value); }
 
 	/**
 	 * Textual representation of annum.
@@ -77,16 +76,17 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 	 * @returns {string}
 	 */
 	function formatAnnum(year,round){
+		// todo: rounding sometimes off: split at . truncate and join
 		var sReturn;
 		if (year>4000) {
-			var i = year;
+			//var i = year;
 			if (round===undefined) round = 0;
 			var aSizes = [' a',' ka',' Ma',' Ga'];
-			for (i = 0; year>1000 && (aSizes.length>=(i + 2)); i++) year /= 1000;
+			for (var i = 0; year>1000 && (aSizes.length>=(i + 2)); i++) year /= 1000;
 			var iMult = Math.pow(10,round);
 			sReturn = (Math.round(year * iMult) / iMult) + aSizes[i];
 		} else {
-			year = YEAR_NOW-year;
+			year = time.YEAR_NOW-year;
 			sReturn = Math.abs(year) + (year<0?' BC':(year<1500?' AD':''));
 		}
 		return sReturn;

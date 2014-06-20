@@ -9,6 +9,7 @@
 				,"src/iddqd.math.prng.js"
 				,"src/iddqd.internal.js"
 				,"src/iddqd.internal.native.string.js"
+				,"src/iddqd.network.jsonp.js"
 				,"src/iddqd.network.xhttp.js"
 				,"src/iddqd.image.js"
 				,"src/iddqd.style.js"

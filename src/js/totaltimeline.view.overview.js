@@ -6,6 +6,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	'use strict';
 
 	var s = totaltimeline.string
+		,time = totaltimeline.time
+		,model
 		,signals = iddqd.signals
 		,keys
 		,oSpan
@@ -20,21 +22,21 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,bRangeMouseDown = false
 	;
 
-	function init(span,range){
-		initVariables(span,range);
+	function init(model){
+		initVariables(model);
 		initEvents();
 		initView();
 	}
 
 	/**
 	 * Initialise Variables
-	 * @param span
-	 * @param range
+	 * @param {model} _model
 	 */
-	function initVariables(span,range){
+	function initVariables(_model){
 		// span and range
-		oSpan = span;
-		oRange = range;
+		model = _model;
+		oSpan = model.span;
+		oRange = model.range;
 		// view elements
 		mBody = document.body;
 		mSpan = document.getElementById('overview');
@@ -96,7 +98,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	/**
 	 * Handles the wheel event to zoom or move mRange.
 	 * @param {number} direction Corresponds to wheelDelta
-	 * @param {WheelEvent} e
+	 * @param {Event} e The WheelEvent
 	 */
 	function handleWheel(direction,e){
 		if (bOver) {
@@ -111,18 +113,18 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function handleRangeChange(){
 		fRangeWidth = oRange.duration/oSpan.duration;
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
-		mRange.style.width = getPercentage(fRangeWidth);
-		mRange.style.left = getPercentage(fRangeStart);
+		mRange.style.width = s.getPercentage(fRangeWidth);
+		mRange.style.left = s.getPercentage(fRangeStart);
 		mRange.setAttribute(s.dataBefore,oRange.start.toString());
 		mRange.setAttribute(s.dataAfter,oRange.end.toString());
 	}
 
 	/**
 	 * Zooms the 'range' object relative to the duration of the 'span' object and accounting for the mouse position relative to the mSpan element.
-	 * @param {boolean} plusmin Zoom in or out.
+	 * @param {boolean} zoomin Zoom in or out.
 	 * @param {number} mouseX Mouse offset
 	 */
-	function rangeZoom(plusmin,mouseX){
+	function rangeZoom(zoomin,mouseX){
 		var fRangeGrowRate = 0.01111*oSpan.duration<<0
 			,iStart = oRange.start.ago
 			,iEnd = oRange.end.ago
@@ -135,11 +137,24 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 			,fDeltaL = iDeltaL/iDeltaTotal
 			,fDeltaR = iDeltaR/iDeltaTotal
 			// new positions
-			,iNewStart = iStart + fDeltaL*(plusmin?fRangeGrowRate:-fRangeGrowRate)
-			,iNewEnd = iEnd + fDeltaR*(plusmin?-fRangeGrowRate:fRangeGrowRate)
+			,iNewStart
+			,iNewEnd
 		;
+		if (!zoomin) {
+			if (iStart===time.UNIVERSE) {
+				fDeltaL = 0;
+				fDeltaR = -1;
+			}
+			if (iEnd===0) {
+				fDeltaL = -1;
+				fDeltaR = 0;
+			}
+		}
+		iNewStart = iStart + fDeltaL*(zoomin?fRangeGrowRate:-fRangeGrowRate);
+		iNewEnd = iEnd + fDeltaR*(zoomin?-fRangeGrowRate:fRangeGrowRate);
+		//
 		if (iNewEnd<0) iNewEnd = 0;
-		if (iNewStart>totaltimeline.UNIVERSE) iNewStart = totaltimeline.UNIVERSE;
+		if (iNewStart>time.UNIVERSE) iNewStart = time.UNIVERSE;
 		if (iNewEnd>iNewStart) {
 			iNewStart = iStart;
 			iNewEnd = iEnd;
@@ -153,21 +168,13 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * @param {number} x The amount of pixels to move.
 	 */
 	function rangeMove(x){
+		// todo: check max and min
 		var iSpanWidth = mSpan.offsetWidth
 			,iRangeWidth = mRange.offsetWidth
 			,iNewLeft = Math.min(Math.max(x-iMouseXOffset,0),iSpanWidth-iRangeWidth)
 			,fPartLeft = iNewLeft/iSpanWidth
 			,iNewStart = oSpan.duration - Math.floor(fPartLeft*oSpan.duration);
 		oRange.moveStart(iNewStart);
-	}
-
-	/**
-	 * Turns a floating point into a percentage.
-	 * @param float
-	 * @returns {string}
-	 */
-	function getPercentage(float){
-		return 100*float+'%';
 	}
 
 	return init;

@@ -1,8 +1,8 @@
 /**
  * @name range
  * @namespace totaltimeline.time
- * @param start {moment}
- * @param end {moment}
+ * @param {moment} start
+ * @param {moment} end
  */
 iddqd.ns('totaltimeline.time.range',function(start,end){
 	'use strict';
@@ -17,15 +17,26 @@ iddqd.ns('totaltimeline.time.range',function(start,end){
 	;
 	start.change.add(handleChange);
 	end.change.add(handleChange);
+
+	/**
+	 * Handles change in either start- or end moment by recalculating duration.
+	 * @fires Change signal.
+	 */
 	function handleChange(){
 		oReturn.duration = start.ago-end.ago;
 		change.dispatch();
 	}
+
+	/**
+	 * Moves the range by setting the start moment. End moment is recalculated.
+	 * @param {number} ago
+	 * @fires Change signal.
+	 */
 	function moveStart(ago) {
-//		console.log('ago',ago); // log
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
 		change.dispatch();
 	}
+
 	return oReturn;
 });

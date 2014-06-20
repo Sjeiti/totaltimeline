@@ -2,7 +2,17 @@
  * @name eventInfo
  * @namespace totaltimeline.time
  */
-iddqd.ns('totaltimeline.time.eventInfo',	function(name,explanation,importance,example,link,remark,accuracy){
+iddqd.ns('totaltimeline.time.eventInfo',function(
+	name
+	,explanation
+	,importance
+	,example
+	,link
+	,remark
+	,accuracy
+	,icon
+){
+	'use strict';
 	return {
 		name: name
 		,explanation: explanation
@@ -11,5 +21,6 @@ iddqd.ns('totaltimeline.time.eventInfo',	function(name,explanation,importance,ex
 		,link: link
 		,remark: remark
 		,accuracy: accuracy
+		,icon: icon
 	};
 });

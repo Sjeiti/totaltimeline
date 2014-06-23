@@ -4,17 +4,24 @@
  * @param {moment} start
  * @param {moment} end
  */
-iddqd.ns('totaltimeline.time.range',function(start,end){
+iddqd.ns('totaltimeline.time.range',function range(start,end){
 	'use strict';
-	var change = new signals.Signal()
-		,oReturn = {
+	var time = totaltimeline.time
+		,period = time.period
+		,moment = time.moment
+		,change = new signals.Signal()
+		,oReturn = iddqd.factory(range,{
 			start: start
 			,end: end
 			,duration: start.ago-end.ago
 			,change: change
 			,moveStart: moveStart
-		}
+			,inside: inside
+			,surrounds: surrounds
+			,proto: range
+		})
 	;
+	// todo: check if start > end
 	start.change.add(handleChange);
 	end.change.add(handleChange);
 
@@ -36,6 +43,26 @@ iddqd.ns('totaltimeline.time.range',function(start,end){
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
 		change.dispatch();
+	}
+
+	function inside(rangeOrMoment) {
+		if (rangeOrMoment.hasOwnProperty('range')) rangeOrMoment = rangeOrMoment.range;
+		var bStart = start.ago<=rangeOrMoment.start.ago
+			,bEnd = end.ago>=rangeOrMoment.end.ago
+		;
+		return bStart&&bEnd;
+	}
+
+	function surrounds(time) {
+		var oRange = time.factory===period?time.range:time
+			,bMoment = oRange.factory===moment
+			,iStart = bMoment?oRange.ago:oRange.start.ago
+			,iEnd = bMoment?iStart:oRange.end.ago
+		;
+		var bStart = start.ago>=iStart
+			,bEnd = end.ago<=iEnd
+		;
+		return bStart&&bEnd;
 	}
 
 	return oReturn;

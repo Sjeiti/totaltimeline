@@ -9,9 +9,11 @@ iddqd.ns('totaltimeline.model',(function(){
 		,moment = time.moment
 		,range = time.range
 		,event = time.event
-		//,period = time.period
+		,period = time.period
 		,eventInfo = time.eventInfo
 		//
+		,sPrefix = 'gsx$'
+		,sPropprop = '$t'
 		// see: https://developers.google.com/gdata/samples/spreadsheet_sample
 		// see: https://developers.google.com/google-apps/spreadsheets/
 		//,sSpreadsheetKey = '0AgLsBMvUgAW8dE1ZRDJUOVliVnFwNE9DcGRmNHRIbWc'
@@ -19,7 +21,8 @@ iddqd.ns('totaltimeline.model',(function(){
 		,sSpreadsheetKey = '0AgLsBMvUgAW8dEZBWkNXYkRrQ09IVHBrV0NUNTVsTHc'
 		//,sSpreadsheetUri = 'http://spreadsheets.google.com/tq?key='+sSpreadsheetKey
 		//,sSpreadsheetUri = 'https://spreadsheets.google.com/feeds/list/key/od6/public/basic?alt=rss'.replace(/key/,sSpreadsheetKey)
-		,sSpreadsheetUri = 'https://spreadsheets.google.com/feeds/list/key/od6/public/values?alt=json-in-script'.replace(/key/,sSpreadsheetKey)
+		,sSpreadsheetEventsUri = 'https://spreadsheets.google.com/feeds/list/key/od6/public/values?alt=json-in-script'.replace(/key/,sSpreadsheetKey)
+		,sSpreadsheetPeriodsUri = 'https://spreadsheets.google.com/feeds/list/key/od7/public/values?alt=json-in-script'.replace(/key/,sSpreadsheetKey)
 		//
 		,oSpan = range(moment(time.UNIVERSE),moment(time.NOW))
 		//,oRange = range(moment(5.3E9),moment(4.3E8))
@@ -30,6 +33,14 @@ iddqd.ns('totaltimeline.model',(function(){
 
 	function init(){
 		getTimelineEvents(handleTimelineEvents);
+//		var a = range(moment(10),moment(0))
+//			,b = moment(5)
+//			,c = range(moment(8),moment(2))
+//		;
+//		console.log('a.start.toString()',a.start.toString()); // log
+//		console.log('a.end.toString()',a.end.toString()); // log
+//		console.log('a.surrounds(b)',a.surrounds(b)); // log
+//		console.log('a.surrounds(c)',a.surrounds(c)); // log
 	}
 
 	function getTimelineEvents(callback){
@@ -40,8 +51,16 @@ iddqd.ns('totaltimeline.model',(function(){
 				delete window.rvjsonp2223;
 			});
 		} else {
-			iddqd.network.jsonp(sSpreadsheetUri,callback);
+			iddqd.network.jsonp(sSpreadsheetEventsUri,callback);
+			iddqd.network.jsonp(sSpreadsheetPeriodsUri,handleTimelinePeriods);
 		}
+	}
+
+	function getProp(entry,prop,int){
+		var sProp = entry[sPrefix+prop]
+			,sValue = sProp?sProp[sPropprop]:'';
+		(sProp===undefined)&&console.warn(prop+' not present');
+		return int===true?parseInt(sValue,10):sValue;
 	}
 
 	/**
@@ -50,23 +69,14 @@ iddqd.ns('totaltimeline.model',(function(){
 	 */
 	function handleTimelineEvents(sheet){
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
-		var sPrefix = 'gsx$'
-			,sPropprop = '$t'
-			,aEntries = sheet.feed.entry
-		;
-		function getProp(entry,prop,int){
-			var sProp = entry[sPrefix+prop]
-				,sValue = sProp?sProp[sPropprop]:'';
-			(sProp===undefined)&&console.warn(prop+' not present');
-			return int===true?parseInt(sValue,10):sValue;
-		}
-		aEntries.forEach(function(entry){
+		sheet.feed.entry.forEach(function(entry){
 			var  iAgo =		getProp(entry,'ago',true)
 				,iSince =	getProp(entry,'since',true)
 				,iYear =	getProp(entry,'year',true)
 				,oMoment = iAgo?moment(iAgo):(iSince?moment(iSince,moment.SINCE):iYear&&moment(iYear,moment.YEAR))
+				,bExclude = getProp(entry,'exclude')==='1'
 			;
-			if (oMoment) {
+			if (oMoment&&!bExclude) {
 				aEvents.push(event(
 					oMoment
 					,eventInfo(
@@ -88,36 +98,29 @@ iddqd.ns('totaltimeline.model',(function(){
 		});
 		sgEventsLoaded.dispatch();
 	}
-	/*function handleTimelineEvents(data){
-		//var aCols = ['ago','since','year','event','example','exclude','importance','explanation','link','accuracy','time remark'];
-		data.table.rows.forEach(function(row){
-			var rowc = row.c
-				,oAgo = rowc[0]
-				,oSince = rowc[1]
-				,oYear = rowc[2]
-				,oMoment = oAgo?moment(oAgo.v):(oSince?moment(oSince.v,moment.SINCE):oYear&&moment(oYear.v,moment.YEAR))
+	function handleTimelinePeriods(sheet){
+		var aPeriods = [];
+		sheet.feed.entry.forEach(function(entry){
+			var iFrom = getProp(entry,'from',true)
+				,iTo = getProp(entry,'to',true)
+				,sName = getProp(entry,'name')
 			;
-			if (oMoment) {
-				aEvents.push(event(
-					oMoment
-					,eventInfo(
-						 rowc[3]&&rowc[3].v		// name
-						,rowc[7]&&rowc[7].v		// explanation
-						,rowc[6]&&rowc[6].v		// importance
-						,rowc[4]&&rowc[4].v		// example
-						,rowc[8]&&rowc[8].v		// link
-						,rowc[10]&&rowc[10].v	// remark
-						,rowc[9]&&rowc[9].v		// accuracy
-					)
+			if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
+				aPeriods.push(period(
+					range(moment(iFrom),moment(iTo))
+					,eventInfo(sName)
 				));
 			}
 		});
-		// sort events by ago
-		aEvents.sort(function(eventA,eventB){
-			return eventA.moment.ago>eventB.moment.ago?-1:1;
+		//
+		aPeriods.forEach(function(period1){
+			aPeriods.forEach(function(period2){
+				if (period1!==period2&&period1.surrounds(period2)) {
+					console.log(period1.info.name+' surrounds '+period2.info.name);
+				}
+			});
 		});
-		sgEventsLoaded.dispatch();
-	}*/
+	}
 
 	return iddqd.extend(init,{
 		span: oSpan

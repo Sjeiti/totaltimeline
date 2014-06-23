@@ -2,7 +2,7 @@
  * @name timeline
  * @namespace totaltimeline.view
  */
-iddqd.ns('totaltimeline.view.timeline',(function(iddqd){
+iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
@@ -63,4 +63,4 @@ iddqd.ns('totaltimeline.view.timeline',(function(iddqd){
 	}
 
 	return init;
-})(iddqd));
+})());

@@ -18,12 +18,12 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 			,iYear
 			,iSince
 			,change = new signals.Signal()
-			,oReturn = {
+			,oReturn = iddqd.factory(moment,{
 				toString: toString
 				,type:type
 				,set:set
 				,change:change
-			}
+			})
 		;
 		//
 		set(value);

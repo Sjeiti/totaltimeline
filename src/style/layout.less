@@ -62,19 +62,33 @@ footer {
 //			}
 //		}
 		.event {
-//			@pointSize: .8rem;
-			@pointSize: 32px;
+			@pointSize: .8rem;
+//			@pointSize: 32px;
 			.lt;
 			.size(@pointSize);
 			.transform(translateX(-.5*@pointSize));
 //			margin-left: -.5*@pointSize;
 //			.dim(@pointSize,2*@pointSize);
 			.border-radius(@pointSize/2);
-			background-color: orangered;
+			background-color: #c2c85d;
 			background-size: cover;
+			&:after {
+				content: '';
+				.rt(50%,50%);
+				.dim(0,3000%);
+				border-right: 1px dashed #a6bebe;
+			}
+			&:hover {
+			&:after {
+			border-color: red;
+			}
+			}
 			&[class^="event icon-"] {
 				background-color: transparent;
 				.border-radius(0);
+				@pointSize: 32px;
+				.size(@pointSize);
+				.transform(translateX(-.5*@pointSize));
 			}
 			&.icon-explode {	background-image: url('data:image/svg+xml;utf8,<svg version="1.1" id="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve"><polygon fill="none" stroke="#000000" stroke-miterlimit="10" points="10.355,11.034 6.445,2.877 13.602,7.75 16.026,1.861 18.765,7.766 29.011,3.269 23.496,11.794 27.681,14.728 23.927,17.113 29.832,22.236 20.642,20.711 20.563,26.46 16.535,22.393 13.328,28.611 11.607,21.298 2.3,28.22 9.3,16.683 2.104,11.755 "/></svg>'); }
 			&.icon-star {		background-image: url('data:image/svg+xml;utf8,<svg version="1.1" id="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve"><polygon fill="none" stroke="#000000" stroke-miterlimit="10" points="10.458,2.016 9.763,4.796 11.66,6.945 8.8,7.144 7.343,9.611 6.271,6.953 3.474,6.33 5.67,4.489 5.399,1.636 7.828,3.156 "/><polygon fill="none" stroke="#000000" stroke-miterlimit="10" points="24.888,5.425 27.2,8.175 30.777,7.829 28.876,10.878 30.312,14.173 26.822,13.308 24.133,15.69 23.878,12.106 20.781,10.284 24.11,8.935 "/><polygon fill="none" stroke="#000000" stroke-miterlimit="10" points="24.629,19.467 17.756,23.023 16.788,30.703 11.28,25.264 3.677,26.717 7.149,19.798 3.417,13.019 11.069,14.18 16.365,8.537 17.624,16.173 "/></svg>'); }

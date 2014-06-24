@@ -61,7 +61,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	}
 
 	/**
-	 * Initialise view changes
+	 * Initialise view
 	 */
 	function initView(){
 		mSpan.appendChild(mRange);

@@ -2,7 +2,7 @@
  * @name model
  * @namespace totaltimeline
  */
-iddqd.ns('totaltimeline.model',(function(){
+iddqd.ns('totaltimeline.model',(function(undefined){
 	'use strict';
 
 	var time = totaltimeline.time
@@ -28,7 +28,9 @@ iddqd.ns('totaltimeline.model',(function(){
 		//,oRange = range(moment(5.3E9),moment(4.3E8))
 		,oRange = range(moment(time.UNIVERSE),moment(time.NOW))
 		,aEvents = []
+		,aPeriods = []
 		,sgEventsLoaded = new signals.Signal()
+		,sgPeriodsLoaded = new signals.Signal()
 	;
 
 	function init(){
@@ -96,30 +98,44 @@ iddqd.ns('totaltimeline.model',(function(){
 		aEvents.sort(function(eventA,eventB){
 			return eventA.moment.ago>eventB.moment.ago?-1:1;
 		});
-		sgEventsLoaded.dispatch();
+		sgEventsLoaded.dispatch(aEvents);
 	}
 	function handleTimelinePeriods(sheet){
-		var aPeriods = [];
+		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',');
+		var iTimes = aTimes.length;
+		var aTime = [];
 		sheet.feed.entry.forEach(function(entry){
 			var iFrom = getProp(entry,'from',true)
 				,iTo = getProp(entry,'to',true)
 				,sName = getProp(entry,'name')
 			;
 			if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
-				aPeriods.push(period(
+				var oPeriod = period(
 					range(moment(iFrom),moment(iTo))
 					,eventInfo(sName)
-				));
+				);
+				for (var i=0;i<iTimes;i++) {
+					var sTimeName = aTimes[i]
+						,sTimeValue = getProp(entry,sTimeName)
+					;
+					if (sTimeValue!=='') {
+						aTime.length = i+1;
+						aTime[i] = oPeriod;
+					}
+				}
+				var iTime = aTime.length
+					,bInside = iTime>1
+					,oParentPeriod;
+				if (bInside) {
+					oParentPeriod = aTime[iTime-2];
+					oParentPeriod.add(oPeriod);
+				} else {
+					aPeriods.push(oPeriod);
+				}
+
 			}
 		});
-		//
-		aPeriods.forEach(function(period1){
-			aPeriods.forEach(function(period2){
-				if (period1!==period2&&period1.surrounds(period2)) {
-					console.log(period1.info.name+' surrounds '+period2.info.name);
-				}
-			});
-		});
+		sgPeriodsLoaded.dispatch(aPeriods);
 	}
 
 	return iddqd.extend(init,{
@@ -127,5 +143,7 @@ iddqd.ns('totaltimeline.model',(function(){
 		,range: oRange
 		,events: aEvents
 		,eventsLoaded: sgEventsLoaded
+		,periods: aPeriods
+		,periodsLoaded: sgPeriodsLoaded
 	});
 })());

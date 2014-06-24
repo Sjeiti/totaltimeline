@@ -9,20 +9,22 @@ iddqd.ns('totaltimeline.time.event', function event(moment,info){
 	'use strict';
 
 	var s = totaltimeline.string
-		,mElement = document.createElement('div');
-	mElement.classList.add('event');
-	mElement.setAttribute('title',info.name);
-	mElement.style.top = s.getPercentage(0.9*iddqd.math.prng.random(Math.abs(1234+moment.value)));
-	if (info.icon!=='') {
-		// todo: put icons in stylesheet
-		//mElement.style.backgroundImage = 'url(\'data:image/svg+xml;utf8,'+info.icon+'\')';
-		mElement.classList.add('icon-'+info.icon);
-	}
+		,mWrap = zen('div.event-wrap>(div.line+div.event)').pop()
+		,mEvent = mWrap.querySelector('.event')
+		,mLine = mWrap.querySelector('.line')
+		,fTop = 0.9*iddqd.math.prng.random(Math.abs(1234+moment.value))
+		,sTop = s.getPercentage(fTop)
+		,sHeight = s.getPercentage(1-fTop)
+	;
+	mEvent.setAttribute('title',info.name+' '+moment.toString());
+	mEvent.style.top = sTop;
+	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
+	mLine.style.height = sHeight;
 
 	return iddqd.factory(event,{
 		toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}
 		,moment: moment
 		,info: info
-		,element: mElement
+		,element: mWrap
 	});
 });

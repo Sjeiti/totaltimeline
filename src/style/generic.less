@@ -42,3 +42,21 @@ ul.list {
 	list-style: disc;
 	padding-left: 20px;
 }
+
+
+[data-before]:before {
+	content: attr(data-before);
+}
+[data-after]:after {
+	content: attr(data-after);
+}
+
+.show-range {
+	&:before, &:after {
+		font: bold .75rem/1rem Arial, Verdana;
+		white-space: nowrap;
+		z-index: 1;
+	}
+	&:before { .lt; }
+	&:after { .rt; }
+}

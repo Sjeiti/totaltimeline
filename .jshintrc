@@ -4,6 +4,8 @@
     	,"zen": true
     	,"signals": true
     	,"totaltimeline": true
+    	,"module": true
+    	,"require": true
 	},
     "strict": true,
     "browser": true,

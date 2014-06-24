@@ -268,6 +268,13 @@ module.exports = function (grunt) {
 			}
 		}
 
+		,svgIcons: {
+		  main: {
+			src: 'design/svgExport/',
+			dest: 'src/style/svgIcons.less'
+		  }
+		}
+
 		,fontcss2src: {
 		  updatefont: {
 			src: 'icons/font/style.css',

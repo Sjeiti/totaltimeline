@@ -11,13 +11,17 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		,moment = time.moment
 		,change = new signals.Signal()
 		,oReturn = iddqd.factory(range,{
-			start: start
+			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
+			,start: start
 			,end: end
 			,duration: start.ago-end.ago
 			,change: change
 			,moveStart: moveStart
+
 			,inside: inside
 			,surrounds: surrounds
+			,coincides: coincides
+
 			,proto: range
 		})
 	;
@@ -45,24 +49,50 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		change.dispatch();
 	}
 
-	function inside(rangeOrMoment) {
-		if (rangeOrMoment.hasOwnProperty('range')) rangeOrMoment = rangeOrMoment.range;
-		var bStart = start.ago<=rangeOrMoment.start.ago
-			,bEnd = end.ago>=rangeOrMoment.end.ago
-		;
-		return bStart&&bEnd;
+	function inside(time) { // todo: rem
+		var oStartEnd = getInsideStartEnd(time);
+		return !oStartEnd.start&&!oStartEnd.end;
 	}
 
 	function surrounds(time) {
-		var oRange = time.factory===period?time.range:time
-			,bMoment = oRange.factory===moment
-			,iStart = bMoment?oRange.ago:oRange.start.ago
-			,iEnd = bMoment?iStart:oRange.end.ago
-		;
-		var bStart = start.ago>=iStart
-			,bEnd = end.ago<=iEnd
-		;
-		return bStart&&bEnd;
+		var oStartEnd = getInsideStartEnd(time);
+		return oStartEnd.start&&oStartEnd.end;
+	}
+
+	function coincides(time){
+		var bCoincides = false;
+		if (time.factory===moment) {
+			bCoincides = momentInside(time);
+		} else {
+			var oRange = time.factory===period?time.range:time
+				,iStart = start.ago
+				,iEnd = end.ago
+				,iRStart = oRange.start.ago
+				,iREnd = oRange.end.ago;
+			bCoincides = momentInside(oRange.start)
+				||momentInside(oRange.end)
+				||iStart<=iRStart&&iEnd>=iREnd
+				||iStart>=iRStart&&iEnd<=iREnd
+			;
+		}
+		return bCoincides;
+	}
+
+	function getInsideStartEnd(time){ // todo: check or rem
+		var oRange, bStart, bEnd;
+		if (time.factory===moment) {
+			bStart = bEnd = momentInside(time);
+		} else {
+			oRange = time.factory===period?time.range:time;
+			bStart = momentInside(oRange.start);
+			bEnd = momentInside(oRange.end);
+		}
+		return {start:bStart,end:bEnd};
+	}
+
+	function momentInside(moment){
+		window.foo&&console.log('momentInside',start.ago,end.ago,':',moment.ago,moment.ago<=start.ago&&moment.ago>=end.ago); // log
+		return moment.ago<=start.ago&&moment.ago>=end.ago;
 	}
 
 	return oReturn;

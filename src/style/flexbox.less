@@ -6,11 +6,18 @@
 // Flexbox display
 // flex or inline-flex
 .flex-display(@display: flex) {
-	display: ~"-webkit-@{display}";
-	display: ~"-moz-@{display}";
-	display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
-	display: ~"-ms-@{display}"; // IE11
-	display: @display;
+  .old-flex-display(@display);
+  display: ~"-webkit-@{display}";
+  display: ~"-moz-@{display}";
+  display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
+  display: ~"-ms-@{display}"; // IE11
+  display: @display;
+}
+.old-flex-display(@display) when (@display = inline-flex) {
+  display: ~"-webkit-inline-box";
+}
+.old-flex-display(@display) when (@display = flex) {
+  display: ~"-webkit-box";
 }
 
 // The 'flex' shorthand
@@ -27,10 +34,17 @@
 // - applies to: flex containers
 // row | row-reverse | column | column-reverse
 .flex-direction(@direction: row) {
+  .old-flex-direction(@direction);
   -webkit-flex-direction: @direction;
      -moz-flex-direction: @direction;
       -ms-flex-direction: @direction;
           flex-direction: @direction;
+}
+.old-flex-direction(@direction) when (@direction = column) {
+	-webkit-box-direction: normal;
+	-moz-box-direction: normal;
+	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
 }
 
 // Flex Line Wrapping
@@ -67,6 +81,8 @@
 // - applies to: flex items
 // <number>
 .flex-grow(@grow: 0) {
+  -webkit-box-flex: @grow;
+  -moz-box-flex: @grow;
   -webkit-flex-grow: @grow;
      -moz-flex-grow: @grow;
       -ms-flex-grow: @grow;

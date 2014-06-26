@@ -4,7 +4,7 @@
  * @param range {range}
  * @param info {eventInfo}
  */
-iddqd.ns('totaltimeline.time.period',function period(range,info){
+iddqd.ns('totaltimeline.time.period',function period(range,info,offset){
 	'use strict';
 
 	var s = totaltimeline.string
@@ -14,7 +14,10 @@ iddqd.ns('totaltimeline.time.period',function period(range,info){
 	mElement.innerText = info.name + ' ' + range.start.toString() + ' - ' + range.end.toString();
 	mElement.setAttribute('title',info.name);
 //	mElement.style.backgroundColor = '#'+Math.floor(iddqd.math.prng.random(0.01234*range.start.ago)*16777215).toString(16);
-	mElement.style.backgroundColor = 'rgba(0,0,0,'+Math.random()*0.1+')';
+	var iColor = 220 - (Math.random()*0.1*256<<0);
+	mElement.style.backgroundColor = 'rgb('+iColor+','+iColor+','+iColor+')';
+//	mElement.style.backgroundColor = 'rgba(0,0,0,'+Math.random()*0.1+')';
+	mElement.style.marginTop = 2*offset+'rem';
 
 	function addPeriod(period){
 		var mPeriodElement = period.element

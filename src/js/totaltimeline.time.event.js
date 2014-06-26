@@ -12,7 +12,7 @@ iddqd.ns('totaltimeline.time.event', function event(moment,info){
 		,mWrap = zen('div.event-wrap>(div.line+div.event)').pop()
 		,mEvent = mWrap.querySelector('.event')
 		,mLine = mWrap.querySelector('.line')
-		,fTop = 0.9*iddqd.math.prng.random(Math.abs(1234+moment.value))
+		,fTop = 0.9*iddqd.math.prng.random(Math.abs(moment.value<18000?10000*moment.value:moment.value))
 		,sTop = s.getPercentage(fTop)
 		,sHeight = s.getPercentage(1-fTop)
 	;

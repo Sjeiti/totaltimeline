@@ -107,7 +107,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		populatePeriods(iRangeEnd,iDuration);
 	}
 
-	function populateEvents(started,rangeStart,rangeEnd,duration){
+	function populateEvents(started,rangeStart,rangeEnd,duration){ // todo: refactor to ttl.view.elm.event
 		var mFragment = document.createDocumentFragment();
 		emptyView(mEvents);
 		for (var i=0,l=aEvents.length;i<l;i++) {
@@ -131,7 +131,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		mEvents.appendChild(mFragment.cloneNode(true));
 	}
 
-	function populatePeriods(rangeEnd,duration){
+	function populatePeriods(rangeEnd,duration){ // todo: refactor to ttl.view.elm.period
 		var mFragment = document.createDocumentFragment();
 		emptyView(mPeriods);
 		aPeriods.forEach(function(period){
@@ -141,6 +141,13 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 					,fRelLeft = 1-((iAgo-rangeEnd)/duration)
 					,fRelWidth = period.range.duration/duration
 				;
+				if (fRelLeft<0) {
+					fRelWidth += fRelLeft;
+					fRelLeft = 0;
+				}
+				if ((fRelLeft+fRelWidth)>1) {
+					fRelWidth = 1 - fRelLeft;
+				}
 				mPeriod.style.left = s.getPercentage(fRelLeft);
 				mPeriod.style.width = s.getPercentage(fRelWidth);
 				mFragment.appendChild(mPeriod);

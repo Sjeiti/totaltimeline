@@ -103,35 +103,49 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 	function handleTimelinePeriods(sheet){
 		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',');
 		var iTimes = aTimes.length;
-		var aTime = [];
+//		var aTime = [];
 		sheet.feed.entry.forEach(function(entry){
 			var iFrom = getProp(entry,'from',true)
 				,iTo = getProp(entry,'to',true)
 				,sName = getProp(entry,'name')
 			;
 			if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
-				var oPeriod = period(
-					range(moment(iFrom),moment(iTo))
-					,eventInfo(sName)
-				);
+				/////////
+				var iOffset = 0;
 				for (var i=0;i<iTimes;i++) {
 					var sTimeName = aTimes[i]
 						,sTimeValue = getProp(entry,sTimeName)
 					;
 					if (sTimeValue!=='') {
-						aTime.length = i+1;
-						aTime[i] = oPeriod;
+						iOffset = i;
+						break;
 					}
 				}
-				var iTime = aTime.length
-					,bInside = iTime>1
-					,oParentPeriod;
-				if (bInside) {
-					oParentPeriod = aTime[iTime-2];
-					oParentPeriod.add(oPeriod);
-				} else {
+				/////////
+				var oPeriod = period(
+					range(moment(iFrom),moment(iTo))
+					,eventInfo(sName)
+					,iOffset
+				);
+//				for (var i=0;i<iTimes;i++) {
+//					var sTimeName = aTimes[i]
+//						,sTimeValue = getProp(entry,sTimeName)
+//					;
+//					if (sTimeValue!=='') {
+//						aTime.length = i+1;
+//						aTime[i] = oPeriod;
+//					}
+//				}
+//				var iTime = aTime.length
+//					,bInside = iTime>1
+//					,oParentPeriod
+//				;
+//				if (bInside) {
+//					oParentPeriod = aTime[iTime-2];
+//					oParentPeriod.add(oPeriod);
+//				} else {
 					aPeriods.push(oPeriod);
-				}
+//				}
 
 			}
 		});

@@ -15,6 +15,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,mBody
 		,mSpan
 		,mRange
+		,mTime
 		,fRangeWidth
 		,fRangeStart
 		,bOver = false
@@ -40,7 +41,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		// view elements
 		mBody = document.body;
 		mSpan = document.getElementById('overview');
-		mRange = zen('div.range.show-range').pop();
+		mRange = zen('div.range.show-range>time').pop();
+		mTime = mRange.querySelector('time');
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
 		keys = signals.keypress.keys;
@@ -111,12 +113,13 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Changes view to reflect changes in the 'range' object.
 	 */
 	function handleRangeChange(){
-		fRangeWidth = oRange.duration/oSpan.duration;
+		fRangeWidth = Math.min(1,oRange.duration/oSpan.duration);
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
 		mRange.style.width = s.getPercentage(fRangeWidth);
 		mRange.style.left = s.getPercentage(fRangeStart);
 		mRange.setAttribute(s.dataBefore,oRange.start.toString());
 		mRange.setAttribute(s.dataAfter,oRange.end.toString());
+		mTime.innerText = s.duration(oRange.duration,2);
 	}
 
 	/**

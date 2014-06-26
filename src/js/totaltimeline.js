@@ -10,9 +10,11 @@ iddqd.ns('totaltimeline',(function(iddqd){
 	iddqd.onDOMReady(function(){
 		var ttl = totaltimeline
 			,model = ttl.model
-			,view = ttl.view;
+			,view = ttl.view
+			,location = ttl.location;
 		model();
 		view.overview(model);
 		view.timeline(model);
+		location(model);
 	});
 })(iddqd));

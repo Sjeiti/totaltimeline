@@ -6,6 +6,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
+		,time = totaltimeline.time
 		,model
 		,signals = iddqd.signals
 		,keys
@@ -73,16 +74,38 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * @param {number} direction Corresponds to wheelDelta
 	 * @param {Event} e The WheelEvent
 	 */
-	function handleWheel(direction){//,e
+	function handleWheel(direction,e){
 		if (bOver) {
-			var fScale = 0.01,iNewStart,iNewEnd;
+			var fScale = 0.01,iNewStart,iNewEnd
+				,bZoomin = direction>0
+				,iZoomin = bZoomin?1:-1
+				,iStart = oRange.start.ago
+			;
 			if (keys[16]) {
-				iNewStart = oRange.start.ago + (direction>0?1:-1)*(fScale*oRange.duration<<0);
+				iNewStart = iStart + iZoomin*(fScale*oRange.duration<<0);
 				oRange.moveStart(iNewStart);
 			} else {
-				var fAdd = (direction>0?1:-1)*(0.01*oRange.duration<<0);
-				iNewStart = oRange.start.ago - fAdd;
-				iNewEnd = oRange.end.ago + fAdd;
+				var fAdd = iZoomin*(0.01*oRange.duration<<0);
+				// offset calculations
+				var iViewL = mView.offsetLeft // todo: cache value on resize and check property
+					,iViewW = mView.offsetWidth // todo: cache value on resize and check property
+					,iMouseX = e.clientX
+					,fL = (iMouseX-iViewL)/iViewW
+					,fR = 1-fL
+				;
+				/*if (!bZoomin) {
+					if (iStart<=time.UNIVERSE) {
+						fL = 0;
+						fR = -1;
+					}
+				}*/
+				// new position
+				iNewStart = oRange.start.ago - 0.5*fL*fAdd;
+				iNewEnd = oRange.end.ago + 0.5*fR*fAdd;
+				console.log('fMouseX',fL); // log
+				////
+//				iNewStart = oRange.start.ago - fAdd;
+//				iNewEnd = oRange.end.ago + fAdd;
 				oRange.start.set(iNewStart,false);
 				oRange.end.set(iNewEnd);
 			}

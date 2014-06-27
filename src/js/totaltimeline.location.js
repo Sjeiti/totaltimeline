@@ -44,14 +44,12 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 						iAgo = fNumber - time.YEAR_NOW;
 					}
 					// todo: not quite working yet for lower vs future: ie 1969 vs 3000 (make future notation similar to Ga)
-					if (i===0) 		oRange.start.set(iAgo,false);
+					if (i===0)		oRange.start.set(iAgo,false);
 					else if (i===1)	oRange.end.set(iAgo);
-//					console.log('fNumber',fNumber,sString,iAgo); // log
 
 				}
 			}
 		}
-//		console.log('sHash',sHash); // log
 	}
 
 	function handleRangeChange(){
@@ -59,15 +57,13 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 			s.formatAnnum(oRange.start.ago,2,false)
 			,s.formatAnnum(oRange.end.ago,2,false)
 		);
-		/*update(
-			Math.round(oRange.start.ago)
-			,Math.round(oRange.end.ago)
-		);*/
 	}
 
 	/**
 	 * Update option selection variable and try to call pushState
-	 * @param {string} [slug] Optional slug to append
+	 * @param {string} [start] Start time
+	 * @param {string} [end] End time
+	 * @param {string} [subject] Optional subject
 	 */
 	function update(start,end,subject){
 		if (sLocationOriginalPath.indexOf(start)!==-1) {
@@ -81,6 +77,9 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 			if (sNewPath!==sPath) {
 				window.history.pushState('','foobar',sNewPath);
 			}
+		}
+		if (subject) {
+			console.log('subject',subject); // log
 		}
 	}
 

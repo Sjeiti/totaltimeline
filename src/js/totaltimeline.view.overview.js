@@ -16,6 +16,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,mSpan
 		,mRange
 		,mTime
+		,iSpanW = 800
 		,fRangeWidth
 		,fRangeStart
 		,bOver = false
@@ -43,6 +44,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mSpan = document.getElementById('overview');
 		mRange = zen('div.range.show-range>time').pop();
 		mTime = mRange.querySelector('time');
+		//
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
 		keys = signals.keypress.keys;
@@ -52,6 +54,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Initialise event listeners (and signals).
 	 */
 	function initEvents(){
+		signals.resize.add(handleResize);
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
 			mSpan.addEventListener(event,handleSpanMouse,false);
 		});
@@ -60,6 +63,9 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mBody.addEventListener(s.mouseup,handleRangeMouseClick,false);
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
+		//
+		//
+		touchInit();
 	}
 
 	/**
@@ -69,7 +75,14 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mSpan.appendChild(mRange);
 		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
 		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
+		//
+		handleResize();
 		handleRangeChange();
+	}
+
+	function handleResize(ow,oh,w,h){
+		console.log('w,h,ow,oh',ow,oh,w,h); // log
+		iSpanW = mSpan.offsetWidth;
 	}
 
 	/**
@@ -172,12 +185,60 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 */
 	function rangeMove(x){
 		// todo: check max and min
-		var iSpanWidth = mSpan.offsetWidth
-			,iRangeWidth = mRange.offsetWidth
-			,iNewLeft = Math.min(Math.max(x-iMouseXOffset,0),iSpanWidth-iRangeWidth)
-			,fPartLeft = iNewLeft/iSpanWidth
-			,iNewStart = oSpan.duration - Math.floor(fPartLeft*oSpan.duration);
+		var iRangeWidth = mRange.offsetWidth
+			,iNewLeft = Math.min(Math.max(x-iMouseXOffset,0),iSpanW-iRangeWidth)
+			,iNewStart = relativeOffset(iNewLeft);
 		oRange.moveStart(iNewStart);
+	}
+
+	/**
+	 * Calculates an x position relative to mSpan and its associated 'range' object.
+	 * @param {number} x Position in pixels
+	 * @returns {number} Years ago
+	 */
+	function relativeOffset(x) {
+		var fPartLeft = x/iSpanW;
+		return oSpan.duration - Math.floor(fPartLeft*oSpan.duration);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	var log = totaltimeline.view.log
+//		,bTouch
+	;
+
+	function touchInit() {
+		// tmp log
+		log('touch','test');
+		'touchstart,touchmove,touchend'.split(',').forEach(function(event){
+			mSpan.addEventListener(event,handleTouches,false);
+		});
+		mRange.addEventListener('touchstart',handleToucheRange,false);
+	}
+
+	function handleToucheRange(e) {
+		iMouseXOffset = e.offsetX;
+	}
+
+	function handleTouches(e) {
+		var aX = [];
+		log('handleTouches',e.type,e.touches.length);
+		Array.prototype.forEach.call(e.touches,function name(touch) {
+			log('touch',touch.pageX,touch.pageY);
+			aX.push(touch.pageX);
+		});
+		aX.sort();
+		if (aX.length===1){
+			e.type!=='touchstart'&&rangeMove(aX[0]);
+		} else if (aX.length===2){
+			oRange.start.set(relativeOffset(aX[0]),false);
+			oRange.end.set(relativeOffset(aX[1]));
+			e.preventDefault();
+		}
 	}
 
 	return init;

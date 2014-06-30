@@ -175,8 +175,9 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 			iNewStart = iStart;
 			iNewEnd = iEnd;
 		}
-		oRange.start.set(iNewStart,false);
-		oRange.end.set(iNewEnd);
+		oRange.set(iNewStart,iNewEnd);
+		//oRange.start.set(iNewStart,false);
+		//oRange.end.set(iNewEnd);
 	}
 
 	/**
@@ -214,29 +215,30 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function touchInit() {
 		// tmp log
 		log('touch','test');
-		'touchstart,touchmove,touchend'.split(',').forEach(function(event){
+		'touchstart,touchmove'.split(',').forEach(function(event){//touchend
 			mSpan.addEventListener(event,handleTouches,false);
 		});
 		mRange.addEventListener('touchstart',handleToucheRange,false);
 	}
 
 	function handleToucheRange(e) {
-		iMouseXOffset = e.offsetX;
+		iMouseXOffset = e.offsetX||touch.pageX;
+		log('handleToucheRange',iMouseXOffset);
 	}
 
 	function handleTouches(e) {
 		var aX = [];
-		log('handleTouches',e.type,e.touches.length);
 		Array.prototype.forEach.call(e.touches,function name(touch) {
-			log('touch',touch.pageX,touch.pageY);
 			aX.push(touch.pageX);
 		});
 		aX.sort();
+		log('handleTouches',e.type,e.touches.length,aX.join(','));
 		if (aX.length===1){
 			e.type!=='touchstart'&&rangeMove(aX[0]);
 		} else if (aX.length===2){
-			oRange.start.set(relativeOffset(aX[0]),false);
-			oRange.end.set(relativeOffset(aX[1]));
+			oRange.set(relativeOffset(aX[0]),relativeOffset(aX[1]));
+			//oRange.start.set(relativeOffset(aX[0]),false);
+			//oRange.end.set(relativeOffset(aX[1]));
 			e.preventDefault();
 		}
 	}

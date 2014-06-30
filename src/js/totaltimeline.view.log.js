@@ -14,8 +14,12 @@ iddqd.ns('totaltimeline.view.log',(function(){
 		if (!bInited) {
 			mLog = zen('pre.log{lgggg}').pop();
 			document.getElementById('content').appendChild(mLog);
-			mLog.style.marginTop = '1rem';
-			mLog.style.paddingTop = '1rem';
+			iddqd.extend(mLog.style,{
+				marginTop: '1rem'
+				,paddingTop: '1rem'
+				,maxHeight: '100%'
+				,display: 'block'
+			});
 			bInited = true;
 		}
 	}

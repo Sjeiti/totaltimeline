@@ -12,8 +12,11 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		,change = new signals.Signal()
 		,oReturn = iddqd.factory(range,{
 			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
+			
+			,set: set
 			,start: start
 			,end: end
+			
 			,duration: start.ago-end.ago
 			,change: change
 			,moveStart: moveStart
@@ -36,6 +39,16 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	function handleChange(){
 		oReturn.duration = start.ago-end.ago;
 		change.dispatch();
+	}
+	
+	/**
+	 * Set both start and end time.
+	 * {number} startAgo
+	 * {number} endAgo
+	 */
+	function set(startAgo,endAgo){
+		start.set(startAgo,false);
+		end.set(endAgo);
 	}
 
 	/**

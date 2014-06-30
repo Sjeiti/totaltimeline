@@ -6,7 +6,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
-		,time = totaltimeline.time
+//		,time = totaltimeline.time
+		,collection = totaltimeline.collection
 		,model
 		,signals = iddqd.signals
 		,keys
@@ -14,7 +15,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,aEvents
 		,aPeriods
 		,mView
-		,mEvents,mPeriods
 		,bOver = false
 	;
 
@@ -34,8 +34,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		aEvents = model.events;
 		aPeriods = model.periods;
 		mView = document.getElementById('timeline');
-		mPeriods = addView(mView,'periods');
-		mEvents = addView(mView,'events');
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
 		keys = signals.keypress.keys;
@@ -50,8 +48,10 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		});
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
-		model.eventsLoaded.add(handleRangeChange);
-		model.periodsLoaded.add(handleRangeChange);
+
+		collection.forEach(function(col){
+			col.dataLoaded.add(handleRangeChange);
+		});
 	}
 
 	/**
@@ -102,12 +102,13 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 				// new position
 				iNewStart = oRange.start.ago - 0.5*fL*fAdd;
 				iNewEnd = oRange.end.ago + 0.5*fR*fAdd;
-				console.log('fMouseX',fL); // log
+//				console.log('fMouseX',fL); // log
 				////
 //				iNewStart = oRange.start.ago - fAdd;
 //				iNewEnd = oRange.end.ago + fAdd;
-				oRange.start.set(iNewStart,false);
-				oRange.end.set(iNewEnd);
+				oRange.set(iNewStart,iNewEnd);
+				//oRange.start.set(iNewStart,false);
+				//oRange.end.set(iNewEnd);
 			}
 			// todo: add mouseOffset as in overview (refactor dry)
 //			if (keys[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);
@@ -121,80 +122,9 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	function handleRangeChange(){
 		mView.setAttribute(s.dataBefore,oRange.start.toString());
 		mView.setAttribute(s.dataAfter,oRange.end.toString());
-		//
-		var iRangeStart = oRange.start.ago
-			,iRangeEnd = oRange.end.ago
-			,iDuration = oRange.duration
-		;
-		populateEvents(0,iRangeStart,iRangeEnd,iDuration);
-		populatePeriods(iRangeEnd,iDuration);
-	}
-
-	function populateEvents(started,rangeStart,rangeEnd,duration){ // todo: refactor to ttl.view.elm.event
-		var mFragment = document.createDocumentFragment();
-		emptyView(mEvents);
-		for (var i=0,l=aEvents.length;i<l;i++) {
-			var oEvent = aEvents[i]
-				,iAgo = oEvent.moment.ago;
-			if (started===0&&iAgo<=rangeStart) {
-				started++;
-			}
-			if (started===1) {
-				if (iAgo<rangeEnd) {
-					break;
-				} else {
-					var mEvent = oEvent.element
-						,fRel = 1-((iAgo-rangeEnd)/duration)
-					;
-					mEvent.style.left = s.getPercentage(fRel);
-					mFragment.appendChild(mEvent);
-				}
-			}
-		}
-		mEvents.appendChild(mFragment.cloneNode(true));
-	}
-
-	function populatePeriods(rangeEnd,duration){ // todo: refactor to ttl.view.elm.period
-		var mFragment = document.createDocumentFragment();
-		emptyView(mPeriods);
-		aPeriods.forEach(function(period){
-			if (period.coincides(oRange)) {
-				var mPeriod = period.element
-					,iAgo = period.range.start.ago
-					,fRelLeft = 1-((iAgo-rangeEnd)/duration)
-					,fRelWidth = period.range.duration/duration
-				;
-				if (fRelLeft<0) {
-					fRelWidth += fRelLeft;
-					fRelLeft = 0;
-				}
-				if ((fRelLeft+fRelWidth)>1) {
-					fRelWidth = 1 - fRelLeft;
-				}
-				mPeriod.style.left = s.getPercentage(fRelLeft);
-				mPeriod.style.width = s.getPercentage(fRelWidth);
-				mFragment.appendChild(mPeriod);
-//				if (period.children.length) {
-//					period.children.forEach(function(){
-//						mPeriod.appendChild()
-//					});
-//				}
-			}
+		collection.forEach(function(col){
+			col.populate(mView,oRange);
 		});
-		mPeriods.appendChild(mFragment.cloneNode(true));
-	}
-
-	function addView(parent,className){
-		var mElm = document.createElement('div');
-		mElm.classList.add(className);
-		parent.appendChild(mElm);
-		return mElm;
-	}
-
-	function emptyView(view){
-		while (view.childNodes.length) {
-			view.removeChild(view.firstChild);
-		}
 	}
 
 	return init;

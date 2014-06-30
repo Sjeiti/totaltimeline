@@ -25,7 +25,6 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		});
 	}
 
-
 	return iddqd.extend(init,{
 		span: oSpan
 		,range: oRange

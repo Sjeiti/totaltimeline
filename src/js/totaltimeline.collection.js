@@ -29,6 +29,13 @@ iddqd.ns('totaltimeline.collection',(function(){
 		;
 
 		mWrapper.classList.add(slug);
+		mWrapper.addEventListener(totaltimeline.string.click,function(e){
+			var mTarget = e.target
+				,oRange = mTarget.range;
+			if (oRange) {
+				totaltimeline.model.range.set(oRange.start.ago,oRange.end.ago);
+			}
+		});
 
 		function getData(){
 			iddqd.network.jsonp(sheetUri,callback);
@@ -38,7 +45,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 			emptyView(mWrapper);
 			emptyView(mFragment);
 			_populate(mFragment,range);
-			mWrapper.appendChild(mFragment.cloneNode(true));
+			mWrapper.appendChild(mFragment);//.cloneNode(true)
 			if (mWrapper.parentNode!==view) {
 				view.appendChild(mWrapper);
 			}

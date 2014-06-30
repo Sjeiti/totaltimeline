@@ -18,8 +18,13 @@ iddqd.ns('totaltimeline.time.event', function event(moment,info){
 	;
 	mEvent.setAttribute('title',info.name+' '+moment.toString());
 	mEvent.style.top = sTop;
+	mEvent.addEventListener(s.click,handleClick);
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 	mLine.style.height = sHeight;
+
+	function handleClick(){
+		console.log('eventClick'); // log
+	}
 
 	return iddqd.factory(event,{
 		toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}

@@ -11,13 +11,19 @@ iddqd.ns('totaltimeline.time.period',function period(range,info,offset){
 		,aChildren = []
 		,mElement = document.createElement('div');
 	mElement.classList.add('period');
-	mElement.innerText = info.name + ' ' + range.start.toString() + ' - ' + range.end.toString();
-	mElement.setAttribute('title',info.name);
+
+//	mElement.innerText = mElement.textContent = info.name + ' ' + range.start.toString() + ' - ' + range.end.toString();
+//	mElement.setAttribute('title',info.name);
 //	mElement.style.backgroundColor = '#'+Math.floor(iddqd.math.prng.random(0.01234*range.start.ago)*16777215).toString(16);
 	var iColor = 220 - (Math.random()*0.1*256<<0);
 	mElement.style.backgroundColor = 'rgb('+iColor+','+iColor+','+iColor+')';
 //	mElement.style.backgroundColor = 'rgba(0,0,0,'+Math.random()*0.1+')';
 	mElement.style.marginTop = 2*offset+'rem';
+
+	var mTitle = zen('h3.title{'+info.name + ' ' + range.start.toString() + ' - ' + range.end.toString()+'}').pop();
+	mTitle.range = range;
+//	totaltimeline.collection[mTitle] = range;
+	mElement.appendChild(mTitle);
 
 	function addPeriod(period){
 		var mPeriodElement = period.element

@@ -70,6 +70,7 @@ iddqd.ns('totaltimeline.string',(function(){
 		,mousedown: 'mousedown'
 		,mouseup: 'mouseup'
 		,drag: 'drag'
+		,click: 'click'
 		,getPercentage: getPercentage
 		,formatAnnum: formatAnnum
 		,duration: duration

@@ -1,7 +1,7 @@
 #timeline {
 	position: relative;
 	margin: 0 1rem;
-	.user-select;
+//	.user-select;
 	background-color: @colorGrayLight;
 	&.show-range {
 		&:before, &:after {
@@ -12,16 +12,18 @@
 }
 
 .events {
+//	.pointer-events;
 	.lt;
 	.size(100%);
+//	background-color: rgba(255,0,0,.4);
 }
 	.event-wrap {
 		.lt;
 		height: 100%;
 	}
 		.event {
-
 			.lt;
+			z-index: 2;
 			.size(@eventSize);
 			.transform(translateX(-.5*@eventSize));
 			.border-radius(@eventSize/2);
@@ -52,13 +54,16 @@
 		height: 100%;
 		background-color: #005580;
 		overflow: hidden;
-//		color: white;
 		font-weight: bold;
 		white-space: nowrap;
 		text-indent: .4rem;
-		.period {
-			top: 3rem;
-//			margin-top: 25%;
-//			height: 75%;
+		cursor: pointer;
+		&:hover {
+			color: red;
+		}
+		.title {
+			position: relative;
+			font-size: .7rem;
+			z-index: 1;
 		}
 	}

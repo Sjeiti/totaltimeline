@@ -20,7 +20,8 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 		//
 		// check location hash
 		var sHash = location.hash
-			,aHash;
+			,aHash
+			,aAgo = [];
 		if (sHash.length>1) {
 			aHash = sHash.substr(1).split('/');
 			if (aHash.length>=2) {
@@ -44,12 +45,12 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 						iAgo = fNumber - time.YEAR_NOW;
 					}
 					// todo: not quite working yet for lower vs future: ie 1969 vs 3000 (make future notation similar to Ga)
-					if (i===0)		oRange.start.set(iAgo,false);
-					else if (i===1)	oRange.end.set(iAgo);
-
+					aAgo.push(iAgo);
 				}
+				oRange.set.apply(oRange,aAgo);
 			}
 		}
+		console.log('aAgo',aAgo); // log
 	}
 
 	function handleRangeChange(){

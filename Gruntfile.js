@@ -287,25 +287,15 @@ module.exports = function (grunt) {
 				files: {src: [
 				  'package.json',
 				  'bower.json',
-				  sFolderSrc+'/js/main.js'
+				  sFolderSrc+'/js/totaltimeline.js'
 				]}
 			}
 		}
 
-
-		,jsdoc: {
-			dist: {
-				src: [
-					'README.md'
-					,'src/js/totaltimeline.js'
-				],
-				options: {
-					destination: 'doc'
-					,template: 'jsdoc_template'
-					,configure: 'jsdoc_template/jsdoc.conf.json'
-//					,mainpagetitle: 'harhar' // todo find out why this has no effect
-				}
-			}
+		,cli: {
+			jsdoc: { command: 'jsdoc src/js/ -r -c jsdoc_template/jsdoc.conf.json -d docs' }
+			,release: { command: 'cordova build android --release' }
+			,clean: { cwd: 'platforms/android/cordova/', command: 'node clean', output: true }
 		}
 	});
 
@@ -389,6 +379,9 @@ module.exports = function (grunt) {
 	grunt.registerTask('updatefont',[
 		'copy:updatefont'
 		,'fontcss2src'
+	]);
+	grunt.registerTask('jsdoc',[
+		'cli:jsdoc'
 	]);
 	grunt.registerTask('default',[
 		'build'

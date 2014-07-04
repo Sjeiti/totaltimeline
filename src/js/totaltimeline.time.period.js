@@ -1,6 +1,5 @@
 /**
- * @name period
- * @namespace totaltimeline.time
+ * @namespace totaltimeline.time.period
  * @param range {range}
  * @param info {eventInfo}
  */

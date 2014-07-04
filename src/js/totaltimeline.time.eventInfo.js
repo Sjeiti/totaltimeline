@@ -1,6 +1,5 @@
 /**
- * @name eventInfo
- * @namespace totaltimeline.time
+ * @namespace totaltimeline.time.eventInfo
  */
 iddqd.ns('totaltimeline.time.eventInfo',function(
 	name

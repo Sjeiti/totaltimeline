@@ -1,6 +1,5 @@
 /**
- * @name timeline
- * @namespace totaltimeline.view
+ * @namespace totaltimeline.view.timeline
  */
 iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
@@ -102,13 +101,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 				// new position
 				iNewStart = oRange.start.ago - 0.5*fL*fAdd;
 				iNewEnd = oRange.end.ago + 0.5*fR*fAdd;
-//				console.log('fMouseX',fL); // log
-				////
-//				iNewStart = oRange.start.ago - fAdd;
-//				iNewEnd = oRange.end.ago + fAdd;
 				oRange.set(iNewStart,iNewEnd);
-				//oRange.start.set(iNewStart,false);
-				//oRange.end.set(iNewEnd);
 			}
 			// todo: add mouseOffset as in overview (refactor dry)
 //			if (keys[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);

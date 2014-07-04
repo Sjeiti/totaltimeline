@@ -1,6 +1,5 @@
 /**
- * @name time
- * @namespace totaltimeline
+ * @namespace totaltimeline.time
  */
 iddqd.ns('totaltimeline.time',{
 	 YEAR_NOW: (new Date()).getFullYear()

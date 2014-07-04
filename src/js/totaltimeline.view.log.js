@@ -1,7 +1,6 @@
 /**
  * A visual log for mobile browsers
- * @name log
- * @namespace totaltimeline.view
+ * @namespace totaltimeline.view.log
  */
 iddqd.ns('totaltimeline.view.log',(function(){
 	'use strict';
@@ -13,14 +12,24 @@ iddqd.ns('totaltimeline.view.log',(function(){
 	function init(){
 		if (!bInited) {
 			mLog = zen('pre.log{lgggg}').pop();
-			document.getElementById('content').appendChild(mLog);
+			mLog.style.position = 'relative';
+			mLog.style.top = '2rem';
+			mLog.style.margin = '1rem';
+			mLog.style.maxHeight = '100%';
+			mLog.style.display = 'block';
+			mLog.style.backgroundColor = 'yellow';
+			mLog.style.border = '1px solid black';
 			iddqd.extend(mLog.style,{
 				marginTop: '1rem'
 				,paddingTop: '1rem'
 				,maxHeight: '100%'
 				,display: 'block'
-			});
+				,border: '1px solid black'
+				,backgroundColor: '#eee'
+			},true);
+			document.getElementById('content').appendChild(mLog);
 			bInited = true;
+			log('mLog.style',mLog.style);
 		}
 	}
 	function log(){

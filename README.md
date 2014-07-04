@@ -1,4 +1,4 @@
-# My Own Style
+# Noooooooooooooooooooo
 
 * [Project setup](#project-setup)
 * [Version control](#version-control)
@@ -50,3 +50,10 @@ Then run `grunt updatefont` to copy the fontfiles and update `src/style/iconfont
 #### Notes
 
 Even though grunt-google-cdn is installed it is not used in the build because it doesn't seem to be working anymore. It is left in there for possible future fixes and implementation.
+
+## Documentation
+
+Documentation is generated with jdoc3, see: https://github.com/jsdoc3/jsdoc.
+
+Grunt versions failed to install so we use a globally installed jsdoc as so:
+jsdoc src/js/ -r -c jsdoc_template/jsdoc.conf.json -d docs

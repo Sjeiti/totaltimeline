@@ -1,7 +1,6 @@
 /**
  * Sting objects and methods.
- * @name string
- * @namespace totaltimeline
+ * @namespace totaltimeline.string
  */
 iddqd.ns('totaltimeline.string',(function(){
 	'use strict';
@@ -14,6 +13,8 @@ iddqd.ns('totaltimeline.string',(function(){
 
 	/**
 	 * Turns a floating point into a percentage.
+	 * @name totaltimeline.string.getPercentage
+	 * @method
 	 * @param float
 	 * @returns {string}
 	 */
@@ -24,8 +25,10 @@ iddqd.ns('totaltimeline.string',(function(){
 	/**
 	 * Textual representation of annum.
 	 * Years are rounded and represented in a, ka, Ma and Ga.
-	 * Years greater than 2000 BC are written in Gregorian style with BC/AD suffix.
-	 * Years greater than 1500 AD are written without suffix.
+	 * Years later than 2000 BC are written in Gregorian style with BC/AD suffix.
+	 * Years later than 1500 AD are written without suffix.
+	 * @name totaltimeline.string.formatAnnum
+	 * @method
 	 * @param {number} year
 	 * @param {number} round
 	 * @returns {string}
@@ -34,8 +37,7 @@ iddqd.ns('totaltimeline.string',(function(){
 		// todo: rounding sometimes off: split at . truncate and join
 		space = space===false?'':sSpace;
 		var sReturn;
-		if (year>4000) {
-			//var i = year;
+		if (year>4000) {8
 			if (round===undefined) round = 0;
 			for (var i = 0; year>1000 && (aAnnum.length>=(i + 2)); i++) year /= 1000;
 			var iMult = Math.pow(10,round);
@@ -49,6 +51,8 @@ iddqd.ns('totaltimeline.string',(function(){
 
 	/**
 	 * Textual representation of duration
+	 * @name totaltimeline.string.duration
+	 * @method
 	 * @param {number} years
 	 * @param {number} round
 	 * @returns {string}
@@ -62,7 +66,11 @@ iddqd.ns('totaltimeline.string',(function(){
 	}
 
 	return {
+		/** @constant totaltimeline.string.dataBefore
+		 * @default 'data-before' */
 		dataBefore: 'data-before'
+		/** @constant totaltimeline.string.dataAfter
+		 * @default 'data-after' */
 		,dataAfter: 'data-after'
 		,mouseover: 'mouseover'
 		,mouseout: 'mouseout'

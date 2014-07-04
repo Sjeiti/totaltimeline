@@ -1,7 +1,7 @@
 /**
  * Events collection
- * @name events
- * @namespace totaltimeline.collection
+ * @type collectionInstance
+ * @name totaltimeline.collection.events
  */
 iddqd.ns('totaltimeline.collection.events',(function(){
 	'use strict';

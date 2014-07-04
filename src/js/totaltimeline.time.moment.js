@@ -1,7 +1,22 @@
 /**
+ * @typedef {object} moment
+ * @property {function} set
+ * @property {string} type The type of the moment. Can be totaltimeline.time.moment.AGO
+ * @property {Signal} change Signal dispatched when the value of the moment changes
+ * @property {function} factory Direct link back to the original factory
+ */
+/**
  * A single moment in time
- * @name moment
- * @namespace totaltimeline.time
+ * @namespace totaltimeline.time.moment
+ * @property {function} set
+ */
+/**
+ * A single moment in time
+ * @name totaltimeline.time.moment
+ * @method
+ * @param {number} value
+ * @param {string} type
+ * @returns {moment}
  */
 iddqd.ns('totaltimeline.time.moment',(function(){
 	'use strict';

@@ -1,6 +1,5 @@
 /**
- * @name model
- * @namespace totaltimeline
+ * @namespace totaltimeline.model
  */
 iddqd.ns('totaltimeline.model',(function(undefined){
 	'use strict';

@@ -1,6 +1,5 @@
 /**
- * @name location
- * @namespace totaltimeline
+ * @namespace totaltimeline.location
  */
 iddqd.ns('totaltimeline.location',(function(iddqd){
 	'use strict';

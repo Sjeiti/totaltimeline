@@ -1,6 +1,5 @@
 /**
- * @name overview
- * @namespace totaltimeline.view
+ * @namespace totaltimeline.view.overview
  */
 iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	'use strict';
@@ -222,13 +221,13 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	}
 
 	function handleToucheRange(e) {
-		iMouseXOffset = e.offsetX||touch.pageX;
+		iMouseXOffset = e.offsetX||e.touches[0].pageX;
 		log('handleToucheRange',iMouseXOffset);
 	}
 
 	function handleTouches(e) {
 		var aX = [];
-		Array.prototype.forEach.call(e.touches,function name(touch) {
+		Array.prototype.forEach.call(e.touches,function(touch) {
 			aX.push(touch.pageX);
 		});
 		aX.sort();

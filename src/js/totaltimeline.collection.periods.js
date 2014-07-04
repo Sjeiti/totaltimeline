@@ -1,7 +1,7 @@
 /**
  * Periods collection
- * @name periods
- * @namespace totaltimeline.collection
+ * @type collectionInstance
+ * @namespace totaltimeline.collection.periods
  */
 iddqd.ns('totaltimeline.collection.periods',(function(){
 	'use strict';

@@ -1,6 +1,5 @@
 /**
- * @name event
- * @namespace totaltimeline.time
+ * @namespace totaltimeline.time.event
  * @param {moment} start
  * @param {moment} end
  * @param {eventInfo} info

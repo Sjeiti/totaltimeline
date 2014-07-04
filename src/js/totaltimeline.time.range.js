@@ -1,8 +1,24 @@
+//todo: typedef range
 /**
- * @name range
- * @namespace totaltimeline.time
+ * @typedef {object} range
+ * @property {function} set
+ * @property {moment} start
+ * @property {moment} end
+ * @property {number} duration
+ * @property {Signal} change
+ * @property {function} moveStart
+ * @property {function} inside
+ * @property {function} surrounds
+ * @property {function} coincides
+ * @property {function} proto
+ */
+/**
+ * The timerange between two moments.
+ * @name totaltimeline.time.range
+ * @method
  * @param {moment} start
  * @param {moment} end
+ * @returns {range}
  */
 iddqd.ns('totaltimeline.time.range',function range(start,end){
 	'use strict';
@@ -12,11 +28,11 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		,change = new signals.Signal()
 		,oReturn = iddqd.factory(range,{
 			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
-			
+
 			,set: set
 			,start: start
 			,end: end
-			
+
 			,duration: start.ago-end.ago
 			,change: change
 			,moveStart: moveStart
@@ -40,7 +56,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		oReturn.duration = start.ago-end.ago;
 		change.dispatch();
 	}
-	
+
 	/**
 	 * Set both start and end time.
 	 * {number} startAgo
@@ -49,6 +65,15 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	function set(startAgo,endAgo){
 		start.set(startAgo,false);
 		end.set(endAgo);
+	}
+
+	/**
+	 * Mimic another range.
+	 * {range} range
+	 */
+	function set(range){
+		start.set(range.start.ago,false);
+		end.set(range.end.ago);
 	}
 
 	/**

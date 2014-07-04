@@ -292,6 +292,21 @@ module.exports = function (grunt) {
 			}
 		}
 
+
+		,jsdoc: {
+			dist: {
+				src: [
+					'README.md'
+					,'src/js/totaltimeline.js'
+				],
+				options: {
+					destination: 'doc'
+					,template: 'jsdoc_template'
+					,configure: 'jsdoc_template/jsdoc.conf.json'
+//					,mainpagetitle: 'harhar' // todo find out why this has no effect
+				}
+			}
+		}
 	});
 
 

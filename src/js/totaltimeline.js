@@ -1,5 +1,4 @@
 /**
- * @name totaltimeline
  * @namespace totaltimeline
  * @version 0.0.1
  * @author Ron Valstar (http://www.sjeiti.com/)

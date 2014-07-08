@@ -6,6 +6,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 
 	var s = totaltimeline.string
 		,time = totaltimeline.time
+		//,log = totaltimeline.view.log
 		,model
 		,signals = iddqd.signals
 		,keys
@@ -63,8 +64,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
 		//
-		//
-		touchInit();
+		mRange.addEventListener(s.touchstart,handleTouchStart,false);
+		mSpan.addEventListener(s.touchmove,handleTouchMove,false);
 	}
 
 	/**
@@ -79,8 +80,11 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		handleRangeChange();
 	}
 
-	function handleResize(ow,oh,w,h){
-		console.log('w,h,ow,oh',ow,oh,w,h); // log
+	/**
+	 * Handle resize Signal
+	 * Cache view element size on resize
+	 */
+	function handleResize(){//ow,oh,w,h
 		iSpanW = mSpan.offsetWidth;
 	}
 
@@ -132,6 +136,36 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mRange.setAttribute(s.dataBefore,oRange.start.toString());
 		mRange.setAttribute(s.dataAfter,oRange.end.toString());
 		mTime.innerText = s.duration(oRange.duration,2);
+	}
+
+
+	/**
+	 * Handles touchstart event to scroll or zoom the timeline.
+	 * @param {Event} e
+	 */
+	function handleTouchStart(e) {
+		iMouseXOffset = (e.offsetX||e.touches[0].pageX)-mRange.offsetLeft;
+	}
+
+	/**
+	 * Handles touchmove event to scroll or zoom the timeline.
+	 * @param {Event} e
+	 */
+	function handleTouchMove(e) {
+		var aTouchX = [];
+		Array.prototype.forEach.call(e.touches,function(touch) {
+			aTouchX.push(touch.pageX);
+		});
+		if (aTouchX.length===1){
+			rangeMove(aTouchX[0]);
+			e.preventDefault();
+		} else if (aTouchX.length===2){
+			if (aTouchX[0]>aTouchX[1]) {
+				aTouchX.push(aTouchX.shift());
+			}
+			oRange.set(relativeOffset(aTouchX[0]),relativeOffset(aTouchX[1]));
+			e.preventDefault();
+		}
 	}
 
 	/**
@@ -199,47 +233,6 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function relativeOffset(x) {
 		var fPartLeft = x/iSpanW;
 		return oSpan.duration - Math.floor(fPartLeft*oSpan.duration);
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-
-	var log = totaltimeline.view.log
-//		,bTouch
-	;
-
-	function touchInit() {
-		// tmp log
-		log('touch','test');
-		'touchstart,touchmove'.split(',').forEach(function(event){//touchend
-			mSpan.addEventListener(event,handleTouches,false);
-		});
-		mRange.addEventListener('touchstart',handleToucheRange,false);
-	}
-
-	function handleToucheRange(e) {
-		iMouseXOffset = e.offsetX||e.touches[0].pageX;
-		log('handleToucheRange',iMouseXOffset);
-	}
-
-	function handleTouches(e) {
-		var aX = [];
-		Array.prototype.forEach.call(e.touches,function(touch) {
-			aX.push(touch.pageX);
-		});
-		aX.sort();
-		log('handleTouches',e.type,e.touches.length,aX.join(','));
-		if (aX.length===1){
-			e.type!=='touchstart'&&rangeMove(aX[0]);
-		} else if (aX.length===2){
-			oRange.set(relativeOffset(aX[0]),relativeOffset(aX[1]));
-			//oRange.start.set(relativeOffset(aX[0]),false);
-			//oRange.end.set(relativeOffset(aX[1]));
-			e.preventDefault();
-		}
 	}
 
 	return init;

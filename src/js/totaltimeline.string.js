@@ -77,6 +77,9 @@ iddqd.ns('totaltimeline.string',(function(){
 		,mousemove: 'mousemove'
 		,mousedown: 'mousedown'
 		,mouseup: 'mouseup'
+		,touchstart: 'touchstart'
+		,touchmove: 'touchmove'
+		,touchend: 'touchend'
 		,drag: 'drag'
 		,click: 'click'
 		,getPercentage: getPercentage

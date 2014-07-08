@@ -1,10 +1,10 @@
 /**
- * @namespace totaltimeline.time.event
+ * @namespace totaltimeline.collection.events.event
  * @param {moment} start
  * @param {moment} end
  * @param {eventInfo} info
  */
-iddqd.ns('totaltimeline.time.event', function event(moment,info){
+iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	'use strict';
 
 	var s = totaltimeline.string

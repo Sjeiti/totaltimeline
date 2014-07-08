@@ -1,5 +1,6 @@
 //todo: typedef range
 /**
+ * An object instance created by the factory method {@link totaltimeline.time.range}
  * @typedef {object} range
  * @property {function} set
  * @property {moment} start
@@ -23,7 +24,7 @@
 iddqd.ns('totaltimeline.time.range',function range(start,end){
 	'use strict';
 	var time = totaltimeline.time
-		,period = time.period
+		,period = time.period // todo: period should be view element, remove here
 		,moment = time.moment
 		,change = new signals.Signal()
 		,oReturn = iddqd.factory(range,{
@@ -40,6 +41,8 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 			,inside: inside
 			,surrounds: surrounds
 			,coincides: coincides
+
+			,clone: clone
 
 			,proto: range
 		})
@@ -59,21 +62,18 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 
 	/**
 	 * Set both start and end time.
-	 * {number} startAgo
+	 * Method can be overloaded by either using only a range as the first parameter, or a number for both parameters.
+	 * {number|range} startAgo
 	 * {number} endAgo
 	 */
 	function set(startAgo,endAgo){
-		start.set(startAgo,false);
-		end.set(endAgo);
-	}
-
-	/**
-	 * Mimic another range.
-	 * {range} range
-	 */
-	function set(range){
-		start.set(range.start.ago,false);
-		end.set(range.end.ago);
+		if (arguments.length===1) { // assume range
+			start.set(startAgo.start.ago,false);
+			end.set(startAgo.end.ago);
+		} else {
+			start.set(startAgo,false);
+			end.set(endAgo);
+		}
 	}
 
 	/**
@@ -131,6 +131,10 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	function momentInside(moment){
 		window.foo&&console.log('momentInside',start.ago,end.ago,':',moment.ago,moment.ago<=start.ago&&moment.ago>=end.ago); // log
 		return moment.ago<=start.ago&&moment.ago>=end.ago;
+	}
+	
+	function clone() {
+		return range(start.clone(),end.clone());
 	}
 
 	return oReturn;

@@ -1,6 +1,7 @@
 /**
- * 'Abstract' implementation for a collection.
+ * A collection of {@link collectionInstance}s
  * @namespace totaltimeline.collection
+ * @property {number} length
  */
 iddqd.ns('totaltimeline.collection',(function(){
 	'use strict';
@@ -26,6 +27,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 */
 
 	/**
+	 * An object instance created by the factory method {@link totaltimeline.collection.add}
 	 * @typedef {Array} collectionInstance
 	 * @property {Element} wrapper ...
 	 * @property {DocumentFragment} fragment ...
@@ -63,13 +65,6 @@ iddqd.ns('totaltimeline.collection',(function(){
 		;
 
 		mWrapper.classList.add(slug);
-		mWrapper.addEventListener(totaltimeline.string.click,function(e){
-			var mTarget = e.target
-				,oRange = mTarget.range;
-			if (oRange) {
-				totaltimeline.model.range.set(oRange.start.ago,oRange.end.ago);
-			}
-		});
 
 		/**
 		 * Initialises JSONP call.
@@ -108,23 +103,25 @@ iddqd.ns('totaltimeline.collection',(function(){
 	}
 
 	/**
-	 * jhhgg
+	 * Populates all the collections for a range into a view.
 	 * @name totaltimeline.collection.populate
+	 * @method
 	 * @param {HTMLElement} view
 	 * @param {range} range
 	 */
 	function populate(view,range) {
-		collection.forEach(function(col){
-			col.populate(view,range);
+		collection.forEach(function(collectionInstance){
+			collectionInstance.populate(view,range);
 		});
 	}
 
 	/**
-	 * Get a specific property from a spreadsheet enty.
+	 * Get a specific property from a spreadsheet entry.
 	 * @name totaltimeline.collection.getProp
-	 * @param {object} entry
+	 * @method
+	 * @param {object} entry 
 	 * @param {string} prop
-	 * @param {boolean} [int]
+	 * @param {boolean} [int] Optional boolean to convert the value to an integer.
 	 */
 	function getProp(entry,prop,int){
 		var sProp = entry[sPrefix+prop]
@@ -135,10 +132,32 @@ iddqd.ns('totaltimeline.collection',(function(){
 
 	return iddqd.extend(collection,{
 		length: 0
+		/**
+		 * @name totaltimeline.collection.splice
+		 * @method
+		 * @param {Number} [start]
+		 * @param {Number} [deleteCount]
+		 * @param {...*} [items]
+		 * @return {Array}
+		 */
 		,splice: Array.prototype.splice.bind(collection)
+		/**
+		 * @name totaltimeline.collection.push
+		 * @method
+		 * @param {...*} [items]
+		 * @return {Number}
+		 */
 		,push: Array.prototype.push.bind(collection)
+		/**
+		 * @name totaltimeline.collection.forEach
+		 * @method
+		 * @param {Function} callback
+		 * @param {Object} [thisObject]
+		 * @return {void}
+		 */
 		,forEach: Array.prototype.forEach.bind(collection)
 		,add: add
 		,getProp: getProp
+		,populate: populate
 	});
 })());

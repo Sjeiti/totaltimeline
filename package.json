@@ -14,8 +14,6 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-rename": "0.0.3",
-    "grunt-google-cdn": "~0.2.0",
-    "google-cdn-data": "~0.1.2",
     "grunt-usemin": "~2.1.1",
     "glob": "~3.2.7",
     "node-zip": "~1.1.0",

@@ -12,7 +12,6 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		,time = totaltimeline.time
 		,moment = time.moment
 		,range = time.range
-		,period = time.period
 		,eventInfo = time.eventInfo
 		//
 		,aCollection = collection.add(
@@ -23,9 +22,21 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		)
 	;
 
+	aCollection.wrapper.addEventListener(s.click, handleWrapperClick, false);
+	//aCollection.wrapper.addEventListener(s.touchend, handleWrapperClick, false);
+
+	function handleWrapperClick(e) {
+		var mTarget = e.target
+			,oRange = mTarget.range;
+		totaltimeline.view.log('handleWrapperClick',mTarget.nodeName);
+		if (oRange) {
+			totaltimeline.model.range.set(oRange);//todo:animate
+		}
+	}
+
 	function handleGetData(sheet){
-		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',');
-		var iTimes = aTimes.length;
+		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
+			,iTimes = aTimes.length;
 		sheet.feed.entry.forEach(function(entry){
 			var iFrom = getProp(entry,'from',true)
 				,iTo = getProp(entry,'to',true)
@@ -42,7 +53,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 						break;
 					}
 				}
-				var oPeriod = period(
+				var oPeriod = aCollection.period(
 					range(moment(iFrom),moment(iTo))
 					,eventInfo(sName)
 					,iOffset

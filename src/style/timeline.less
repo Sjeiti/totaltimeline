@@ -1,7 +1,7 @@
 #timeline {
 	position: relative;
 	margin: 0 1rem;
-//	.user-select;
+	.user-select;
 	background-color: @colorGrayLight;
 	&.show-range {
 		&:before, &:after {
@@ -12,9 +12,9 @@
 }
 
 .events {
-//	.pointer-events;
 	.lt;
 	.size(100%);
+	pointer-events: none;
 //	background-color: rgba(255,0,0,.4);
 }
 	.event-wrap {
@@ -23,10 +23,11 @@
 	}
 		.event {
 			.lt;
-			z-index: 2;
+			//z-index: 2;
 			.size(@eventSize);
 			.transform(translateX(-.5*@eventSize));
 			.border-radius(@eventSize/2);
+			pointer-events: auto;
 			background-color: #c2c85d;
 			background-size: cover;
 			&[class^="event icon-"] {

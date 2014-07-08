@@ -10,13 +10,9 @@ module.exports = function (grunt) {
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
-	var fs = require('fs')
-		,glob = require('glob')
-		// config
-		,sFolderSrc = 'src'
+	var sFolderSrc = 'src'
 		,sFolderBuild = 'build'
 		,sFolderDist = 'dist'
-		,sBanner = getBanner(sFolderSrc+'/js/totaltimeline.js')
 	;
 
 	grunt.initConfig({
@@ -35,24 +31,15 @@ module.exports = function (grunt) {
 		,clean: {
 			build: { src: [sFolderBuild+'/**'] }
 			,dist: { src: [sFolderDist+'/**'] }
+			,jsdoc: { src: ['docs/**'] }
 		}
 
-        // Automatically inject Bower components into the HTML file
-        ,bowerInstall: {
-            app: {
-                src: [sFolderSrc+'/index.html']
-        	}
-        }
-
-//		// Replace Google CDN references (not working though)
-//		,cdnify: {
-//			options: {
-//				cdn: require('google-cdn-data')
-//			}
-//			,dist: {
-//				html: [sFolderDist+'/*.html']
-//			}
-//		}
+		// Automatically inject Bower components into the HTML file
+		,bowerInstall: {
+			app: {
+				src: [sFolderSrc + '/index.html']
+			}
+		}
 
 		// Compile less files
 		,less: {
@@ -67,20 +54,6 @@ module.exports = function (grunt) {
 				,dest: sFolderDist+'/style/screen.css'
 			}
 		}
-
-//		// Include files into other files
-//		,include_file: {
-//			main: {
-//				cwd: sFolderSrc+'/js/',
-//				src: ['main.js'],
-//				dest: sFolderBuild+'/js/'
-//			}
-//			,index: {
-//				cwd: sFolderSrc+'/',
-//				src: ['index.html'],
-//				dest: sFolderBuild+'/'
-//			}
-//		}
 
 		// Lint source files
 		,jshint: {
@@ -293,54 +266,19 @@ module.exports = function (grunt) {
 		}
 
 		,cli: {
-			jsdoc: { command: 'jsdoc src/js/ -r -c jsdoc_template/jsdoc.conf.json -d docs' }
+			jsdoc: { command: 'jsdoc src/js/ -r -c jsdoc_template/jsdoc.conf.json -d docs --template jsdoc_template' }
 			,release: { command: 'cordova build android --release' }
 			,clean: { cwd: 'platforms/android/cordova/', command: 'node clean', output: true }
 		}
 	});
 
-
-	/**
-	 * Convert initial jsdoc comments to object
-	 * @param source source file
-	 * @returns {{title: *}} jsdoc as object
-	 */
-	function getBanner(source){
-		var sSource = fs.readFileSync(source).toString();
-		return sSource.match(/\/\*\*([\s\S]*?)\*\//g)[0];
-	}
-
-
-	/**
-	 * Convert initial jsdoc comments to object
-	 * @param source source file
-	 * @returns {{title: *}} jsdoc as object
-	 */
-	function readBanner(source){
-		var sSource = fs.readFileSync(source).toString()
-			,sBanner = sSource.match(/\/\*\*([\s\S]*?)\*\//g)[0]
-			,aLines = sBanner.split(/[\n\r]/g)
-			,aMatchName = sBanner.match(/(\s?\*\s?([^@]+))/g)
-			,sName = aMatchName.shift().replace(/[\/\*\s\r\n]+/g,' ').trim()
-			,oBanner = {title:sName};
-		for (var i = 0, l = aLines.length; i<l; i++) {
-			var sLine = aLines[i]
-				,aMatchKey = sLine.match(/(\s?\*\s?@([^\s]*))/);
-			if (aMatchKey) {
-				var sKey = aMatchKey[2];
-				oBanner[sKey] = sLine.split(sKey).pop().trim();
-			}
-		}
-		return oBanner;
-	}
-
 	/**
 	 * Processes icomoon font package to less files
 	 */
-	grunt.registerMultiTask('fontcss2src', '', function() {
-		var fs = require('fs'),
-      sSrc = fs.readFileSync(this.data.src).toString();
-    sSrc = sSrc.replace(/url\(\'/g,'url(\'/styles/');
+	grunt.registerMultiTask('fontcss2src','',function () {
+		var fs = require('fs')
+			,sSrc = fs.readFileSync(this.data.src).toString();
+		sSrc = sSrc.replace(/url\(\'/g,'url(\'/styles/');
 		fs.writeFileSync(this.data.dest,sSrc);
 		grunt.log.writeln('updated '+this.data.dest+' with font data');
 	});
@@ -381,7 +319,8 @@ module.exports = function (grunt) {
 		,'fontcss2src'
 	]);
 	grunt.registerTask('jsdoc',[
-		'cli:jsdoc'
+		'clean:jsdoc'
+		,'cli:jsdoc'
 	]);
 	grunt.registerTask('default',[
 		'build'

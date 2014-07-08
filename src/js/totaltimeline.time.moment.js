@@ -1,4 +1,5 @@
 /**
+ * An object instance created by the factory method {@link totaltimeline.time.moment}
  * @typedef {object} moment
  * @property {function} set
  * @property {string} type The type of the moment. Can be totaltimeline.time.moment.AGO
@@ -38,6 +39,7 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 				,type:type
 				,set:set
 				,change:change
+				,clone:clone
 			})
 		;
 		//
@@ -68,6 +70,9 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 		function toString(){
 			return formatAnnum(iAgo,2);
 			//return '[moment '+value+' '+type+']';
+		}
+		function clone() {
+			return moment(oReturn.ago);
 		}
 		//
 		return oReturn;

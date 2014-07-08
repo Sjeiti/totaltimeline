@@ -11,7 +11,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		,getProp = collection.getProp
 		,time = totaltimeline.time
 		,moment = time.moment
-		,event = time.event
+//		,event = time.event
 		,eventInfo = time.eventInfo
 		//
 		,aCollection = collection.add(
@@ -21,6 +21,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 			,populate
 		)
 	;
+	//aCollection.wrapper.style.display = 'none';
 
 	/**
 	 * Turns the spreadsheet json data into an event list.
@@ -36,7 +37,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 				,bExclude = getProp(entry,'exclude')==='1'
 			;
 			if (oMoment&&!bExclude) {
-				aCollection.push(event(
+				aCollection.push(aCollection.event(
 					oMoment
 					,eventInfo(
 						 getProp(entry,'name')

@@ -1,35 +1,68 @@
 /**
  * @namespace totaltimeline.location
  */
-iddqd.ns('totaltimeline.location',(function(iddqd){
+iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	'use strict';
 
 	var s = totaltimeline.string
 		,time = totaltimeline.time
+		,log
 		,oRange
 		,sLocationOriginalPath = location.pathname
 		,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
 	;
 
 	function init(model){
+		log = totaltimeline.view.log;
 		oRange = model.range;
-		oRange.change.add(handleRangeChange);
-//		console.log('sLocationOriginalPath',sLocationOriginalPath); // log
-//		console.log('sLocationBase',sLocationBase); // log
 		//
-		// check location hash
-		var sHash = location.hash
-			,aHash
+		oRange.change.add(handleRangeChange);
+		window.addEventListener('popstate', handlePopstate, false);
+		//
+		updated(location.hash.substr(1));
+	}
+
+	function handleRangeChange(){
+		if (oRange.start.ago===time.UNIVERSE&&oRange.end.ago===time.NOW) {
+			update();
+		} else {
+			update(
+				s.formatAnnum(oRange.start.ago,2,false)
+				,s.formatAnnum(oRange.end.ago,2,false)
+			);
+		}
+	}
+
+	function handlePopstate() {
+		log('popstate');
+		log.watch('history.state',history.state);
+		log.watch('location.href',location.href);
+		log.watch('location.hash',location.hash);
+		log.watch('location.pathname',location.pathname);
+		updated(location.pathname.substr(1));
+	}
+
+	/**
+	 * Handles changes after location has changed.
+	 * @param {string} path Path without leading slash
+	 */
+	function updated(path){
+		log('location updated'
+			,path,':'
+			,location.hash
+			,location.pathname
+		);
+		var aPath
 			,aAgo = [];
-		if (sHash.length>1) {
-			aHash = sHash.substr(1).split('/');
-			if (aHash.length>=2) {
+		if (path.length>0) {
+			aPath = path.substr(1).split('/');
+			if (aPath.length>=2) {
 				for (var i=0;i<2;i++) {
-					var sMoment = aHash[i]
+					var sMoment = aPath[i]
 						,aString = sMoment.match(/[a-zA-Z]+/)
 						,sString = aString?aString[0]:''
 						,aNumber = sMoment.match(/[0-9\.]+/)
-						,fNumber = parseFloat(aNumber[0])
+						,fNumber = parseFloat(aNumber[0])// todo: Uncaught TypeError: Cannot read property '0' of null
 						,iAgo = fNumber
 					;
 					if (sString==='Ga') {
@@ -48,34 +81,37 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 				}
 				oRange.set.apply(oRange,aAgo);
 			}
+		} else {
+			oRange.set(time.UNIVERSE,time.NOW);
 		}
-		console.log('aAgo',aAgo); // log
-	}
-
-	function handleRangeChange(){
-		update(
-			s.formatAnnum(oRange.start.ago,2,false)
-			,s.formatAnnum(oRange.end.ago,2,false)
-		);
 	}
 
 	/**
-	 * Update option selection variable and try to call pushState
+	 * Update option selection variable and try to call pushState.
 	 * @param {string} [start] Start time
 	 * @param {string} [end] End time
 	 * @param {string} [subject] Optional subject
 	 */
 	function update(start,end,subject){
+
+		var currentState = history.state;
+		log.watch('currentState',currentState);
+
 		if (sLocationOriginalPath.indexOf(start)!==-1) {
 			sLocationOriginalPath = sLocationOriginalPath.split(start).shift();
 		}
-		if (window.history&&window.history.pushState) {
+		if (history.pushState) {//todo:what if no pushstate
 			var sPath = location.pathname
 				//,sNewPath = slug===undefined?sLocationBase:sLocationBase+'/'+slug
 				,sNewPath = start===undefined?sLocationOriginalPath:sLocationBase +start+'/'+end
 			;
 			if (sNewPath!==sPath) {
-				window.history.pushState('','foobar',sNewPath);
+				//(location.pathname==='/'?history.pushState:history.replaceState)('','foobar',sNewPath);
+				if (location.pathname==='/') {
+					history.pushState('','foobar',sNewPath);
+				} else {
+					history.replaceState('','foobar',sNewPath);
+				}
 			}
 		}
 		if (subject) {
@@ -89,4 +125,4 @@ iddqd.ns('totaltimeline.location',(function(iddqd){
 	return iddqd.extend(init,{
 		set: set
 	});
-})(iddqd));
+})(iddqd,window.history));

@@ -28,6 +28,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 	 * @param {object} sheet
 	 */
 	function handleGetData(sheet){
+		console.log('handleGetData',sheet); // log
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
 		sheet.feed.entry.forEach(function(entry){
 			var  iAgo =		getProp(entry,'ago',true)
@@ -60,20 +61,30 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 	}
 
 	function populate(fragment,range){
-		var started = 0
-			,iRangeStart = range.start.ago
+		var /*started = 0
+			,*/iRangeStart = range.start.ago
 			,iRangeEnd = range.end.ago
 			,iDuration = range.duration
 		;
 		for (var i=0,l=aCollection.length;i<l;i++) {
 			var oEvent = aCollection[i]
-				,iAgo = oEvent.moment.ago;
-			if (started===0&&iAgo<=iRangeStart) {
+				,iAgo = oEvent.moment.ago
+				,bInside = iAgo<iRangeStart&&iAgo>iRangeEnd
+			;
+			if (bInside) {
+				var mEvent = oEvent.element
+					,fRel = 1-((iAgo-iRangeEnd)/iDuration)
+				;
+				mEvent.style.left = s.getPercentage(fRel);
+				fragment.appendChild(mEvent);
+			}
+			oEvent.inside(bInside);
+			/*if (started===0&&iAgo<=iRangeStart) {
 				started++;
 			}
 			if (started===1) {
 				if (iAgo<iRangeEnd) {
-					break;
+					//break;
 				} else {
 					var mEvent = oEvent.element
 						,fRel = 1-((iAgo-iRangeEnd)/iDuration)
@@ -81,7 +92,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 					mEvent.style.left = s.getPercentage(fRel);
 					fragment.appendChild(mEvent);
 				}
-			}
+			}*/
 		}
 	}
 

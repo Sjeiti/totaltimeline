@@ -7,6 +7,7 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 	var time = totaltimeline.time
 		,moment = time.moment
 		,range = time.range
+		,sgInfoShown = new signals.Signal()
 		// see: https://developers.google.com/gdata/samples/spreadsheet_sample
 		// see: https://developers.google.com/google-apps/spreadsheets/
 		//,sSpreadsheetKey = '0AgLsBMvUgAW8dE1ZRDJUOVliVnFwNE9DcGRmNHRIbWc'
@@ -28,5 +29,6 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		span: oSpan
 		,range: oRange
 		,spreadsheetKey: sSpreadsheetKey
+		,infoShown: sgInfoShown
 	});
 })());

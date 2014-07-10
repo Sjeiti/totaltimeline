@@ -17,8 +17,8 @@
     "grunt-usemin": "~2.1.1",
     "glob": "~3.2.7",
     "node-zip": "~1.1.0",
-    "grunt-bower-install": "~1.4.0",
     "grunt-version-git": "~0.1.5",
-    "grunt-include-file": "~0.1.1"
+    "grunt-include-file": "~0.1.1",
+    "grunt-svgmin": "~0.4.0"
   }
 }

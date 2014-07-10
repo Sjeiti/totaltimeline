@@ -23,18 +23,22 @@
 	}
 		.event {
 			.lt;
-			//z-index: 2;
+			z-index: 2;
 			.size(@eventSize);
 			.transform(translateX(-.5*@eventSize));
 			.border-radius(@eventSize/2);
 			pointer-events: auto;
 			background-color: #c2c85d;
 			background-size: cover;
+			cursor: pointer;
 			&[class^="event icon-"] {
 				background-color: transparent;
 				.border-radius(0);
 				.size(@eventIconSize);
 				.transform(translateX(-.5*@eventIconSize));
+			}
+			&.selected {
+				background-color: red;
 			}
 		}
 		.line {
@@ -58,13 +62,14 @@
 		font-weight: bold;
 		white-space: nowrap;
 		text-indent: .4rem;
-		cursor: pointer;
-		&:hover {
-			color: red;
-		}
 		.title {
 			position: relative;
+			display: inline;
 			font-size: .7rem;
 			z-index: 1;
+			cursor: pointer;
+			&:hover {
+				color: red;
+			}
 		}
 	}

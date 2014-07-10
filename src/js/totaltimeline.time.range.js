@@ -24,7 +24,6 @@
 iddqd.ns('totaltimeline.time.range',function range(start,end){
 	'use strict';
 	var time = totaltimeline.time
-		,period = time.period // todo: period should be view element, remove here
 		,moment = time.moment
 		,change = new signals.Signal()
 		,oReturn = iddqd.factory(range,{
@@ -38,13 +37,13 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 			,change: change
 			,moveStart: moveStart
 
-			,inside: inside
-			,surrounds: surrounds
+			//,inside: inside
+			//,surrounds: surrounds
 			,coincides: coincides
 
 			,clone: clone
 
-			,proto: range
+//			,proto: range
 		})
 	;
 	// todo: check if start > end
@@ -87,7 +86,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		change.dispatch();
 	}
 
-	function inside(time) { // todo: rem
+	/*function inside(time) {
 		var oStartEnd = getInsideStartEnd(time);
 		return !oStartEnd.start&&!oStartEnd.end;
 	}
@@ -95,20 +94,24 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	function surrounds(time) {
 		var oStartEnd = getInsideStartEnd(time);
 		return oStartEnd.start&&oStartEnd.end;
-	}
+	}*/
 
+	/**
+	 *
+	 * @param {moment|range} time
+	 * @returns {boolean}
+	 */
 	function coincides(time){
 		var bCoincides = false;
 		if (time.factory===moment) {
 			bCoincides = momentInside(time);
 		} else {
-			var oRange = time.factory===period?time.range:time
-				,iStart = start.ago
+			var iStart = start.ago
 				,iEnd = end.ago
-				,iRStart = oRange.start.ago
-				,iREnd = oRange.end.ago;
-			bCoincides = momentInside(oRange.start)
-				||momentInside(oRange.end)
+				,iRStart = time.start.ago
+				,iREnd = time.end.ago;
+			bCoincides = momentInside(time.start)
+				||momentInside(time.end)
 				||iStart<=iRStart&&iEnd>=iREnd
 				||iStart>=iRStart&&iEnd<=iREnd
 			;
@@ -116,7 +119,12 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 		return bCoincides;
 	}
 
-	function getInsideStartEnd(time){ // todo: check or rem
+	function momentInside(moment){
+		window.foo&&console.log('momentInside',start.ago,end.ago,':',moment.ago,moment.ago<=start.ago&&moment.ago>=end.ago); // log
+		return moment.ago<=start.ago&&moment.ago>=end.ago;
+	}
+
+	/*function getInsideStartEnd(time){
 		var oRange, bStart, bEnd;
 		if (time.factory===moment) {
 			bStart = bEnd = momentInside(time);
@@ -126,13 +134,8 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 			bEnd = momentInside(oRange.end);
 		}
 		return {start:bStart,end:bEnd};
-	}
+	}*/
 
-	function momentInside(moment){
-		window.foo&&console.log('momentInside',start.ago,end.ago,':',moment.ago,moment.ago<=start.ago&&moment.ago>=end.ago); // log
-		return moment.ago<=start.ago&&moment.ago>=end.ago;
-	}
-	
 	function clone() {
 		return range(start.clone(),end.clone());
 	}

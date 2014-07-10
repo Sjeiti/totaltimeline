@@ -72,6 +72,9 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 */
 		function getData(){
 			iddqd.network.jsonp(sheetUri,callback);
+
+//			window['_'+slug] = callback;
+//			iddqd.loadScript('/data/_'+slug+'.js');
 		}
 
 		/**
@@ -119,7 +122,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 * Get a specific property from a spreadsheet entry.
 	 * @name totaltimeline.collection.getProp
 	 * @method
-	 * @param {object} entry 
+	 * @param {object} entry
 	 * @param {string} prop
 	 * @param {boolean} [int] Optional boolean to convert the value to an integer.
 	 */

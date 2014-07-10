@@ -8,6 +8,7 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	'use strict';
 
 	var s = totaltimeline.string
+		,model = totaltimeline.model
 		,mWrap = zen('div.event-wrap>(div.line+div.event)').pop()
 		,mEvent = mWrap.querySelector('.event')
 		,mLine = mWrap.querySelector('.line')
@@ -20,9 +21,22 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	mEvent.addEventListener(s.click,handleClick);
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 	mLine.style.height = sHeight;
+	model.infoShown.add(handleInfoShown);
+
+	function handleInfoShown(shownInfo){
+		mEvent.classList.toggle(s.selected,shownInfo===info);
+	}
 
 	function handleClick(){
 		console.log('eventClick'); // log
+		model.infoShown.dispatch(info);
+//		totaltimeline.view.content.show(info);
+	}
+
+	function inside(is){
+		if (!is&&mEvent.classList.contains(s.selected)) {
+			model.infoShown.dispatch();
+		}
 	}
 
 	return iddqd.factory(event,{
@@ -30,5 +44,6 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		,moment: moment
 		,info: info
 		,element: mWrap
+		,inside: inside
 	});
 });

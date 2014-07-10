@@ -20,6 +20,10 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	mTitle.range = range;
 	mElement.appendChild(mTitle);
 
+	function coincides(time){
+		return range.coincides(time.factory===period?time.range:time);
+	}
+
 	return iddqd.factory(period,{
 		toString: function(){
 			return '[object period, '+info.name+': '+range.start.toString()+' - '+range.end.toString()+']';
@@ -28,8 +32,8 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 		,info: info
 		,element: mElement
 
-		,inside: range.inside
-		,surrounds: range.surrounds
-		,coincides: range.coincides
+//		,inside: range.inside
+//		,surrounds: range.surrounds
+		,coincides: coincides
 	});
 });

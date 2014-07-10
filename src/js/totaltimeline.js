@@ -14,6 +14,7 @@ iddqd.ns('totaltimeline',(function(iddqd){
 		model();
 		view.overview(model);
 		view.timeline(model);
+		view.content(model);
 		location(model);
 	});
 })(iddqd));

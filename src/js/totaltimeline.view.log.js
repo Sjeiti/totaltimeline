@@ -16,7 +16,7 @@ iddqd.ns('totaltimeline.view.log',(function(iddqd){
 			mLog = zen('pre.log').pop();
 			mLog.style.position = 'absolute';
 			mLog.style.top = '10%';
-			mLog.style.margin = '0 0 0 1rem';
+			mLog.style.right = '1rem';
 			mLog.style.height = '90%';
 			mLog.style.display = 'block';
 			mLog.style.backgroundColor = 'yellow';

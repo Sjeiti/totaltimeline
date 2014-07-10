@@ -34,13 +34,6 @@ module.exports = function (grunt) {
 			,jsdoc: { src: ['docs/**'] }
 		}
 
-		// Automatically inject Bower components into the HTML file
-		,bowerInstall: {
-			app: {
-				src: [sFolderSrc + '/index.html']
-			}
-		}
-
 		// Compile less files
 		,less: {
 			build: {
@@ -241,17 +234,27 @@ module.exports = function (grunt) {
 			}
 		}
 
+		,svgmin: {
+			options: {
+				plugins: [
+				  { removeViewBox: false }
+				  ,{ removeUselessStrokeAndFill: false }
+				]
+			}
+			,dist: {
+				files: [{
+					expand: true
+					,cwd: 'design/svgExport/'
+					,src: ['*.svg']
+					,dest: 'temp/svg/'
+					,ext: '.svg'
+				}]
+			}
+		}
 		,svgIcons: {
 		  main: {
-			src: 'design/svgExport/',
+			src: 'temp/svg/',
 			dest: 'src/style/svgIcons.less'
-		  }
-		}
-
-		,fontcss2src: {
-		  updatefont: {
-			src: 'icons/font/style.css',
-			dest: sFolderSrc+'/style/iconfont.less'
 		  }
 		}
 
@@ -272,17 +275,6 @@ module.exports = function (grunt) {
 		}
 	});
 
-	/**
-	 * Processes icomoon font package to less files
-	 */
-	grunt.registerMultiTask('fontcss2src','',function () {
-		var fs = require('fs')
-			,sSrc = fs.readFileSync(this.data.src).toString();
-		sSrc = sSrc.replace(/url\(\'/g,'url(\'/styles/');
-		fs.writeFileSync(this.data.dest,sSrc);
-		grunt.log.writeln('updated '+this.data.dest+' with font data');
-	});
-
 	grunt.registerTask('js',[
 		'copy:js'
 	]);
@@ -296,7 +288,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('build',[
 		'clean:build'
-		,'bowerInstall'
+		,'bower'
 		//,'include_file'
 		,'copy:build'
 		,'less:build'
@@ -314,13 +306,14 @@ module.exports = function (grunt) {
 		,'uglify'
 		,'usemin'
 	]);
-	grunt.registerTask('updatefont',[
-		'copy:updatefont'
-		,'fontcss2src'
-	]);
 	grunt.registerTask('jsdoc',[
 		'clean:jsdoc'
 		,'cli:jsdoc'
+	]);
+	grunt.registerTask('svg',[
+		'svgmin'
+		,'svgIcons'
+		,'css'
 	]);
 	grunt.registerTask('default',[
 		'build'

@@ -37,7 +37,7 @@ iddqd.ns('totaltimeline.string',(function(){
 		// todo: rounding sometimes off: split at . truncate and join
 		space = space===false?'':sSpace;
 		var sReturn;
-		if (year>4000) {	
+		if (year>4000) {
 			if (round===undefined) round = 0;
 			for (var i = 0; year>1000 && (aAnnum.length>=(i + 2)); i++) year /= 1000;
 			var iMult = Math.pow(10,round);

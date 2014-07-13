@@ -7,6 +7,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
+		,model = totaltimeline.model
 		,collection = totaltimeline.collection
 		,getProp = collection.getProp
 		,time = totaltimeline.time
@@ -21,7 +22,16 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 			,populate
 		)
 	;
-	//aCollection.wrapper.style.display = 'none';
+
+	aCollection.wrapper.addEventListener(s.click, handleWrapperClick, false);
+	function handleWrapperClick(e) {
+		var mTarget = e.target
+			,oModel = mTarget.model;
+		if (oModel&&oModel.factory===collection.events.event) {
+			model.infoShown.dispatch(oModel.info);
+			//model.range.set(oModel.range);//todo:animate
+		}
+	}
 
 	/**
 	 * Turns the spreadsheet json data into an event list.

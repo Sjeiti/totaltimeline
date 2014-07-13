@@ -15,10 +15,17 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		,fTop = 0.9*iddqd.math.prng.random(Math.abs(moment.value<18000?10000*moment.value:moment.value))
 		,sTop = s.getPercentage(fTop)
 		,sHeight = s.getPercentage(1-fTop)
+		,oReturn = iddqd.factory(event,{
+			toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}
+			,moment: moment
+			,info: info
+			,element: mWrap
+			,inside: inside
+		})
 	;
+	mEvent.model = oReturn;
 	mEvent.setAttribute('title',info.name+' '+moment.toString());
 	mEvent.style.top = sTop;
-	mEvent.addEventListener(s.click,handleClick);
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 	mLine.style.height = sHeight;
 	model.infoShown.add(handleInfoShown);
@@ -27,23 +34,11 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		mEvent.classList.toggle(s.selected,shownInfo===info);
 	}
 
-	function handleClick(){
-		console.log('eventClick'); // log
-		model.infoShown.dispatch(info);
-//		totaltimeline.view.content.show(info);
-	}
-
 	function inside(is){
 		if (!is&&mEvent.classList.contains(s.selected)) {
 			model.infoShown.dispatch();
 		}
 	}
 
-	return iddqd.factory(event,{
-		toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}
-		,moment: moment
-		,info: info
-		,element: mWrap
-		,inside: inside
-	});
+	return oReturn;
 });

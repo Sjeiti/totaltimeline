@@ -7,6 +7,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
+		,model = totaltimeline.model
 		,collection = totaltimeline.collection
 		,getProp = collection.getProp
 		,time = totaltimeline.time
@@ -27,10 +28,10 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 
 	function handleWrapperClick(e) {
 		var mTarget = e.target
-			,oRange = mTarget.range;
-		totaltimeline.view.log('handleWrapperClick',mTarget.nodeName);
-		if (oRange) {
-			totaltimeline.model.range.set(oRange);//todo:animate
+			,oModel = mTarget.model;
+		if (oModel&&oModel.factory===collection.periods.period) {
+			model.infoShown.dispatch(oModel.info);
+			model.range.set(oModel.range);//todo:animate
 		}
 	}
 

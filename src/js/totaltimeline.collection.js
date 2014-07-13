@@ -50,7 +50,9 @@ iddqd.ns('totaltimeline.collection',(function(){
 	function add(slug,sheetUri,callback,_populate){
 		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
 
-		var aCollection = []
+		var s = totaltimeline.string
+			,model = totaltimeline.model
+			,aCollection = []
 			,mWrapper = document.createElement('div')
 			,mFragment = document.createDocumentFragment()
 			,sgDataLoaded = new signals.Signal()
@@ -65,6 +67,17 @@ iddqd.ns('totaltimeline.collection',(function(){
 		;
 
 		mWrapper.classList.add(slug);
+
+		mWrapper.addEventListener(s.click, handleWrapperClick, false);
+		function handleWrapperClick(e) {
+			var mTarget = e.target
+				,oModel = mTarget.model;
+			oModel&&oModel.info&&model.infoShown.dispatch(oModel.info);
+			/*if (oModel&&oModel.factory===collection.events.event) {
+				model.infoShown.dispatch(oModel.info);
+				//model.range.set(oModel.range);//todo:animate
+			}*/
+		}
 
 		/**
 		 * Initialises JSONP call.

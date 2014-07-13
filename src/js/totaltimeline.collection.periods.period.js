@@ -32,7 +32,9 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	model.infoShown.add(handleInfoShown);
 
 	function handleInfoShown(shownInfo){
-		mElement.classList.toggle(s.selected,shownInfo===info);
+		var bIs = shownInfo===info;
+		mElement.classList.toggle(s.selected,bIs);
+		bIs&&model.range.set(range);//todo:animate
 	}
 
 	function coincides(time){

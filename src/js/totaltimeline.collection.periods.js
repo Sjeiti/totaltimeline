@@ -7,7 +7,6 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
-		,model = totaltimeline.model
 		,collection = totaltimeline.collection
 		,getProp = collection.getProp
 		,time = totaltimeline.time
@@ -22,18 +21,6 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 			,populate
 		)
 	;
-
-	aCollection.wrapper.addEventListener(s.click, handleWrapperClick, false);
-	//aCollection.wrapper.addEventListener(s.touchend, handleWrapperClick, false);
-
-	function handleWrapperClick(e) {
-		var mTarget = e.target
-			,oModel = mTarget.model;
-		if (oModel&&oModel.factory===collection.periods.period) {
-			model.infoShown.dispatch(oModel.info);
-			model.range.set(oModel.range);//todo:animate
-		}
-	}
 
 	function handleGetData(sheet){
 		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',')

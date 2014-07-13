@@ -43,7 +43,9 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 				}
 				var oPeriod = aCollection.period(
 					range(moment(iFrom),moment(iTo))
-					,eventInfo(sName)
+					,eventInfo(
+						sName
+					)
 					,iOffset
 				);
 				aCollection.push(oPeriod);

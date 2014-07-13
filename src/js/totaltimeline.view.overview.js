@@ -54,16 +54,20 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Initialise event listeners (and signals).
 	 */
 	function initEvents(){
+		// resize
 		signals.resize.add(handleResize);
+		// is over
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
 			mSpan.addEventListener(event,handleSpanMouse,false);
 		});
+		// drag
 		mRange.addEventListener(s.mousedown,handleRangeMouseClick,false);
 		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
 		mBody.addEventListener(s.mouseup,handleRangeMouseClick,false);
+		// wheel
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
-		//
+		// touch
 		mRange.addEventListener(s.touchstart,handleTouchStart,false);
 		mSpan.addEventListener(s.touchmove,handleTouchMove,false);
 	}
@@ -103,14 +107,26 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function handleRangeMouseClick(e){
 		bRangeMouseDown = e.type===s.mousedown;
 		if (bRangeMouseDown) iMouseXOffset = e.offsetX;
+		if (bRangeMouseDown) {
+			iMouseXOffsetDelta = 0;
+			iMouseXOffsetLast = e.clientX;
+		}
 	}
+	var iMouseXOffsetDelta = 0;
+	var iMouseXOffsetLast = 0;
 
 	/**
 	 * Handles move event and moves mRange if the mouse is down.
 	 * @param e
 	 */
 	function handleBodyMouseMove(e){
-		bRangeMouseDown&&rangeMove(e.clientX);
+		if (bRangeMouseDown) {
+			// todo: rangeMove?
+			var iOffsetX = e.clientX;//offsetX;
+			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
+			iMouseXOffsetLast = iOffsetX;
+			oRange.moveStart(oRange.start.ago - Math.round(iMouseXOffsetDelta/iSpanW*oSpan.duration));
+		}
 	}
 
 	/**
@@ -217,7 +233,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Moves the 'range' object.
 	 * @param {number} x The amount of pixels to move.
 	 */
-	function rangeMove(x){
+	function rangeMove(x){ // todo: might be off since span now has left/right margin
 		// todo: check max and min
 		var iRangeWidth = mRange.offsetWidth
 			,iNewLeft = Math.min(Math.max(x-iMouseXOffset,0),iSpanW-iRangeWidth)

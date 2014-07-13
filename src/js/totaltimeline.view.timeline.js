@@ -14,11 +14,16 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,oRange
 		,aEvents
 		,aPeriods
+		,mBody
 		,mView
 		,iViewW
 		,iViewL
 		,bOver = false
 		,aTouchXLast = []
+		//
+		,bViewMouseDown = false
+		,iMouseXOffsetDelta = 0
+		,iMouseXOffsetLast = 0
 	;
 
 	function init(model){
@@ -36,6 +41,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		oRange = model.range;
 		aEvents = model.events;
 		aPeriods = model.periods;
+		// view elements
+		mBody = document.body;
 		mView = document.getElementById('timeline');
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
@@ -46,17 +53,24 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Initialise event listeners (and signals).
 	 */
 	function initEvents(){
+		// resize
 		signals.resize.add(handleResize);
+		// is over
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
 			mView.addEventListener(event,handleSpanMouse,!false);
 		});
+		// drag
+		mView.addEventListener(s.mousedown,handleViewMouseClick,false);
+		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
+		mBody.addEventListener(s.mouseup,handleViewMouseClick,false);
+		// wheel
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
-		//
+		// collection
 		collection.forEach(function(col){
 			col.dataLoaded.add(handleRangeChange);
 		});
-		//
+		// touch
 		mView.addEventListener(s.touchstart,handleTouchStart,!false);
 		mView.addEventListener(s.touchmove,handleTouchMove,false);
 	}
@@ -84,6 +98,34 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 */
 	function handleSpanMouse(e){
 		bOver = e.type!==s.mouseout;
+	}
+
+	/**
+	 * Handles click event. Determines when the mouse is down and stores the offset with the target.
+	 * @param e
+	 */
+	function handleViewMouseClick(e){
+		bViewMouseDown = e.type===s.mousedown;
+		if (bViewMouseDown) {
+			iMouseXOffsetDelta = 0;
+			iMouseXOffsetLast = e.clientX;//.offsetX;
+		}
+	}
+
+	/**
+	 * Handles move event and moves mRange if the mouse is down.
+	 * @param e
+	 */
+	function handleBodyMouseMove(e){
+		if (bViewMouseDown) {
+			var iOffsetX = e.clientX;//offsetX;
+			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
+			iMouseXOffsetLast = iOffsetX;
+			// todo: cache mView.offsetWidth
+
+			console.log('iMouseXOffsetDelta',e,iMouseXOffsetDelta); // log
+			oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
+		}
 	}
 
 	/**

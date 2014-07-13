@@ -47,6 +47,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		if (info) {
 			var mDL = document.createElement('dl');
 			for (var s in info) {
+
 				zen('dt{'+s+'}+dd{'+info[s]+'}').forEach(mDL.appendChild.bind(mDL));
 			}
 			mContent.appendChild(mDL);

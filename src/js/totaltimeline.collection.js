@@ -39,6 +39,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 
 	/**
 	 * Adds a new collection type to the timeline.
+	 * todo: explain click event listener
 	 * @name totaltimeline.collection.add
 	 * @method
 	 * @param {string} slug The name of the collection (will serve as classname in the view).
@@ -73,10 +74,6 @@ iddqd.ns('totaltimeline.collection',(function(){
 			var mTarget = e.target
 				,oModel = mTarget.model;
 			oModel&&oModel.info&&model.infoShown.dispatch(oModel.info);
-			/*if (oModel&&oModel.factory===collection.events.event) {
-				model.infoShown.dispatch(oModel.info);
-				//model.range.set(oModel.range);//todo:animate
-			}*/
 		}
 
 		/**
@@ -85,7 +82,6 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 */
 		function getData(){
 			iddqd.network.jsonp(sheetUri,callback);
-
 //			window['_'+slug] = callback;
 //			iddqd.loadScript('/data/_'+slug+'.js');
 		}

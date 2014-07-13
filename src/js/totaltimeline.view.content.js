@@ -47,8 +47,13 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		if (info) {
 			var mDL = document.createElement('dl');
 			for (var s in info) {
-
-				zen('dt{'+s+'}+dd{'+info[s]+'}').forEach(mDL.appendChild.bind(mDL));
+				var sDD = info[s]
+					,bLink = s==='link'&&sDD!==undefined;
+				// todo: multiple links by \n
+				zen(bLink
+					?'dt{'+s+'}+dd>a[href="'+sDD+'" target=_blank]{'+sDD+'}'
+					:'dt{'+s+'}+dd{'+sDD+'}'
+				).forEach(mDL.appendChild.bind(mDL));
 			}
 			mContent.appendChild(mDL);
 		}

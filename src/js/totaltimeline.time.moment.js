@@ -4,12 +4,18 @@
  * @property {function} set
  * @property {string} type The type of the moment. Can be totaltimeline.time.moment.AGO
  * @property {Signal} change Signal dispatched when the value of the moment changes
+ * @property {function} clone Clone the moment object.
  * @property {function} factory Direct link back to the original factory
  */
-/**
+/*
  * A single moment in time
  * @namespace totaltimeline.time.moment
  * @property {function} set
+ */
+/*
+ * @constant {string} SINCE
+ * @constant {string} AGO
+ * @constant {string} YEAR
  */
 /**
  * A single moment in time

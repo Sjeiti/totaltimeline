@@ -8,10 +8,9 @@
  * @property {number} duration
  * @property {Signal} change
  * @property {function} moveStart
- * @property {function} inside
- * @property {function} surrounds
  * @property {function} coincides
- * @property {function} proto
+ * @property {function} clone
+ * @property {function} factory Direct link back to the original factory
  */
 /**
  * The timerange between two moments.
@@ -37,13 +36,9 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 			,change: change
 			,moveStart: moveStart
 
-			//,inside: inside
-			//,surrounds: surrounds
 			,coincides: coincides
 
 			,clone: clone
-
-//			,proto: range
 		})
 	;
 	// todo: check if start > end
@@ -120,7 +115,6 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	}
 
 	function momentInside(moment){
-		window.foo&&console.log('momentInside',start.ago,end.ago,':',moment.ago,moment.ago<=start.ago&&moment.ago>=end.ago); // log
 		return moment.ago<=start.ago&&moment.ago>=end.ago;
 	}
 

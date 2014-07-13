@@ -13,15 +13,15 @@ iddqd.ns('totaltimeline.collection',(function(){
 
 	/**
 	 * Callback method for the Ajax spreadsheet request.
-	 * @callback add~callback
+	 * @callback totaltimeline.collection~add-callback
 	 * @param {object} sheet The spreadsheet object.
 	 * @see https://developers.google.com/gdata/samples/spreadsheet_sample
 	 * @see https://developers.google.com/google-apps/spreadsheets/
 	 */
 
 	/**
-	 * The method that populates the collection.
-	 * @callback add~populate
+	 * The callback method that populates the collection.
+	 * @callback totaltimeline.collection~add-populate
 	 * @param {DocumentFragment} fragment The fragment to populate. Fragment itself is added in {@link collectionInstance.populate|the collection instance object}.
 	 * @param {totaltimeline.time.range} range The {@link totaltimeline.time.range|time range} to apply.
 	 */
@@ -29,12 +29,11 @@ iddqd.ns('totaltimeline.collection',(function(){
 	/**
 	 * An object instance created by the factory method {@link totaltimeline.collection.add}
 	 * @typedef {Array} collectionInstance
-	 * @property {Element} wrapper ...
-	 * @property {DocumentFragment} fragment ...
-	 * @property {function} populate ...
-	 * @property {function} getData ...
-	 * @property {function} getProp ...
-	 * @property {Signal} dataLoaded ...
+	 * @property {Element} wrapper The wrapper element (has the event listeners for the collection instances).
+	 * @property {DocumentFragment} fragment A document fragment re-used for populating the wrapper element.
+	 * @property {function} populate Populates the view for a specific {@link totaltimeline.time.range|range}.
+	 * @property {function} getData Initialises the Ajax call to load the spreadsheet data.
+	 * @property {Signal} dataLoaded Signal that fires when the spreadsheet data is loaded.
 	 */
 
 	/**
@@ -44,8 +43,8 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 * @method
 	 * @param {string} slug The name of the collection (will serve as classname in the view).
 	 * @param {string} sheetUri The Google spreadsheet uri containing the collection data.
-	 * @param {add~callback} callback The callback uri to process the collection data.
-	 * @param {add~populate} populate The method that populates the collection.
+	 * @param {totaltimeline.collection~add-callback} callback The callback uri to process the collection data.
+	 * @param {totaltimeline.collection~add-populate} populate The method that populates the collection.
 	 * @return {collectionInstance} Collection instance object.
 	 */
 	function add(slug,sheetUri,callback,_populate){
@@ -62,7 +61,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 				,fragment: mFragment
 				,populate: populate
 				,getData: getData
-				,getProp: getProp//todo: can be removed
+//				,getProp: getProp//todo: can be removed
 				,dataLoaded: sgDataLoaded
 			})
 		;

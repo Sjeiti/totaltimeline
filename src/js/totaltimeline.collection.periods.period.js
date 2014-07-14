@@ -36,7 +36,7 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	 * @param {period|event} entry
 	 */
 	function handleEntryShown(entry){
-		var bIs = entry.info===info;
+		var bIs = entry&&entry.info===info;
 		mElement.classList.toggle(s.selected,bIs);
 		bIs&&model.range.set(range);//todo:animate
 	}

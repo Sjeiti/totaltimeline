@@ -5,6 +5,8 @@
  * @property {function} set
  * @property {moment} start
  * @property {moment} end
+ * @property {moment} min
+ * @property {moment} max
  * @property {number} duration
  * @property {Signal} change
  * @property {function} moveStart
@@ -31,8 +33,12 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
 
 			,set: set
+
 			,start: start
 			,end: end
+
+			,min: min
+			,max: max
 
 			,duration: start.ago-end.ago
 			,change: change
@@ -70,6 +76,11 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 			start.set(startAgo,false);
 			end.set(endAgo);
 		}
+		if (min&&start.ago>min.ago) {
+			// todo: implement without moveStart and only calling start.set and end.set once
+			moveStart(min.ago);
+		}
+		// todo: implement max
 	}
 
 	/**
@@ -78,11 +89,11 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	 * @fires Change signal.
 	 */
 	function moveStart(ago) {
-		//console.log('min',min); // log
-		if (min&&ago>min.ago) { //
+		if (min&&ago>min.ago) {
 			end.ago += ago-min.ago;
 			ago = min.ago;
 		}
+		// todo: implement max
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
 		change.dispatch();

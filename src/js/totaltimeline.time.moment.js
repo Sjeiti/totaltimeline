@@ -103,17 +103,20 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 	 */
 	function formatAnnum(year,round){
 		// todo: rounding sometimes off: split at . truncate and join
-		var sReturn;
-		if (year>4000) {
+		var sReturn
+			,iYearAbs = Math.abs(year)
+			,iYearCnt = iYearAbs
+		;
+		if (iYearAbs>4000) {
 			//var i = year;
 			if (round===undefined) round = 0;
-			var aSizes = [' a',' ka',' Ma',' Ga'];
-			for (var i = 0; year>1000 && (aSizes.length>=(i + 2)); i++) year /= 1000;
+			var aSizes = year>0?[' a',' ka',' Ma',' Ga']:[' ',' k',' M',' G'];
+			for (var i = 0; iYearCnt>1000 && (aSizes.length>=(i + 2)); i++) iYearCnt /= 1000;
 			var iMult = Math.pow(10,round);
-			sReturn = (Math.round(year * iMult) / iMult) + aSizes[i];
+			sReturn = (Math.round(iYearCnt * iMult) / iMult) + aSizes[i];
 		} else {
 			year = time.YEAR_NOW-year;
-			sReturn = Math.abs(year) + (year<0?' BC':(year<1500?' AD':''));
+			sReturn = Math.round(Math.abs(year)) + (year<0?' BC':(year<1500?' AD':''));
 		}
 		return sReturn;
 	}

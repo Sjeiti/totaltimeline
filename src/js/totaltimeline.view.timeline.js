@@ -118,12 +118,10 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 */
 	function handleBodyMouseMove(e){
 		if (bViewMouseDown) {
-			var iOffsetX = e.clientX;//offsetX;
+			var iOffsetX = e.clientX;
 			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
 			iMouseXOffsetLast = iOffsetX;
 			// todo: cache mView.offsetWidth
-
-			console.log('iMouseXOffsetDelta',e,iMouseXOffsetDelta); // log
 			oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
 		}
 	}

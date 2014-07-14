@@ -220,10 +220,11 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		//
 //		if (iNewEnd<0) iNewEnd = 0;
 //		if (iNewStart>time.UNIVERSE) iNewStart = time.UNIVERSE;
-//		if (iNewEnd>iNewStart) {
-//			iNewStart = iStart;
-//			iNewEnd = iEnd;
-//		}
+		if (iNewEnd>iNewStart) {
+			var iHalf = iNewStart + Math.ceil((iNewEnd-iNewStart)/2);
+			iNewStart = iHalf-1;
+			iNewEnd = iHalf;
+		}
 		oRange.set(iNewStart,iNewEnd);
 		//oRange.start.set(iNewStart,false);
 		//oRange.end.set(iNewEnd);

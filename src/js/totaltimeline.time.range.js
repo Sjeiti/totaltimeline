@@ -18,9 +18,11 @@
  * @method
  * @param {moment} start
  * @param {moment} end
+ * @param {moment} min
+ * @param {moment} max
  * @returns {range}
  */
-iddqd.ns('totaltimeline.time.range',function range(start,end){
+iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	'use strict';
 	var time = totaltimeline.time
 		,moment = time.moment
@@ -76,6 +78,11 @@ iddqd.ns('totaltimeline.time.range',function range(start,end){
 	 * @fires Change signal.
 	 */
 	function moveStart(ago) {
+		//console.log('min',min); // log
+		if (min&&ago>min.ago) { //
+			end.ago += ago-min.ago;
+			ago = min.ago;
+		}
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
 		change.dispatch();

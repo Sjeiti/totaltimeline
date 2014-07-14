@@ -15,11 +15,12 @@ iddqd.ns('totaltimeline.view.log',(function(iddqd){
 		if (!bInited) {
 			mLog = zen('pre.log').pop();
 			mLog.style.position = 'absolute';
-			mLog.style.top = '10%';
-			mLog.style.right = '1rem';
-			mLog.style.height = '90%';
+			mLog.style.bottom = '0';
+			mLog.style.right = '0';
+			mLog.style.height = '50%';
 			mLog.style.display = 'block';
-			mLog.style.backgroundColor = 'yellow';
+			mLog.style.backgroundColor = 'rgba(255,226,0,.8)';
+			mLog.style.color = 'black';
 			mLog.style.border = '1px solid black';
 			mLog.style.overflow = 'auto';
 			/*iddqd.extend(mLog.style,{

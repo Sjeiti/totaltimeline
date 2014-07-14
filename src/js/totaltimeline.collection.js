@@ -67,12 +67,16 @@ iddqd.ns('totaltimeline.collection',(function(){
 		;
 
 		mWrapper.classList.add(slug);
-
 		mWrapper.addEventListener(s.click, handleWrapperClick, false);
+
+		/**
+		 * Handles the click event on the wrapper.
+		 * @param e
+		 */
 		function handleWrapperClick(e) {
 			var mTarget = e.target
 				,oModel = mTarget.model;
-			oModel&&oModel.info&&model.infoShown.dispatch(oModel.info);
+			oModel&&oModel.info&&model.entryShown.dispatch(oModel);
 		}
 
 		/**

@@ -67,7 +67,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		for (var i=0,l=aCollection.length;i<l;i++) {
 			var oEvent = aCollection[i]
 				,iAgo = oEvent.moment.ago
-				,bInside = iAgo<iRangeStart&&iAgo>iRangeEnd
+				,bInside = iAgo<=iRangeStart&&iAgo>=iRangeEnd
 			;
 			if (bInside) {
 				var mEvent = oEvent.element

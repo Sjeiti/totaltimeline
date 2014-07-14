@@ -7,7 +7,7 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 	var time = totaltimeline.time
 		,moment = time.moment
 		,range = time.range
-		,sgInfoShown = new signals.Signal()
+		,sgEntryShown = new signals.Signal()
 		// see: https://developers.google.com/gdata/samples/spreadsheet_sample
 		// see: https://developers.google.com/google-apps/spreadsheets/
 		//,sSpreadsheetKey = '0AgLsBMvUgAW8dE1ZRDJUOVliVnFwNE9DcGRmNHRIbWc'
@@ -16,7 +16,7 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		//
 		,oSpan = range(moment(time.UNIVERSE),moment(time.NOW))
 		//,oRange = range(moment(5.3E9),moment(4.3E8))
-		,oRange = range(moment(time.UNIVERSE),moment(time.NOW))
+		,oRange = range(moment(time.UNIVERSE),moment(time.NOW),moment(time.UNIVERSE))
 	;
 
 	function init(){
@@ -29,6 +29,6 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		span: oSpan
 		,range: oRange
 		,spreadsheetKey: sSpreadsheetKey
-		,infoShown: sgInfoShown
+		,entryShown: sgEntryShown
 	});
 })());

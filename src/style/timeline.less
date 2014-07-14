@@ -1,12 +1,13 @@
 #timeline {
 	position: relative;
-	margin: 0 1rem;
+	margin: 0 @screenPadding;
 	.user-select;
-	background-color: @colorGrayLight;
+	.gradientHorizontal(@colorBlack,@colorGrayDark);
 	&.show-range {
 		&:before, &:after {
 			top: auto;
-			bottom: -1rem;
+			bottom: 0;
+			background-color: @colorPageBackground;
 		}
 	}
 }
@@ -15,7 +16,6 @@
 	.lt;
 	.size(100%);
 	pointer-events: none;
-//	background-color: rgba(255,0,0,.4);
 }
 	.event-wrap {
 		.lt;
@@ -38,7 +38,10 @@
 				.transform(translateX(-.5*@eventIconSize));
 			}
 			&.selected {
-				background-color: red;
+//				background-color: red;
+
+				-webkit-filter: drop-shadow( 0 0 4px @colorGreen );
+						filter: drop-shadow( 0 0 4px @colorGreen );
 			}
 		}
 		.line {
@@ -65,8 +68,11 @@
 		.title {
 			position: relative;
 			display: inline;
-			font-size: .7rem;
 			z-index: 1;
+			font-weight: bold;
+			font-family: @fontNameBody;
+			font-size: .6rem;
+			text-rendering: optimizeSpeed;
 			cursor: pointer;
 			&:hover {
 				color: red;

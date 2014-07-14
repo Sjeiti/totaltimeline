@@ -29,6 +29,13 @@
 	<section id="timeline" class="show-range">
 	</section>
 	<section id="content">
+		<script type="text/html" id="content_tmpl">
+			<article>
+				<h3><%=info.name%></h3>
+				<time><%=time%></time>
+				<%=info.explanation%>
+			</article>
+		</script>
 	</section>
 </main>
 <footer><div>Total Timeline</div></footer>
@@ -52,6 +59,7 @@
 <script src="/vendor/iddqd/src/iddqd.animate.js"></script>
 <script src="/vendor/zen/dist/zen.js"></script>
 <script src="/vendor/hammerjs/hammer.js"></script>
+<script src="/vendor/markdown/lib/markdown.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 

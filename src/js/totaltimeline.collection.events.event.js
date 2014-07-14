@@ -28,15 +28,20 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	mEvent.style.top = sTop;
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 	mLine.style.height = sHeight;
-	model.infoShown.add(handleInfoShown);
+	model.entryShown.add(handleEntryShown);
 
-	function handleInfoShown(shownInfo){
-		mEvent.classList.toggle(s.selected,shownInfo===info);
+
+	/**
+	 * Handles entryShown signal
+	 * @param {period|event} entry
+	 */
+	function handleEntryShown(entry){
+		mEvent.classList.toggle(s.selected,entry.info===info);
 	}
 
 	function inside(is){
 		if (!is&&mEvent.classList.contains(s.selected)) {
-			model.infoShown.dispatch();
+			model.entryShown.dispatch();
 		}
 	}
 

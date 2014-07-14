@@ -218,12 +218,12 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		iNewStart = iStart + fDeltaL*(zoomin?fRangeGrowRate:-fRangeGrowRate);
 		iNewEnd = iEnd + fDeltaR*(zoomin?-fRangeGrowRate:fRangeGrowRate);
 		//
-		if (iNewEnd<0) iNewEnd = 0;
-		if (iNewStart>time.UNIVERSE) iNewStart = time.UNIVERSE;
-		if (iNewEnd>iNewStart) {
-			iNewStart = iStart;
-			iNewEnd = iEnd;
-		}
+//		if (iNewEnd<0) iNewEnd = 0;
+//		if (iNewStart>time.UNIVERSE) iNewStart = time.UNIVERSE;
+//		if (iNewEnd>iNewStart) {
+//			iNewStart = iStart;
+//			iNewEnd = iEnd;
+//		}
 		oRange.set(iNewStart,iNewEnd);
 		//oRange.start.set(iNewStart,false);
 		//oRange.end.set(iNewEnd);
@@ -236,7 +236,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function rangeMove(x){ // todo: might be off since span now has left/right margin
 		// todo: check max and min
 		var iRangeWidth = mRange.offsetWidth
-			,iNewLeft = Math.min(Math.max(x-iMouseXOffset,0),iSpanW-iRangeWidth)
+			,iNewLeft = x-iMouseXOffset//Math.min(Math.max(x-iMouseXOffset,0),iSpanW-iRangeWidth)
 			,iNewStart = relativeOffset(iNewLeft);
 		oRange.moveStart(iNewStart);
 	}

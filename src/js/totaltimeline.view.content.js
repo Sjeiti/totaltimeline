@@ -32,7 +32,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	 * Initialise event listeners (and signals).
 	 */
 	function initEvents(){
-		model.infoShown.add(handleInfoShown);
+		model.entryShown.add(handleEntryShown);
 	}
 
 	/**
@@ -41,13 +41,18 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	function initView(){
 	}
 
-	function handleInfoShown(info) {
+	function handleEntryShown(entry) {
 		emptyView(mContent);
 		emptyView(mFragment);
-		if (info) {
+		if (entry) {
+			mContent.innerHTML = iddqd.tmpl('content_tmpl',iddqd.extend(entry,{
+				time: entry.factory===totaltimeline.collection.events.event
+						?entry.moment.toString()
+						:entry.range.start.toString()+' - '+entry.range.end.toString()
+			}));
 			var mDL = document.createElement('dl');
-			for (var s in info) {
-				var sDD = info[s]
+			for (var s in entry.info) {
+				var sDD = entry.info[s]
 					,bLink = s==='link'&&sDD!==undefined;
 				// todo: multiple links by \n
 				zen(bLink

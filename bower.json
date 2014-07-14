@@ -6,6 +6,7 @@
     "signals": "~1.0.0",
     "iddqd": "git://github.com/Sjeiti/iddqd.git",
     "zen": "git://github.com/Sjeiti/zen.git",
-    "hammerjs": "*"
+    "hammerjs": "*",
+    "markdown": "~0.5.0"
   }
 }

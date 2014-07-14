@@ -1,23 +1,24 @@
 
 #overview {
-	margin: 0 1rem;
-	background-color: @colorGray;
+	margin: 0 @screenPadding;
+	.gradientVertical(@colorGrayDark,@colorGrayDarker);
 	position: relative;
 	.user-select;
+	&:before, &:after {
+		margin: 0 @innerPadding 0;
+	}
 	time {
 		display: block;
 		text-align: center;
-		//margin: 0 auto;
 	}
 }
 .range {
 	.lt;
 	.size(100%);
 	min-width: 1px;
-	background-color: #a2c937;
+	.gradientVertical(@colorRangeLight,@colorRange);
 	overflow: hidden;
 	&:before, &:after {
-		background-color: inherit;
-		margin-top: 1rem;
+		margin: 1rem @innerPadding 0;
 	}
 }

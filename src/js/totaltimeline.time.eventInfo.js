@@ -1,3 +1,4 @@
+/*global markdown*/
 /**
  * An object instance created by the factory method {@link totaltimeline.time.eventInfo}
  * @typedef {object} eventInfo
@@ -29,7 +30,7 @@ iddqd.ns('totaltimeline.time.eventInfo',function(
 	'use strict';
 	return {
 		name: name
-		,explanation: explanation
+		,explanation: explanation===''||explanation===undefined?'':markdown.toHTML(explanation)
 		,importance: importance
 		,example: example
 		,link: link

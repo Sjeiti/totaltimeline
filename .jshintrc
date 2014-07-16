@@ -6,6 +6,7 @@
     	,"totaltimeline": true
     	,"module": true
     	,"require": true
+    	,"TWEEN": true
 	},
     "strict": true,
     "browser": true,

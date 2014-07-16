@@ -1,24 +1,26 @@
-
 #overview {
-	margin: 0 @screenPadding;
 	.gradientVertical(@colorGrayDark,@colorGrayDarker);
 	position: relative;
-	//.user-select;
-	&:before, &:after {
-		margin: 0 @innerPadding 0;
+	padding: 0 @screenPadding;
+	.span {
+		position: relative;
+		.size(100%);
+		&:before, &:after {
+			margin: 0 @innerPadding 0;
+		}
+	}
+	.range {
+		.lt;
+		.size(100%);
+		min-width: 1px;
+		.gradientVertical(@colorRangeLight,@colorRange);
+		overflow: hidden;
+		&:before, &:after {
+			margin: 1rem @innerPadding 0;
+		}
 	}
 	time {
 		display: block;
 		text-align: center;
-	}
-}
-.range {
-	.lt;
-	.size(100%);
-	min-width: 1px;
-	.gradientVertical(@colorRangeLight,@colorRange);
-	overflow: hidden;
-	&:before, &:after {
-		margin: 1rem @innerPadding 0;
 	}
 }

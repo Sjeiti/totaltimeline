@@ -121,8 +121,9 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 			var iOffsetX = e.clientX;
 			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
 			iMouseXOffsetLast = iOffsetX;
-			// todo: cache mView.offsetWidth
-			oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
+			if (iMouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
+				oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
+			}
 		}
 	}
 

@@ -94,6 +94,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @memberof collectionInstance
 		 */
 		function populate(view,range){
+			// todo: refactor more efficiently: only add/remove what is needed
 			emptyView(mWrapper);
 			emptyView(mFragment);
 			_populate(mFragment,range);

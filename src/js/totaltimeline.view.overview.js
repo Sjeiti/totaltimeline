@@ -13,6 +13,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,oSpan
 		,oRange
 		,mBody
+		,mOverView
 		,mSpan
 		,mRange
 		,mTime
@@ -41,8 +42,9 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		oRange = model.range;
 		// view elements
 		mBody = document.body;
-		mSpan = document.getElementById('overview');
-		mRange = zen('div.range.show-range>time').pop();
+		mOverView = document.getElementById('overview');
+		mSpan = zen('div.span.show-range>div.range.show-range>time').pop();
+		mRange = mSpan.querySelector('.range');//zen('div.range.show-range>time').pop();
 		mTime = mRange.querySelector('time');
 		//
 		// init and detach keypress so keys exist
@@ -58,7 +60,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		signals.resize.add(handleResize);
 		// is over
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
-			mSpan.addEventListener(event,handleSpanMouse,false);
+			mOverView.addEventListener(event,handleOverViewMouse,false);
 		});
 		// drag
 		mRange.addEventListener(s.mousedown,handleRangeMouseClick,false);
@@ -76,7 +78,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Initialise view
 	 */
 	function initView(){
-		mSpan.appendChild(mRange);
+		//mSpan.appendChild(mRange);
+		mOverView.appendChild(mSpan);
 		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
 		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
 		//
@@ -96,7 +99,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Handles mouse events on mSpan to see when the mouse is inside mSpan.
 	 * @param e
 	 */
-	function handleSpanMouse(e){
+	function handleOverViewMouse(e){
 		bOver = e.type!==s.mouseout;
 	}
 
@@ -121,7 +124,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 */
 	function handleBodyMouseMove(e){
 		if (bRangeMouseDown) {
-			// todo: rangeMove?
+			// todo: rangeMove? ... This is relative... rangeMove is ~absolute
 			var iOffsetX = e.clientX;//offsetX;
 			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
 			iMouseXOffsetLast = iOffsetX;
@@ -234,12 +237,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Moves the 'range' object.
 	 * @param {number} x The amount of pixels to move.
 	 */
-	function rangeMove(x){ // todo: might be off since span now has left/right margin
-		// todo: check max and min
-		var iRangeWidth = mRange.offsetWidth
-			,iNewLeft = x-iMouseXOffset//Math.min(Math.max(x-iMouseXOffset,0),iSpanW-iRangeWidth)
-			,iNewStart = relativeOffset(iNewLeft);
-		oRange.moveStart(iNewStart);
+	function rangeMove(x){
+		oRange.moveStart(relativeOffset(x-iMouseXOffset));
 	}
 
 	/**

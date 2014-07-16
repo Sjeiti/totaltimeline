@@ -30,6 +30,10 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	mLine.style.height = sHeight;
 	model.entryShown.add(handleEntryShown);
 
+	mWrap.addEventListener(s.click,function (e){
+		console.log('clickEvent',e); // log
+	});
+
 
 	/**
 	 * Handles entryShown signal

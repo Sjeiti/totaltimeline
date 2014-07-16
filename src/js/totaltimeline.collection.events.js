@@ -26,7 +26,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 	 * @param {object} sheet
 	 */
 	function handleGetData(sheet){
-		console.log('handleGetData',sheet); // log
+		console.log('handleGetData',sheet,sheet.feed.entry.length); // log
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
 		sheet.feed.entry.forEach(function(entry){
 			var  iAgo =		getProp(entry,'ago',true)

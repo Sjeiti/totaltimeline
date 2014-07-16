@@ -84,9 +84,9 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @memberof collectionInstance
 		 */
 		function getData(){
-			iddqd.network.jsonp(sheetUri,callback);
-//			window['_'+slug] = callback;
-//			iddqd.loadScript('/data/_'+slug+'.js');
+//			iddqd.network.jsonp(sheetUri,callback);
+			window['_'+slug] = callback;
+			iddqd.loadScript('/data/_'+slug+'.js');
 		}
 
 		/**
@@ -141,7 +141,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 	function getProp(entry,prop,int){
 		var sProp = entry[sPrefix+prop]
 			,sValue = sProp?sProp[sPropprop]:'';
-		(sProp===undefined)&&console.warn(prop+' not present');
+		(sProp===undefined)&&console.warn(prop,'not present in',entry);
 		return int===true?parseInt(sValue,10):sValue;
 	}
 

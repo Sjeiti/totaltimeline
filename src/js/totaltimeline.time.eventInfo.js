@@ -26,8 +26,13 @@ iddqd.ns('totaltimeline.time.eventInfo',function(
 	,remark
 	,accuracy
 	,icon
+	,wikimediakey
+	,wikimedia
+	,image
+	,imageinfo
 ){
 	'use strict';
+	console.log('explanation',explanation); // log
 	return {
 		name: name
 		,explanation: explanation===''||explanation===undefined?'':markdown.toHTML(explanation)
@@ -37,5 +42,9 @@ iddqd.ns('totaltimeline.time.eventInfo',function(
 		,remark: remark
 		,accuracy: accuracy
 		,icon: icon
+		,wikimediakey: wikimediakey
+		,wikimedia: wikimedia===''||wikimedia===undefined?'':txtwiki.parseWikitext(wikimedia).replace('&nbsp;',' ')
+		,image: image
+		,imageinfo: imageinfo
 	};
 });

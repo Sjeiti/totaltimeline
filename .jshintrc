@@ -7,6 +7,7 @@
     	,"module": true
     	,"require": true
     	,"TWEEN": true
+    	,"txtwiki": true
 	},
     "strict": true,
     "browser": true,

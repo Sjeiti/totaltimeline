@@ -134,16 +134,19 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 */
 	function handleWheel(direction,e){
 		if (bOver) {
-			var fScale = 0.2,iNewStart,iNewEnd
+			var fScaleMove = 0.02
+				,fScaleZoom = 0.1
+				,iNewStart
+				,iNewEnd
 				,bZoomin = direction>0
 				,iZoomin = bZoomin?1:-1
 				,iStart = oRange.start.ago
 			;
 			if (keys[16]) {
-				iNewStart = iStart + iZoomin*(fScale*fScale*oRange.duration<<0);
+				iNewStart = iStart + iZoomin*(fScaleMove*oRange.duration<<0);
 				oRange.moveStart(iNewStart);
 			} else {
-				var fAdd = iZoomin*(fScale*oRange.duration<<0)
+				var fAdd = iZoomin*(fScaleZoom*oRange.duration<<0)
 					// offset calculations
 					,iMouseX = e.clientX
 					,fL = (iMouseX-iViewL)/iViewW

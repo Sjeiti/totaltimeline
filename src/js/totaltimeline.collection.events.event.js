@@ -40,7 +40,7 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	 * @param {period|event} entry
 	 */
 	function handleEntryShown(entry){
-		mEvent.classList.toggle(s.selected,entry.info===info);
+		mEvent.classList.toggle(s.selected,entry&&entry.info===info);
 	}
 
 	function inside(is){

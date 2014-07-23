@@ -15,7 +15,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		//
 		,aCollection = collection.add(
 			'events'
-			,'https://spreadsheets.google.com/feeds/list/key/od6/public/values?alt=json-in-script'
+			,'https://spreadsheets.google.com/feeds/list/key/1/public/values?alt=json-in-script'
 			,handleGetData
 			,populate
 		)
@@ -29,6 +29,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		console.log('handleGetData',sheet,sheet.feed.entry.length); // log
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
 		sheet.feed.entry.forEach(function(entry){
+			//console.log('event',getProp(entry,'name'),getProp(entry,'ago'),getProp(entry,'ago',true)); // log
 			var  iAgo =		getProp(entry,'ago',true)
 				,iSince =	getProp(entry,'since',true)
 				,iYear =	getProp(entry,'year',true)
@@ -47,6 +48,10 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 						,getProp(entry,'remark')
 						,getProp(entry,'accuracy')
 						,getProp(entry,'icon')
+						,getProp(entry,'wikimediakey')
+						,getProp(entry,'wikimedia')
+						,getProp(entry,'image')
+						,getProp(entry,'imageinfo')
 					)
 				));
 			}
@@ -57,6 +62,8 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		});
 		aCollection.dataLoaded.dispatch(aCollection);
 	}
+
+
 
 	function populate(fragment,range){
 		var /*started = 0

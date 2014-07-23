@@ -16,7 +16,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		//
 		,aCollection = collection.add(
 			'periods'
-			,'https://spreadsheets.google.com/feeds/list/key/od7/public/values?alt=json-in-script'
+			,'https://spreadsheets.google.com/feeds/list/key/2/public/values?alt=json-in-script'
 			,handleGetData
 			,populate
 		)

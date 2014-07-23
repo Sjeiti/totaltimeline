@@ -21,5 +21,6 @@
 		,"devicejs": { "main": ["lib/device.min.js"] }
 		,"markdown": { "main": ["lib/markdown.js"] }
 		,"tweenjs": { "main": ["src/Tween.js"] }
+		,"txtwiki.js": { "main": ["txtwiki.js"] }
 	}
 }

@@ -50,7 +50,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 						?entry.moment.toString()
 						:entry.range.start.toString()+' - '+entry.range.end.toString()
 			}));
-			var mDL = document.createElement('dl');
+			/*var mDL = document.createElement('dl');
 			for (var s in entry.info) {
 				var sDD = entry.info[s]
 					,bLink = s==='link'&&sDD!==undefined;
@@ -60,7 +60,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 					:'dt{'+s+'}+dd{'+sDD+'}'
 				).forEach(mDL.appendChild.bind(mDL));
 			}
-			mContent.appendChild(mDL);
+			mContent.appendChild(mDL);*/
 		}
 	}
 

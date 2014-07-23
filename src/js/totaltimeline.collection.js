@@ -84,9 +84,9 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @memberof collectionInstance
 		 */
 		function getData(){
-//			iddqd.network.jsonp(sheetUri,callback);
-			window['_'+slug] = callback;
-			iddqd.loadScript('/data/_'+slug+'.js');
+			iddqd.network.jsonp(sheetUri,callback);
+//			window['_'+slug] = callback;
+//			iddqd.loadScript('/data/_'+slug+'.js');
 		}
 
 		/**

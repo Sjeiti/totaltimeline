@@ -8,6 +8,7 @@
     "zen": "git://github.com/Sjeiti/zen.git",
     "hammerjs": "*",
     "markdown": "~0.5.0",
-    "tweenjs": "*"
+    "tweenjs": "*",
+    "txtwiki.js": "git://github.com/joaomsa/txtwiki.js.git"
   }
 }

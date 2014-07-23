@@ -47,8 +47,8 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 * @param {totaltimeline.collection~add-populate} populate The method that populates the collection.
 	 * @return {collectionInstance} Collection instance object.
 	 */
-	function add(slug,sheetUri,callback,_populate){
-		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
+	function add(slug,worksheet,callback,_populate){
+//		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
 
 		var s = totaltimeline.string
 			,model = totaltimeline.model
@@ -84,7 +84,12 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @memberof collectionInstance
 		 */
 		function getData(){
-			iddqd.network.jsonp(sheetUri,callback);
+//			iddqd.network.jsonp(sheetUri,callback);
+			totaltimeline.spreadsheetproxy.getData(
+				totaltimeline.model.spreadsheetKey
+				,worksheet
+				,callback
+			);
 //			window['_'+slug] = callback;
 //			iddqd.loadScript('/data/_'+slug+'.js');
 		}

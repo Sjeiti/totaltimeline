@@ -131,7 +131,7 @@ function getPageContent(json){
 }
 
 /**
- * Extend an object
+ * Serialize an object
  * @param {Object} obj Subject.
  */
 function serialize(obj) {

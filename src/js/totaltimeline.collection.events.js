@@ -8,14 +8,13 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 
 	var s = totaltimeline.string
 		,collection = totaltimeline.collection
-		,getProp = collection.getProp
 		,time = totaltimeline.time
 		,moment = time.moment
 		,eventInfo = time.eventInfo
 		//
 		,aCollection = collection.add(
 			'events'
-			,'https://spreadsheets.google.com/feeds/list/key/1/public/values?alt=json-in-script'
+			,1
 			,handleGetData
 			,populate
 		)
@@ -25,34 +24,20 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 	 * Turns the spreadsheet json data into an event list.
 	 * @param {object} sheet
 	 */
-	function handleGetData(sheet){
-		console.log('handleGetData',sheet,sheet.feed.entry.length); // log
+	function handleGetData(data){
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
-		sheet.feed.entry.forEach(function(entry){
+		data.forEach(function(entry){
 			//console.log('event',getProp(entry,'name'),getProp(entry,'ago'),getProp(entry,'ago',true)); // log
-			var  iAgo =		getProp(entry,'ago',true)
-				,iSince =	getProp(entry,'since',true)
-				,iYear =	getProp(entry,'year',true)
+			var  iAgo =		parseInt(entry.ago,10)
+				,iSince =	parseInt(entry.since,10)
+				,iYear =	parseInt(entry.year,10)
 				,oMoment = iAgo?moment(iAgo):(iSince?moment(iSince,moment.SINCE):iYear&&moment(iYear,moment.YEAR))
-				,bExclude = getProp(entry,'exclude')==='1'
+				,bExclude = entry.exclude==='1'
 			;
 			if (oMoment&&!bExclude) {
 				aCollection.push(aCollection.event(
 					oMoment
-					,eventInfo(
-						 getProp(entry,'name')
-						,getProp(entry,'explanation')
-						,getProp(entry,'importance')
-						,getProp(entry,'example')
-						,getProp(entry,'link')
-						,getProp(entry,'remark')
-						,getProp(entry,'accuracy')
-						,getProp(entry,'icon')
-						,getProp(entry,'wikimediakey')
-						,getProp(entry,'wikimedia')
-						,getProp(entry,'image')
-						,getProp(entry,'imageinfo')
-					)
+					,eventInfo().parse(entry)
 				));
 			}
 		});

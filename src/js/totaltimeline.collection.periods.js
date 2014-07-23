@@ -8,7 +8,6 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 
 	var s = totaltimeline.string
 		,collection = totaltimeline.collection
-		,getProp = collection.getProp
 		,time = totaltimeline.time
 		,moment = time.moment
 		,range = time.range
@@ -16,25 +15,25 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		//
 		,aCollection = collection.add(
 			'periods'
-			,'https://spreadsheets.google.com/feeds/list/key/2/public/values?alt=json-in-script'
+			,2
 			,handleGetData
 			,populate
 		)
 	;
 
-	function handleGetData(sheet){
+	function handleGetData(data){
 		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
 			,iTimes = aTimes.length;
-		sheet.feed.entry.forEach(function(entry){
-			var iFrom = getProp(entry,'from',true)
-				,iTo = getProp(entry,'to',true)
-				,sName = getProp(entry,'name')
+		data.forEach(function(entry){
+			var iFrom = parseInt(entry.from,10)
+				,iTo = parseInt(entry.to,10)
+				,sName = entry.name
 			;
 			if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
 				var iOffset = 0;
 				for (var i=0;i<iTimes;i++) {
 					var sTimeName = aTimes[i]
-						,sTimeValue = getProp(entry,sTimeName)
+						,sTimeValue = entry[sTimeName]//getProp(entry,sTimeName)
 					;
 					if (sTimeValue!=='') {
 						iOffset = i;
@@ -43,9 +42,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 				}
 				var oPeriod = aCollection.period(
 					range(moment(iFrom),moment(iTo))
-					,eventInfo(
-						sName
-					)
+					,eventInfo().parse(entry)
 					,iOffset
 				);
 				aCollection.push(oPeriod);

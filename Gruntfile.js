@@ -18,6 +18,42 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json')
 
+		// watchers
+		,watch: {
+			js: {
+				files: ['src/js/*.js']
+				,tasks: ['js']
+				,options: {
+					spawn: false
+				}
+			}
+			,less: {
+				files: ['src/style/*.less']
+				,tasks: ['less:build']
+				,options: {
+					spawn: false
+				}
+			}
+			,root: {
+				files: ['src/*']
+				,tasks: ['copy:build']
+				,options: {
+					spawn: false
+				}
+			}
+		}
+
+		// Unit testing
+		,qunit: {
+			all: [sFolderSrc + '/test/*.html']
+		}
+
+		// Lint source files
+		,jshint: {
+			options: { jshintrc: '.jshintrc' },
+			files: sFolderBuild+'/js/main.js'
+		}
+
         // Automatically inject Bower components into the HTML file
 		,bower: {
 			main: {
@@ -46,12 +82,6 @@ module.exports = function (grunt) {
 				,src: [sFolderSrc+'/style/screen.less']
 				,dest: sFolderDist+'/style/screen.css'
 			}
-		}
-
-		// Lint source files
-		,jshint: {
-			options: { jshintrc: '.jshintrc' },
-			files: sFolderBuild+'/js/main.js'
 		}
 
 //		// Uglify stuff
@@ -277,6 +307,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('js',[
 		'copy:js'
+		,'qunit'
 	]);
 	grunt.registerTask('css',[
 		'less:build'

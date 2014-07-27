@@ -8,32 +8,38 @@ iddqd.ns('totaltimeline.view.log',(function(iddqd){
 	var bInited = false
 		,aLgg = []
 		,oLgg = {}
+		,mContent
 		,mLog
 		,sBr = '<br/>'
 	;
 	function init(){
 		if (!bInited) {
-			mLog = zen('pre.log').pop();
-			mLog.style.position = 'absolute';
-			mLog.style.bottom = '0';
-			mLog.style.right = '0';
-			mLog.style.height = '50%';
-			mLog.style.display = 'block';
-			mLog.style.backgroundColor = 'rgba(255,226,0,.8)';
-			mLog.style.color = 'black';
-			mLog.style.border = '1px solid black';
-			mLog.style.overflow = 'auto';
-			/*iddqd.extend(mLog.style,{
-				marginTop: '1rem'
-				,paddingTop: '1rem'
-				,maxHeight: '100%'
-				,display: 'block'
-				,border: '1px solid black'
-				,backgroundColor: '#eee'
-			},true);*/
-			document.getElementById('content').appendChild(mLog);
-			bInited = true;
+			mContent = document.getElementById('content');
+			if (mContent) {
+				mLog = zen('pre.log').pop();
+				mLog.style.position = 'absolute';
+				mLog.style.bottom = '0';
+				mLog.style.right = '0';
+				mLog.style.height = '50%';
+				mLog.style.display = 'block';
+				mLog.style.backgroundColor = 'rgba(255,226,0,.8)';
+				mLog.style.color = 'black';
+				mLog.style.border = '1px solid black';
+				mLog.style.overflow = 'auto';
+				mLog.style.whiteSpace = 'nowrap';
+				/*iddqd.extend(mLog.style,{
+					marginTop: '1rem'
+					,paddingTop: '1rem'
+					,maxHeight: '100%'
+					,display: 'block'
+					,border: '1px solid black'
+					,backgroundColor: '#eee'
+				},true);*/
+				mContent.appendChild(mLog);
+				bInited = true;
+			}
 		}
+		return bInited;
 	}
 	function log(){
 		var s = '';
@@ -62,14 +68,15 @@ iddqd.ns('totaltimeline.view.log',(function(iddqd){
 		update();
 	}
 	function update(){
-		init();
-		var sLog = '';
-		for (var s in oLgg) {
-			sLog += s+': '+oLgg[s]+sBr;
+		if (init()) {
+			var sLog = '';
+			for (var s in oLgg) {
+				sLog += s+': '+oLgg[s]+sBr;
+			}
+			if (sLog!=='') sLog += '<hr/>';//-----'+sBr;
+			sLog += aLgg.join(sBr);
+			mLog.innerHTML = sLog;
 		}
-		if (sLog!=='') sLog += '-----'+sBr;
-		sLog += aLgg.join(sBr);
-		mLog.innerHTML = sLog;
 	}
 	return iddqd.extend(log,{
 		watch: watch

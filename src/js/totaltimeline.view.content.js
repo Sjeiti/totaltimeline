@@ -9,13 +9,16 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		,*/model
 //		,signals = iddqd.signals
 		,mContent
+		,mContentWrapper
 		,mFragment = document.createDocumentFragment()
 	;
 
 	function init(model){
 		initVariables(model);
-		initEvents();
-		initView();
+		if (mContent) {
+			initEvents();
+			initView();
+		}
 	}
 
 	/**
@@ -24,8 +27,8 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	 */
 	function initVariables(_model){
 		model = _model;
-		mContent = zen('div.content').pop();
-		document.getElementById('content').appendChild(mContent);
+		mContent = document.getElementById('content');
+		mContentWrapper = zen('div.content').pop();
 	}
 
 	/**
@@ -39,13 +42,14 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	 * Initialise view
 	 */
 	function initView(){
+		mContent.appendChild(mContentWrapper);
 	}
 
 	function handleEntryShown(entry) {
-		emptyView(mContent);
+		emptyView(mContentWrapper);
 		emptyView(mFragment);
 		if (entry) {
-			mContent.innerHTML = iddqd.tmpl('content_tmpl',iddqd.extend(entry,{
+			mContentWrapper.innerHTML = iddqd.tmpl('content_tmpl',iddqd.extend(entry,{
 				time: entry.factory===totaltimeline.collection.events.event
 						?entry.moment.toString()
 						:entry.range.start.toString()+' - '+entry.range.end.toString()

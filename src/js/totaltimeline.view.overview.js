@@ -27,8 +27,10 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 
 	function init(model){
 		initVariables(model);
-		initEvents();
-		initView();
+		if (mOverView) {
+			initEvents();
+			initView();
+		}
 	}
 
 	/**
@@ -154,7 +156,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mRange.style.left = s.getPercentage(fRangeStart);
 		mRange.setAttribute(s.dataBefore,oRange.start.toString());
 		mRange.setAttribute(s.dataAfter,oRange.end.toString());
-		mTime.innerText = s.duration(oRange.duration,2);
+		mTime.innerText = time.duration(oRange.duration,2);
 	}
 
 

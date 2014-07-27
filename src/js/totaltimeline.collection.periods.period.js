@@ -38,18 +38,7 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	function handleEntryShown(entry){
 		var bIs = entry&&entry.info===info;
 		mElement.classList.toggle(s.selected,bIs);
-		if (bIs) {
-			// todo: put animation somewhere central?
-			var iStartFrom = model.range.start.ago
-				,iStartDelta = range.start.ago - iStartFrom
-				,iEndFrom = model.range.end.ago
-				,iEndDelta = range.end.ago - iEndFrom;
-			iddqd.animate(1000,function(f){
-				var fInOut = TWEEN.Easing.Quadratic.InOut(f);
-				model.range.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta);
-			});
-		}
-		//bIs&&model.range.set(range);
+		bIs&&model.range.animate(range);
 	}
 
 	function coincides(time){

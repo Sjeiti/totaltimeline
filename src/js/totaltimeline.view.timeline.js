@@ -28,8 +28,10 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 
 	function init(model){
 		initVariables(model);
-		initEvents();
-		initView();
+		if (mView) {
+			initEvents();
+			initView();
+		}
 	}
 
 	/**

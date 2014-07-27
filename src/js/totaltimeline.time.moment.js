@@ -74,7 +74,7 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 			return oReturn;
 		}
 		function toString(){
-			return formatAnnum(iAgo,2);
+			return time.formatAnnum(iAgo,2);
 			//return '[moment '+value+' '+type+']';
 		}
 		function clone() {
@@ -91,35 +91,6 @@ iddqd.ns('totaltimeline.time.moment',(function(){
 	function yearToSince(value){	return time.UNIVERSE-value; }
 	function sinceToAgo(value){		return time.UNIVERSE-value; }
 	function sinceToYear(value){	return time.YEAR_NOW-(time.UNIVERSE-value); }
-
-	/**
-	 * Textual representation of annum.
-	 * Years are rounded and represented in a, ka, Ma and Ga.
-	 * Years greater than 2000 BC are written in Gregorian style with BC/AD suffix.
-	 * Years greater than 1500 AD are written without suffix.
-	 * @param {number} year
-	 * @param {number} round
-	 * @returns {string}
-	 */
-	function formatAnnum(year,round){
-		// todo: rounding sometimes off: split at . truncate and join
-		var sReturn
-			,iYearAbs = Math.abs(year)
-			,iYearCnt = iYearAbs
-		;
-		if (iYearAbs>4000) {
-			//var i = year;
-			if (round===undefined) round = 0;
-			var aSizes = year>0?[' a',' ka',' Ma',' Ga']:[' ',' k',' M',' G'];
-			for (var i = 0; iYearCnt>1000 && (aSizes.length>=(i + 2)); i++) iYearCnt /= 1000;
-			var iMult = Math.pow(10,round);
-			sReturn = (Math.round(iYearCnt * iMult) / iMult) + aSizes[i];
-		} else {
-			year = time.YEAR_NOW-year;
-			sReturn = Math.round(Math.abs(year)) + (year<0?' BC':(year<1500?' AD':''));
-		}
-		return sReturn;
-	}
 
 	return iddqd.extend(moment,{
 		SINCE: 'since'

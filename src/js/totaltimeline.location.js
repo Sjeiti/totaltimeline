@@ -4,12 +4,13 @@
 iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	'use strict';
 
-	var s = totaltimeline.string
-		,time = totaltimeline.time
+	var time = totaltimeline.time
+		,formatAnnum = time.formatAnnum
 		,log
 		,oRange
 		,sLocationOriginalPath = location.pathname
 		,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
+		,sDocumentTitle = document.title
 	;
 
 	function init(model){
@@ -19,6 +20,7 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 		oRange.change.add(handleRangeChange);
 		window.addEventListener('popstate', handlePopstate, false);
 		//
+		oRange.set(time.UNIVERSE,time.NOW);
 		updated(location.hash.substr(1));
 	}
 
@@ -27,8 +29,8 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 			update();
 		} else {
 			update(
-				s.formatAnnum(oRange.start.ago,2,false)
-				,s.formatAnnum(oRange.end.ago,2,false)
+				formatAnnum(oRange.start.ago,2,false)
+				,formatAnnum(oRange.end.ago,2,false)
 			);
 		}
 	}
@@ -39,50 +41,35 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 		log.watch('location.href',location.href);
 		log.watch('location.hash',location.hash);
 		log.watch('location.pathname',location.pathname);
-		updated(location.pathname.substr(1));
+		updated(location.pathname.substr(1),location.hash.substr(1));
 	}
 
 	/**
 	 * Handles changes after location has changed.
-	 * @param {string} path Path without leading slash
+	 * @param {string} path Path without leading slash (or hash)
 	 */
-	function updated(path){
+	function updated(path,hash){
 		log('location updated'
 			,path,':'
-			,location.hash
-			,location.pathname
+			,hash
+//			,location.pathname
 		);
+		var bNoHash = hash===undefined||hash===''
+			,sPath = bNoHash?path:hash
+		;
 		var aPath
 			,aAgo = [];
-		if (path.length>0) {
-			aPath = path.substr(1).split('/');
+		if (sPath.length>0) {
+			aPath = sPath.split('/');
 			if (aPath.length>=2) {
 				for (var i=0;i<2;i++) {
-					var sMoment = aPath[i]
-						,aString = sMoment.match(/[a-zA-Z]+/)
-						,sString = aString?aString[0]:''
-						,aNumber = sMoment.match(/[0-9\.]+/)
-						,fNumber = parseFloat(aNumber[0])// todo: Uncaught TypeError: Cannot read property '0' of null
-						,iAgo = fNumber
-					;
-					if (sString==='Ga') {
-						iAgo = fNumber*1E9;
-					} else if (sString==='Ma') {
-						iAgo = fNumber*1E6;
-					} else if (sString==='ka') {
-						iAgo = fNumber*1E3;
-					} else if (sString==='BC') {
-						iAgo = fNumber + time.YEAR_NOW;
-					} else if (sString==='AD') {
-						iAgo = fNumber - time.YEAR_NOW;
-					}
-					// todo: not quite working yet for lower vs future: ie 1969 vs 3000 (make future notation similar to Ga)
-					aAgo.push(iAgo);
+					aAgo.push(time.unformatAnnum(aPath[i]));
 				}
-				oRange.set.apply(oRange,aAgo);
+//				oRange.set.apply(oRange,aAgo);
+				oRange.animate.apply(oRange,aAgo);
 			}
 		} else {
-			oRange.set(time.UNIVERSE,time.NOW);
+			oRange.animate(time.UNIVERSE,time.NOW);
 		}
 	}
 
@@ -93,6 +80,7 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	 * @param {string} [subject] Optional subject
 	 */
 	function update(start,end,subject){
+		console.log('location.update',start,end,subject); // log
 
 		var currentState = history.state;
 		log.watch('currentState',currentState);
@@ -114,6 +102,7 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 				}
 			}
 		}
+		document.title = sDocumentTitle + ' ' + oRange.start + ' - ' + oRange.end;
 		if (subject) {
 			console.log('subject',subject); // log
 		}

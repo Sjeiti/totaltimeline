@@ -33,6 +33,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
 
 			,set: set
+			,animate: animate
 
 			,start: start
 			,end: end
@@ -65,22 +66,36 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	/**
 	 * Set both start and end time.
 	 * Method can be overloaded by either using only a range as the first parameter, or a number for both parameters.
-	 * {number|range} startAgo
-	 * {number} endAgo
+	 * @param {number|range} startAgo
+	 * @param {number} endAgo
 	 */
 	function set(startAgo,endAgo){
 		if (arguments.length===1) { // assume range
-			start.set(startAgo.start.ago,false);
-			end.set(startAgo.end.ago);
-		} else {
-			start.set(startAgo,false);
-			end.set(endAgo);
+			endAgo = startAgo.end.ago;
+			startAgo = startAgo.start.ago;
 		}
+		start.set(startAgo,false);
+		end.set(endAgo);
 		if (min&&start.ago>min.ago) {
 			// todo: implement without moveStart and only calling start.set and end.set once
 			moveStart(min.ago);
 		}
 		// todo: implement max
+	}
+
+	function animate(startAgo,endAgo){
+		if (arguments.length===1) { // assume range
+			endAgo = startAgo.end.ago;
+			startAgo = startAgo.start.ago;
+		}
+		var iStartFrom = start.ago
+			,iStartDelta = startAgo - iStartFrom
+			,iEndFrom = end.ago
+			,iEndDelta = endAgo - iEndFrom;
+		iddqd.animate(1000,function(f){
+			var fInOut = TWEEN.Easing.Quadratic.InOut(f);
+			set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta);
+		});
 	}
 
 	/**

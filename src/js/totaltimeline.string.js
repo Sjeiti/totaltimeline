@@ -22,6 +22,11 @@ iddqd.ns('totaltimeline.string',(function(){
 		return 100*float+'%';
 	}
 
+	//todo:doc/rename
+	function slug(s) {
+		return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+	}
+
 	return {
 		/** @constant totaltimeline.string.dataBefore
 		 * @default 'data-before' */
@@ -41,5 +46,6 @@ iddqd.ns('totaltimeline.string',(function(){
 		,drag: 'drag'
 		,click: 'click'
 		,getPercentage: getPercentage
+		,slug: slug
 	};
 })());

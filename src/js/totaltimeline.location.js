@@ -4,7 +4,8 @@
 iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	'use strict';
 
-	var time = totaltimeline.time
+	var slug = totaltimeline.string.slug
+		,time = totaltimeline.time
 		,formatAnnum = time.formatAnnum
 		,log
 		,oRange
@@ -19,6 +20,8 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 		//
 		oRange.change.add(handleRangeChange);
 		window.addEventListener('popstate', handlePopstate, false);
+		//
+		model.entryShown.add(handleEntryShown);
 		//
 		oRange.set(time.UNIVERSE,time.NOW);
 		updated(location.hash.substr(1));
@@ -36,12 +39,23 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	}
 
 	function handlePopstate() {
-		log('popstate');
+		/*log('popstate');
 		log.watch('history.state',history.state);
 		log.watch('location.href',location.href);
 		log.watch('location.hash',location.hash);
-		log.watch('location.pathname',location.pathname);
+		log.watch('location.pathname',location.pathname);*/
 		updated(location.pathname.substr(1),location.hash.substr(1));
+	}
+
+	function handleEntryShown(event){
+		// todo: set location
+		console.log('handleEntryShown'
+			,event.info
+			,slug(event.info.name)
+		); // log
+//		history.pushState('','foobar',slug(event.info.name));
+//		var sNewPath = start===undefined?sLocationOriginalPath:sLocationBase +start+'/'+end
+		history.pushState('','foobar',sLocationBase+slug(event.info.name));
 	}
 
 	/**
@@ -49,11 +63,7 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	 * @param {string} path Path without leading slash (or hash)
 	 */
 	function updated(path,hash){
-		log('location updated'
-			,path,':'
-			,hash
-//			,location.pathname
-		);
+		//log('location.updated',path,':',hash);
 		var bNoHash = hash===undefined||hash===''
 			,sPath = bNoHash?path:hash
 		;
@@ -80,11 +90,9 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 	 * @param {string} [subject] Optional subject
 	 */
 	function update(start,end,subject){
-		console.log('location.update',start,end,subject); // log
-
+		//console.log('location.update',start,end,subject); // log
 		var currentState = history.state;
 		log.watch('currentState',currentState);
-
 		if (sLocationOriginalPath.indexOf(start)!==-1) {
 			sLocationOriginalPath = sLocationOriginalPath.split(start).shift();
 		}

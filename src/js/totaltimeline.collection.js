@@ -6,9 +6,16 @@
 iddqd.ns('totaltimeline.collection',(function(){
 	'use strict';
 
-	var collection = {}
-		,sPrefix = 'gsx$'
-		,sPropprop = '$t'
+	var slug = totaltimeline.string.slug
+		,sgCollectionDataLoaded = new signals.Signal()
+		,collection = {
+			length: 0
+			,loaded: 0
+			,dataLoaded: sgCollectionDataLoaded
+			,add: add
+			,populate: populate
+			,getEntryBySlug: getEntryBySlug
+		}
 	;
 
 	/**
@@ -61,13 +68,18 @@ iddqd.ns('totaltimeline.collection',(function(){
 				,fragment: mFragment
 				,populate: populate
 				,getData: getData
-//				,getProp: getProp//todo: can be removed
 				,dataLoaded: sgDataLoaded
 			})
 		;
 
 		mWrapper.classList.add(slug);
 		mWrapper.addEventListener(s.click, handleWrapperClick, false);
+
+		collection.push(oReturn);
+		sgDataLoaded.add(function(collectionInstance){
+			collection.loaded++;
+			sgCollectionDataLoaded.dispatch(collectionInstance);
+		});
 
 		/**
 		 * Handles the click event on the wrapper.
@@ -119,7 +131,6 @@ iddqd.ns('totaltimeline.collection',(function(){
 			}
 		}
 
-		collection.push(oReturn);
 		return oReturn;
 	}
 
@@ -136,23 +147,21 @@ iddqd.ns('totaltimeline.collection',(function(){
 		});
 	}
 
-	/**
-	 * Get a specific property from a spreadsheet entry.
-	 * @name totaltimeline.collection.getProp
-	 * @method
-	 * @param {object} entry
-	 * @param {string} prop
-	 * @param {boolean} [int] Optional boolean to convert the value to an integer.
-	 */
-	function getProp(entry,prop,int){
-		var sProp = entry[sPrefix+prop]
-			,sValue = sProp?sProp[sPropprop]:'';
-		(sProp===undefined)&&console.warn(prop,'not present in',entry);
-		return int===true?parseInt(sValue,10):sValue;
+	// todo: document
+	function getEntryBySlug(_slug){
+		for (var i=0,l=collection.length;i<l;i++) {
+			var oCollectionInstance = collection[i];
+			for (var j=0,k=oCollectionInstance.length;j<k;j++) {
+				var oInstance = oCollectionInstance[j]
+					,sSlug = slug(oInstance.info.name);
+				if (sSlug===_slug) {
+					return oInstance;
+				}
+			}
+		}
 	}
 
 	return iddqd.extend(collection,{
-		length: 0
 		/**
 		 * @name totaltimeline.collection.splice
 		 * @method
@@ -161,7 +170,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @param {...*} [items]
 		 * @return {Array}
 		 */
-		,splice: Array.prototype.splice.bind(collection)
+		splice: Array.prototype.splice.bind(collection)
 		/**
 		 * @name totaltimeline.collection.push
 		 * @method
@@ -177,8 +186,5 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * @return {void}
 		 */
 		,forEach: Array.prototype.forEach.bind(collection)
-		,add: add
-		,getProp: getProp
-		,populate: populate
 	});
 })());

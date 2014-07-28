@@ -1,43 +1,51 @@
 /**
  * @namespace totaltimeline.location
  */
-iddqd.ns('totaltimeline.location',(function(iddqd,history){
+iddqd.ns('totaltimeline.location',(function(history){
 	'use strict';
 
 	var slug = totaltimeline.string.slug
 		,time = totaltimeline.time
 		,formatAnnum = time.formatAnnum
 		,log
+		,oModel
 		,oRange
 		,sLocationOriginalPath = location.pathname
-		,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
+//		,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
 		,sDocumentTitle = document.title
 	;
 
 	function init(model){
+		oModel = model;
+		//
 		log = totaltimeline.view.log;
-		oRange = model.range;
+		oRange = oModel.range;
 		//
 		oRange.change.add(handleRangeChange);
 		window.addEventListener('popstate', handlePopstate, false);
 		//
-		model.entryShown.add(handleEntryShown);
+		oModel.entryShown.add(handleEntryShown);
 		//
 		oRange.set(time.UNIVERSE,time.NOW);
 		updated(location.hash.substr(1));
+		//console.log('init',location.hash.substr(1)); // log
 	}
 
+	// todo: document
 	function handleRangeChange(){
 		if (oRange.start.ago===time.UNIVERSE&&oRange.end.ago===time.NOW) {
 			update();
 		} else {
-			update(
+			/*update(
 				formatAnnum(oRange.start.ago,2,false)
 				,formatAnnum(oRange.end.ago,2,false)
-			);
+			);*/
+			//oModel.view.content.currentEntry
+			update(totaltimeline.view.content.currentEntry,oRange);// todo: not null if something is selected
 		}
 	}
 
+	// todo: document
 	function handlePopstate() {
 		/*log('popstate');
 		log.watch('history.state',history.state);
@@ -47,15 +55,9 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 		updated(location.pathname.substr(1),location.hash.substr(1));
 	}
 
+	// todo: document
 	function handleEntryShown(event){
-		// todo: set location
-		console.log('handleEntryShown'
-			,event.info
-			,slug(event.info.name)
-		); // log
-//		history.pushState('','foobar',slug(event.info.name));
-//		var sNewPath = start===undefined?sLocationOriginalPath:sLocationBase +start+'/'+end
-		history.pushState('','foobar',sLocationBase+slug(event.info.name));
+		update(event,oRange);
 	}
 
 	/**
@@ -68,15 +70,37 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 			,sPath = bNoHash?path:hash
 		;
 		var aPath
-			,aAgo = [];
+			,iPath;
 		if (sPath.length>0) {
 			aPath = sPath.split('/');
-			if (aPath.length>=2) {
-				for (var i=0;i<2;i++) {
-					aAgo.push(time.unformatAnnum(aPath[i]));
+			iPath = aPath.length;
+			// Event
+			if  (iPath===1||iPath===3) {
+				var sLocationSlug = aPath[0]
+					,oCollection = totaltimeline.collection
+					,showSlugInstance = function(){
+						var oSlugInst = oCollection.getEntryBySlug(sLocationSlug);
+						if (oSlugInst) {
+							oCollection.dataLoaded.remove(showSlugInstance);
+							oModel.entryShown.dispatch(oSlugInst);
+						}
+					}
+				;
+				if (oCollection.length!==oCollection.loaded) {
+					oCollection.dataLoaded.add(showSlugInstance);
+				} else {
+					showSlugInstance();
 				}
-//				oRange.set.apply(oRange,aAgo);
-				oRange.animate.apply(oRange,aAgo);
+			}
+			// Range
+			if (iPath>=2) {
+				var bPath2 = iPath===2
+					,iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
+					,iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
+				;
+				oRange.animate(iAgoStart,iAgoEnd,function(){
+					console.log('doneanimating'); // log
+				});
 			}
 		} else {
 			oRange.animate(time.UNIVERSE,time.NOW);
@@ -85,22 +109,34 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 
 	/**
 	 * Update option selection variable and try to call pushState.
-	 * @param {string} [start] Start time
-	 * @param {string} [end] End time
-	 * @param {string} [subject] Optional subject
+	 * @param {totaltimeline.collection.events.event} [event] Optional current event.
+	 * @param {range} [range] The current range.
 	 */
-	function update(start,end,subject){
-		//console.log('location.update',start,end,subject); // log
-		var currentState = history.state;
-		log.watch('currentState',currentState);
-		if (sLocationOriginalPath.indexOf(start)!==-1) {
-			sLocationOriginalPath = sLocationOriginalPath.split(start).shift();
+	function update(event,range){
+		//console.log('location.update',!!event,!!range); // log
+		var currentState = history.state
+			,sSlugStart = range&&formatAnnum(range.start.ago,2,false)
+			,sSlugEnd = range&&formatAnnum(range.end.ago,2,false)
+		;
+		//console.log('history.state',currentState); // log;
+		log.watch('history.state',currentState);
+		//
+		//console.log('sLocationOriginalPath',sLocationOriginalPath); // log
+		if (range&&sLocationOriginalPath.indexOf(sSlugStart)!==-1) { // why?
+			sLocationOriginalPath = sLocationOriginalPath.split(sSlugStart).shift();
 		}
 		if (history.pushState) {//todo:what if no pushstate
-			var sPath = location.pathname
-				//,sNewPath = slug===undefined?sLocationBase:sLocationBase+'/'+slug
-				,sNewPath = start===undefined?sLocationOriginalPath:sLocationBase +start+'/'+end
+			var aPath = ['']
+				,sPath = location.pathname
+				,sNewPath
 			;
+			if (event) aPath.push(slug(event.info.name));
+			if (range) {
+				aPath.push(sSlugStart);
+				aPath.push(sSlugEnd);
+			}
+			sNewPath = aPath.join('/');
+			//console.log('path\n\told: ',sPath,'\n\tnew: ',sNewPath); // log
 			if (sNewPath!==sPath) {
 				//(location.pathname==='/'?history.pushState:history.replaceState)('','foobar',sNewPath);
 				if (location.pathname==='/') {
@@ -110,16 +146,17 @@ iddqd.ns('totaltimeline.location',(function(iddqd,history){
 				}
 			}
 		}
-		document.title = sDocumentTitle + ' ' + oRange.start + ' - ' + oRange.end;
-		if (subject) {
-			console.log('subject',subject); // log
-		}
+		setDocumentTitle(event,range);
 	}
 
-	function set(){
-
+	// todo: document
+	function setDocumentTitle(event,range){
+		// First trees | 2 Ga - 3 Ma | TotalTimeline
+		document.title = sDocumentTitle
+			+(event?' - '+event.info.name:'')
+			+(range?' ' + oRange.start + ' - ' + oRange.end:'')
+		;
 	}
-	return iddqd.extend(init,{
-		set: set
-	});
-})(iddqd,window.history));
+
+	return init;
+})(window.history));

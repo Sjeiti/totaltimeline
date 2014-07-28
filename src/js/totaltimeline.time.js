@@ -22,16 +22,16 @@ iddqd.ns('totaltimeline.time',(function(){
 	 * @method
 	 * @param {number} year Number of years ago.
 	 * @param {number} round Number of digits to round to.
-	 * @param {boolean} [space=true] Are there spaces between the value and the type.
+	 * @param {boolean} [noSlug=true] Are there spaces between the value and the type.
 	 * @returns {string}
 	 */
-	function formatAnnum(year,round,space){
+	function formatAnnum(year,round,noSlug){
 		// todo: rounding sometimes off: split at . truncate and join
 		// todo: also round absolutes, ie: 4 to 4.00
-		space = space===false?'':sSpace;
 		var sReturn
 			,isFuture = year<0
 			,iYear = Math.abs(year)
+			,space = noSlug===false?'':sSpace
 		;
 		if (iYear>4000) {
 			if (round===undefined) round = 0;
@@ -42,7 +42,7 @@ iddqd.ns('totaltimeline.time',(function(){
 			iYear = Math.round(YEAR_NOW-iYear);
 			sReturn = Math.abs(iYear) + (iYear<0?space+'BC':(iYear<1500?space+'AD':''));
 		}
-		return sReturn + (isFuture?' from now':'');
+		return sReturn + (isFuture?noSlug?' from now':'-from-now':'');
 	}
 
 	/**

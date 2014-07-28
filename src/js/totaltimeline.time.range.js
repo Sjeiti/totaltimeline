@@ -83,11 +83,12 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		// todo: implement max
 	}
 
-	function animate(startAgo,endAgo){
-		if (arguments.length===1) { // assume range
+	// todo: document // no overload!
+	function animate(startAgo,endAgo,callback){
+		/*if (arguments.length===1) { // assume range
 			endAgo = startAgo.end.ago;
 			startAgo = startAgo.start.ago;
-		}
+		}*/
 		var iStartFrom = start.ago
 			,iStartDelta = startAgo - iStartFrom
 			,iEndFrom = end.ago
@@ -95,7 +96,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		iddqd.animate(1000,function(f){
 			var fInOut = TWEEN.Easing.Quadratic.InOut(f);
 			set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta);
-		});
+		},callback);
 	}
 
 	/**

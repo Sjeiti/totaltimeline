@@ -46,6 +46,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	}
 
 	function handleEntryShown(entry) {
+		init.currentEntry = entry;
 		emptyView(mContentWrapper);
 		emptyView(mFragment);
 		if (entry) {
@@ -78,7 +79,5 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		}
 	}
 
-	return iddqd.extend(init,{
-//		show: show
-	});
+	return init;//iddqd.extend(init,{show: show});
 })());

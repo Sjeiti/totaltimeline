@@ -303,6 +303,13 @@ module.exports = function (grunt) {
 			,release: { command: 'cordova build android --release' }
 			,clean: { cwd: 'platforms/android/cordova/', command: 'node clean', output: true }
 		}
+
+		,renderPage: {
+			main: {
+				src: 'temp/svg/',
+				dest: 'src/style/svgIcons.less'
+			}
+		}
 	});
 
 	grunt.registerTask('js',[

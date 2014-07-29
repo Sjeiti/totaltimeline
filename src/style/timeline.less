@@ -45,6 +45,13 @@
 				-webkit-filter: drop-shadow( 0 0 4px @colorGreen );
 						filter: drop-shadow( 0 0 4px @colorGreen );
 			}
+			a {
+				display: inline-block;
+				.size(100%);
+				overflow: hidden;
+				padding-top: 100%;
+				pointer-events: none;
+			}
 		}
 		.line {
 			.transform(translateY(@eventSize));

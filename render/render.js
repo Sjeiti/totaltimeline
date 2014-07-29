@@ -26,22 +26,10 @@
 		//console.log(page.title);
 		//console.log(page.evaluate(function(){return document.querySelector('title').innerText;}));
 		page.render('render/'+sName+'.png');
-
 		var sHtml = page.evaluate(function() {
 			return document.getElementsByTagName('html')[0].innerHTML;
 		});
-		/*require('fs').writeFile('render/example.html', sHtml, function(err) {
-			console.log(err||'file saved');
-			phantom.exit();
-		});*/
-
-		//require('fs').write('render/example.html', sHtml, 'w');
-
-		console.log(sHtml); // log
-		//	var system = require('system');
-		//	var args = system.args;
-		//			console.log(JSON.stringify(args)); // log
-
+		console.log(sHtml);
 		phantom.exit(sHtml);
 	}
 

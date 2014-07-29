@@ -29,13 +29,26 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		});
 	}
 
-
+	// todo:document
+	function getCssValuePrefix() {
+		var aPrefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
+			,mTmp = document.createElement('div')
+			,sValue = 'linear-gradient(left, #fff, #fff)';
+		for (var i = 0; i < aPrefixes.length; i++) {
+			mTmp.style.backgroundImage = aPrefixes[i] + sValue;
+			if (mTmp.style.backgroundImage) {
+				return aPrefixes[i];
+			}
+			mTmp.style.backgroundImage = '';
+		}
+	}
 
 	return iddqd.extend(init,{
 		span: oSpan
 		,range: oRange
 		,spreadsheetKey: sSpreadsheetKey
 		,entryShown: sgEntryShown
+		,cssPrefix: getCssValuePrefix()
 		,userAgent: {
 			isPhantom: sUserAgent.match(/PhantomJS/)
 		}

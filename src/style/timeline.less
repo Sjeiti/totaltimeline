@@ -1,8 +1,10 @@
 #timeline {
 	position: relative;
 	margin: 0 @screenPadding;
-	background: url(wallpaper.jpg);
-	background-size: cover;
+	background-color: #615d78;
+	background-repeat: repeat-x;
+//	background: url(wallpaper.jpg);
+//	background-size: cover;
 	//	.user-select;
 //	.gradientHorizontal(@colorBlack,@colorGrayDark);
 	&.show-range {
@@ -22,14 +24,20 @@
 	.event-wrap {
 		.lt;
 		height: 100%;
+		pointer-events: auto;
+		&.selected .event {
+			//background-color: red;
+			-webkit-filter: drop-shadow( 0 0 4px @colorGreen );
+					filter: drop-shadow( 0 0 4px @colorGreen );
+		}
 	}
+
 		.event {
 			.lt;
 			z-index: 2;
 			.size(@eventSize);
 			.transform(translateX(-.5*@eventSize));
 			.border-radius(@eventSize/2);
-			pointer-events: auto;
 			background-color: #c2c85d;
 			background-size: cover;
 			cursor: pointer;
@@ -39,12 +47,12 @@
 				.size(@eventIconSize);
 				.transform(translateX(-.5*@eventIconSize));
 			}
-			&.selected {
+			/*&.selected {
 //				background-color: red;
 
 				-webkit-filter: drop-shadow( 0 0 4px @colorGreen );
 						filter: drop-shadow( 0 0 4px @colorGreen );
-			}
+			}*/
 			a {
 				display: inline-block;
 				.size(100%);
@@ -53,10 +61,12 @@
 				pointer-events: none;
 			}
 		}
+		.event-wrap.selected .line, .event-wrap:hover .line {
+			border-right: 1px solid @colorBlueLighter;
+		}
 		.line {
 			.transform(translateY(@eventSize));
 			.lb;
-			border-right: 1px dashed #a6bebe;
 		}
 
 
@@ -69,14 +79,18 @@
 		.lt;
 		min-height: 1rem;
 		height: 100%;
-		background-color: #005580;
 		overflow: hidden;
 		font-weight: bold;
 		white-space: nowrap;
 		text-indent: .4rem;
-		&:hover {
-			background-color: #a61e24;
+		pointer-events: none;
+		background-color: rgba(0,0,0,.1);
+		&:nth-child(even) {
+			background-color: rgba(0,0,0,.05);
 		}
+		/*&:hover {
+			background-color: #a61e24;
+		}*/
 		.title {
 			position: relative;
 			display: inline;
@@ -86,6 +100,7 @@
 			font-size: .6rem;
 			text-rendering: optimizeSpeed;
 			cursor: pointer;
+			pointer-events: auto;
 			&:hover {
 				color: #ff647a;
 			}

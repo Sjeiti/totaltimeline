@@ -5,7 +5,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
 
 	var s = totaltimeline.string
-		//,time = totaltimeline.time
+		,time = totaltimeline.time
 		//,log = totaltimeline.view.log
 		,collection = totaltimeline.collection
 		,model
@@ -20,6 +20,16 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,iViewL
 		,bOver = false
 		,aTouchXLast = []
+		,aBackgroundColors = [
+			 {time:time.UNIVERSE,					color:'#171B30'}//171B30
+			,{time:time.UNIVERSE-800E6,				color:'#585873'}//585873
+			,{time:time.UNIVERSE-801E6,				color:'#799193'}//CCE7E7
+			,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
+			,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
+			,{time:time.NOW,						color:'#D8945A'}
+			,{time:-1E9,							color:'#8A5246'}
+			,{time:-9E9,							color:'#460505'}
+		]
 		//
 		,bViewMouseDown = false
 		,iMouseXOffsetDelta = 0
@@ -178,6 +188,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		mView.setAttribute(s.dataBefore,oRange.start.toString());
 		mView.setAttribute(s.dataAfter,oRange.end.toString());
 		collection.populate(mView,oRange);
+		setGradient();
 	}
 
 	/**
@@ -246,6 +257,25 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		while (iX--) {
 			aTouchXLast[iX] = aTouchX[iX];
 		}
+	}
+
+	function setGradient(){
+		var iAgoFrom = oRange.start.ago
+			,iAgoTo = oRange.end.ago
+			,iDeltaRange = oRange.duration
+			,aGradient = [];
+		for (var i=0,l=aBackgroundColors.length;i<l;i++) {
+			var oColor = aBackgroundColors[i]
+				,iTime = oColor.time;
+			if (true||iTime<=iAgoFrom&&iTime>=iAgoTo) {
+				//console.log('color',iTime,1-(iTime-iAgoTo)/iDeltaRange); // log
+				var fPos = s.getPercentage(1-(iTime-iAgoTo)/iDeltaRange);
+				aGradient.push(oColor.color+' '+fPos);
+			}
+		}
+		mView.style.backgroundImage = model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')';
+		//mView.style.backgroundImage = '-webkit-linear-gradient(left, #171B30 0%, #2E4346 33%, #657851 66%, #D8945A 100%)';
+		//console.log('backgroundImage: ','-webkit-linear-gradient(left,'+aGradient.join(',')+')'); // log
 	}
 
 	return init;

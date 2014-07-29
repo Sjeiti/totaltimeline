@@ -3,7 +3,9 @@
 	'use strict';
 	var system = require('system')
 		,args = system.args
+		,bRenderImage = args.length>2
 		,sSrcUri = args[1]
+		,sTargetPath = bRenderImage?args[2]:''
 		,sName = sSrcUri.split('/').pop()
 	;
 
@@ -17,21 +19,36 @@
 
 	function waitForCondition(){
 		return page.evaluate(function () {
-			var c = window.totaltimeline.collection;
-			return c.length===c.loaded;
+			var collection = window.totaltimeline.collection;
+			return collection.length===collection.loaded;
 		});
 	}
 
 	function waitForDone(){
 		//console.log(page.title);
 		//console.log(page.evaluate(function(){return document.querySelector('title').innerText;}));
-		page.render('render/'+sName+'.png');
+		bRenderImage&&page.render(sTargetPath+sName+'.png');
 		var sHtml = page.evaluate(function() {
 			return document.getElementsByTagName('html')[0].innerHTML;
 		});
 		console.log(sHtml);
 		phantom.exit(sHtml);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * Wait until the test condition is true or a timeout occurs. Useful for waiting

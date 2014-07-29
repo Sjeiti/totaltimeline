@@ -10,7 +10,7 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	var s = totaltimeline.string
 		,model = totaltimeline.model
 		,sTitle = info.name+' '+moment.toString()
-		,mWrap = zen('div.event-wrap>(div.line+(div.event[title='+sTitle+']>a[href=/'+info.slug+']{'+sTitle+'}))').pop()
+		,mWrap = zen('div.event-wrap>(div.line+(div.event>a[href=/'+info.slug+']{'+sTitle+'}))').pop()
 		,mEvent = mWrap.querySelector('.event')
 		,mLine = mWrap.querySelector('.line')
 		,fTop = 0.9*iddqd.math.prng.random(Math.abs(moment.value<18000?10000*moment.value:moment.value))
@@ -25,7 +25,7 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		})
 	;
 	mEvent.model = oReturn;
-//	mEvent.setAttribute('title',info.name+' '+moment.toString());
+	mEvent.setAttribute('title',sTitle);
 	mEvent.style.top = sTop;
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 	mLine.style.height = sHeight;

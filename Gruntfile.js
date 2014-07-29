@@ -306,8 +306,10 @@ module.exports = function (grunt) {
 
 		,renderPage: {
 			main: {
-				src: 'temp/svg/',
-				dest: 'src/style/svgIcons.less'
+				baseUri: 'http://localhost.ttl/'
+				,dest: 'temp/cache/'
+//				,pages: ['spiral-galaxy','milky-way']
+				,renderImage: false
 			}
 		}
 	});

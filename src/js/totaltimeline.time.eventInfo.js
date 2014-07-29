@@ -31,8 +31,10 @@
 iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 	'use strict';
 	var _ = (function(u){return u;})()
+		,slug = totaltimeline.string.slug
 		,oEventInfo = {
 			name:_
+			,slug:_
 			,icon:_
 			,importance:_
 			,accuracy:_
@@ -55,7 +57,14 @@ iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 	;
 	function parse(o) {
 		// todo: markdown.toHTML(explanation)
-		for (var s in o) if (oEventInfo.hasOwnProperty(s)) oEventInfo[s] = o[s];
+		for (var s in o) {
+			if (oEventInfo.hasOwnProperty(s)) {
+				oEventInfo[s] = o[s];
+				if (s==='name') {
+					oEventInfo.slug = slug(o[s]);
+				}
+			}
+		}
 		return oEventInfo;
 	}
 	return objectToParse?oEventInfo.parse(objectToParse):oEventInfo;

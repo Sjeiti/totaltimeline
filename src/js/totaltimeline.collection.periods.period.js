@@ -27,7 +27,8 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	mElement.style.backgroundColor = 'rgba(0,0,0,'+ (0.1+Math.random()/3)+')';
 	mElement.style.marginTop = 2*offset+'rem';
 
-	var mTitle = zen('h3.title{'+info.name + ' ' + range.start.toString() + ' - ' + range.end.toString()+'}').pop();
+//	var mTitle = zen('h3.title{'+info.name + ' ' + range.start.toString() + ' - ' + range.end.toString()+'}').pop();
+	var mTitle = zen('h3.title>a[href=/'+info.slug+']{'+info.name + ' ' + range.start.toString() + ' - ' + range.end.toString()+'}').pop();
 	mTitle.model = oReturn;
 	mElement.appendChild(mTitle);
 	model.entryShown.add(handleEntryShown); // todo: not very efficient

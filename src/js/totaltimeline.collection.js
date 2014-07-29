@@ -152,9 +152,8 @@ iddqd.ns('totaltimeline.collection',(function(){
 		for (var i=0,l=collection.length;i<l;i++) {
 			var oCollectionInstance = collection[i];
 			for (var j=0,k=oCollectionInstance.length;j<k;j++) {
-				var oInstance = oCollectionInstance[j]
-					,sSlug = slug(oInstance.info.name);
-				if (sSlug===_slug) {
+				var oInstance = oCollectionInstance[j];
+				if (oInstance.info.slug===_slug) {
 					return oInstance;
 				}
 			}

@@ -132,7 +132,7 @@ iddqd.ns('totaltimeline.location',(function(history){
 				,sPath = location.pathname
 				,sNewPath
 			;
-			if (event) aPath.push(slug(event.info.name));
+			if (event) aPath.push(event.info.slug);
 			if (range) {
 				aPath.push(sSlugStart);
 				aPath.push(sSlugEnd);

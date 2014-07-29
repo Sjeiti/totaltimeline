@@ -43,7 +43,9 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		mEvent.classList.toggle(s.selected,entry&&entry.info===info);
 	}
 
+	// todo: document
 	function inside(is){
+		//console.log('event.inside',is,mEvent.classList.contains(s.selected)); // log
 		if (!is&&mEvent.classList.contains(s.selected)) {
 			model.entryShown.dispatch();
 		}

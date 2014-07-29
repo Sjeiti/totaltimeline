@@ -8,6 +8,9 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		,moment = time.moment
 		,range = time.range
 		,sgEntryShown = new signals.Signal()
+		//
+		,sUserAgent = navigator.userAgent
+		//
 		// see: https://developers.google.com/gdata/samples/spreadsheet_sample
 		// see: https://developers.google.com/google-apps/spreadsheets/
 		//,sSpreadsheetKey = '0AgLsBMvUgAW8dE1ZRDJUOVliVnFwNE9DcGRmNHRIbWc'
@@ -33,5 +36,8 @@ iddqd.ns('totaltimeline.model',(function(undefined){
 		,range: oRange
 		,spreadsheetKey: sSpreadsheetKey
 		,entryShown: sgEntryShown
+		,userAgent: {
+			isPhantom: sUserAgent.match(/PhantomJS/)
+		}
 	});
 })());

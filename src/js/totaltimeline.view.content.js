@@ -46,6 +46,10 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	}
 
 	function handleEntryShown(entry) {
+//		console.log('handleEntryShown',Date.now(),entry&&entry.info.name,entry); // log
+//		totaltimeline.view.log('handleEntryShown',entry.info.name);
+//		console.log('handleEntryShown',entry.info.name); // log
+//		model.userAgent.isPhantom&&totaltimeline.view.log('handleEntryShown',Date.now(),entry&&entry.info.name);
 		init.currentEntry = entry;
 		emptyView(mContentWrapper);
 		emptyView(mFragment);
@@ -55,6 +59,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 						?entry.moment.toString()
 						:entry.range.start.toString()+' - '+entry.range.end.toString()
 			}));
+//			model.userAgent.isPhantom&&totaltimeline.view.log('\tinnerHTML',mContentWrapper.innerHTML.substr(0,10));
 			/*var mDL = document.createElement('dl');
 			for (var s in entry.info) {
 				var sDD = entry.info[s]
@@ -66,7 +71,16 @@ iddqd.ns('totaltimeline.view.content',(function(){
 				).forEach(mDL.appendChild.bind(mDL));
 			}
 			mContent.appendChild(mDL);*/
+//			model.userAgent.isPhantom&&totaltimeline.view.log('\tfoo');
 		}
+//		console.trace();
+//		var errDummy = new Error('dummy');
+//		console.log('dummyError',errDummy);
+		/*var stack = errDummy.stack.replace(/^[^\(]+?[\n$]/gm, '')
+			.replace(/^\s+at\s+/gm, '')
+			.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
+			.split('\n');
+		console.log('stack',stack);*/
 	}
 
 	/**

@@ -79,9 +79,11 @@ iddqd.ns('totaltimeline.location',(function(history){
 				var sLocationSlug = aPath[0]
 					,oCollection = totaltimeline.collection
 					,showSlugInstance = function(){
+//						console.log('showSlugInstance'); // log
 						var oSlugInst = oCollection.getEntryBySlug(sLocationSlug);
 						if (oSlugInst) {
 							oCollection.dataLoaded.remove(showSlugInstance);
+//							setTimeout(oModel.entryShown.dispatch.bind(this,oSlugInst), 140 );
 							oModel.entryShown.dispatch(oSlugInst);
 						}
 					}
@@ -119,7 +121,7 @@ iddqd.ns('totaltimeline.location',(function(history){
 			,sSlugEnd = range&&formatAnnum(range.end.ago,2,false)
 		;
 		//console.log('history.state',currentState); // log;
-		log.watch('history.state',currentState);
+		//log.watch('history.state',currentState);
 		//
 		//console.log('sLocationOriginalPath',sLocationOriginalPath); // log
 		if (range&&sLocationOriginalPath.indexOf(sSlugStart)!==-1) { // why?

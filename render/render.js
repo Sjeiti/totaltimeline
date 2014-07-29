@@ -1,37 +1,49 @@
-//var phantom = require('node-phantom');
-
+/*global phantom*/
 (function(page){
 	'use strict';
+	var system = require('system')
+		,args = system.args
+		,sSrcUri = args[1]
+		,sName = sSrcUri.split('/').pop()
+	;
 
-	page.onLoadFinished = function() {
-		waitFor(function () {
-			return page.evaluate(function () {
-				var c = window.totaltimeline.collection;
-				return c.length===c.loaded;
-			});
-		},function () {
-			//console.log(page.title);
-			//console.log(page.evaluate(function(){return document.querySelector('title').innerText;}));
-			page.render('render/example.png');
+	page.viewportSize = { width: 800, height: 600 };
+	page.onLoadFinished = handleLoadFinished;
+	page.open(sSrcUri);
 
-			var sHtml = page.evaluate(function() {
-				return document.getElementsByTagName('html')[0].innerHTML;
-			});
-			/*require('fs').writeFile('render/example.html', sHtml, function(err) {
-				console.log(err||'file saved');
-				phantom.exit();
-			});*/
+	function handleLoadFinished(){
+		waitFor(waitForCondition,waitForDone);
+	}
 
-			//require('fs').write('render/example.html', sHtml, 'w');
-
-			console.log(sHtml); // log
-
-			phantom.exit(sHtml);
+	function waitForCondition(){
+		return page.evaluate(function () {
+			var c = window.totaltimeline.collection;
+			return c.length===c.loaded;
 		});
+	}
 
+	function waitForDone(){
+		//console.log(page.title);
+		//console.log(page.evaluate(function(){return document.querySelector('title').innerText;}));
+		page.render('render/'+sName+'.png');
 
-	};
-	page.open('http://localhost.ttl/milky-way');
+		var sHtml = page.evaluate(function() {
+			return document.getElementsByTagName('html')[0].innerHTML;
+		});
+		/*require('fs').writeFile('render/example.html', sHtml, function(err) {
+			console.log(err||'file saved');
+			phantom.exit();
+		});*/
+
+		//require('fs').write('render/example.html', sHtml, 'w');
+
+		console.log(sHtml); // log
+		//	var system = require('system');
+		//	var args = system.args;
+		//			console.log(JSON.stringify(args)); // log
+
+		phantom.exit(sHtml);
+	}
 
 	/**
 	 * Wait until the test condition is true or a timeout occurs. Useful for waiting

@@ -79,7 +79,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		sgDataLoaded.add(function(collectionInstance){
 			collection.loaded++;
 			sgCollectionDataLoaded.dispatch(collectionInstance);
-		});
+		},null,-1); // should be the last to called
 
 		/**
 		 * Handles the click event on the wrapper.

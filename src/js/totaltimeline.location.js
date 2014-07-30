@@ -4,8 +4,7 @@
 iddqd.ns('totaltimeline.location',(function(history){
 	'use strict';
 
-	var slug = totaltimeline.string.slug
-		,time = totaltimeline.time
+	var time = totaltimeline.time
 		,formatAnnum = time.formatAnnum
 		,log
 		,oModel
@@ -116,8 +115,8 @@ iddqd.ns('totaltimeline.location',(function(history){
 	 */
 	function update(event,range){
 		//console.log('location.update',!!event,!!range); // log
-		var currentState = history.state
-			,sSlugStart = range&&formatAnnum(range.start.ago,2,false)
+		var /*currentState = history.state
+			,*/sSlugStart = range&&formatAnnum(range.start.ago,2,false)
 			,sSlugEnd = range&&formatAnnum(range.end.ago,2,false)
 		;
 		//console.log('history.state',currentState); // log;

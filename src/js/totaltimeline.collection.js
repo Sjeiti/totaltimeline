@@ -6,8 +6,7 @@
 iddqd.ns('totaltimeline.collection',(function(){
 	'use strict';
 
-	var slug = totaltimeline.string.slug
-		,sgCollectionDataLoaded = new signals.Signal()
+	var sgCollectionDataLoaded = new signals.Signal()
 		,collection = {
 			length: 0
 			,loaded: 0

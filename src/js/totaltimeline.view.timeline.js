@@ -48,8 +48,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		// view elements
 		mBody = document.body;
 		mView = document.getElementById('timeline');
-		mTimeFrom = mView.appendChild(document.createElement('time'));
-		mTimeTo = mView.appendChild(document.createElement('time'));
+		mTimeFrom = document.createElement('time');
+		mTimeTo = document.createElement('time');
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
 		keys = signals.keypress.keys;
@@ -85,6 +85,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Initialise view
 	 */
 	function initView(){
+		mView.appendChild(mTimeFrom);
+		mView.appendChild(mTimeTo);
 		handleResize();
 		handleRangeChange();
 	}

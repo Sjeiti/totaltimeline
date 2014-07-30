@@ -51,7 +51,7 @@ module.exports = function (grunt) {
 		// Lint source files
 		,jshint: {
 			options: { jshintrc: '.jshintrc' },
-			files: sFolderBuild+'/js/main.js'
+			files: sFolderBuild+'/js/totaltimeline.*.js'
 		}
 
         // Automatically inject Bower components into the HTML file

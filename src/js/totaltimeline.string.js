@@ -5,12 +5,6 @@
 iddqd.ns('totaltimeline.string',(function(){
 	'use strict';
 
-	var time = totaltimeline.time
-		,sSpace = ' '
-		,aAnnum = 'a,ka,Ma,Ga'.split(',')
-		,aDuration = ' kMGTP'.split('')
-	;
-
 	/**
 	 * Turns a floating point into a percentage.
 	 * @name totaltimeline.string.getPercentage

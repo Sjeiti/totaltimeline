@@ -7,10 +7,16 @@ iddqd.ns('totaltimeline.view',(function(){
 
 	var s = totaltimeline.string
 		,time = totaltimeline.time
+
+		,iLight1 = 150E6
+		,iLight2 = 1E9
+		,iLight0 = iLight1 + (iLight2-iLight1)/2
+		,iLightA = 0.25*(iLight2-iLight1)
+
 		,aBackgroundColors = [
 			 {time:time.UNIVERSE,					color:'#171B30'}//171B30
-			,{time:time.UNIVERSE-800E6,				color:'#585873'}//585873
-			,{time:time.UNIVERSE-801E6,				color:'#799193'}//CCE7E7
+			,{time:time.UNIVERSE-iLight0+iLightA,	color:'#585873'}//585873
+			,{time:time.UNIVERSE-iLight0-iLightA,	color:'#799193'}//CCE7E7
 			,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
 			,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
 			,{time:time.NOW,						color:'#D8945A'}

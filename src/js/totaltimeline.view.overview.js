@@ -88,7 +88,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function initView(){
 		//mSpan.appendChild(mRange);
 		mOverView.appendChild(mSpan);
-		var amTime = mSpan.querySelectorAll(':scope > time');
+		var amTime = mSpan.getElementsByTagName('time');
+		//var amTime = mSpan.querySelectorAll(':scope > time');
 		amTime[0].innerText = oSpan.start.toString();
 		amTime[1].innerText = oSpan.end.toString();
 //		console.log('amTime.length',amTime.length); // log

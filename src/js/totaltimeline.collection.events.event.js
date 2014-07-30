@@ -30,15 +30,19 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 
 //	console.log('mEvent.querySelector',mEvent.offsetHeight); // log .querySelector('h3')
 
+	if (info.slug==='light') {
+		console.log('light',oReturn); // log
+	}
+
 	mTime.style.height = sHeight; // todo: less vars @eventIconSize
 //	mTime.setAttribute('data-before',info.name);
 	mTime.setAttribute('data-after',moment.toString());
 
 	model.entryShown.add(handleEntryShown);
 
-	mWrap.addEventListener(s.click,function (e){
+	/*mWrap.addEventListener(s.click,function (e){
 		console.log('clickEvent',e); // log
-	});
+	});*/
 
 
 	/**
@@ -46,7 +50,12 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	 * @param {period|event} entry
 	 */
 	function handleEntryShown(entry){
-		mWrap.classList.toggle(s.selected,entry&&entry.info===info);
+		// toggle won't work in Safari
+		if (entry&&entry.info===info) {
+			mWrap.classList.add(s.selected);
+		} else {
+			mWrap.classList.remove(s.selected);
+		}
 	}
 
 	// todo: document

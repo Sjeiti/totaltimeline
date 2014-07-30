@@ -48,12 +48,16 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		mOverView = document.getElementById('overview');
 		//
 		mSpan = zen('div.span>(time+time+div.range>time*3)').pop();
+		var amSpanTime = mSpan.getElementsByTagName('time');
+		amSpanTime[0].innerText = oSpan.start.toString();
+		amSpanTime[1].innerText = oSpan.end.toString();
 		//
 		mRange = mSpan.querySelector('.range');
-		var amTime = mRange.querySelectorAll('time');
-		mTimeFrom = amTime[0];
-		mTime = amTime[1];
-		mTimeTo = amTime[2];
+		var amRangeTime = mRange.querySelectorAll('time');
+		mTimeFrom = amRangeTime[0];
+		mTime = amRangeTime[1];
+		mTimeTo = amRangeTime[2];
+		//
 		//
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
@@ -86,16 +90,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Initialise view
 	 */
 	function initView(){
-		//mSpan.appendChild(mRange);
 		mOverView.appendChild(mSpan);
-		var amTime = mSpan.getElementsByTagName('time');
-		//var amTime = mSpan.querySelectorAll(':scope > time');
-		amTime[0].innerText = oSpan.start.toString();
-		amTime[1].innerText = oSpan.end.toString();
-//		console.log('amTime.length',amTime.length); // log
-//		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
-//		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
-		//
 		handleResize();
 		handleRangeChange();
 	}
@@ -165,9 +160,6 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
 		mRange.style.width = s.getPercentage(fRangeWidth);
 		mRange.style.left = s.getPercentage(fRangeStart);
-
-//		mRange.setAttribute(s.dataBefore,oRange.start.toString());
-//		mRange.setAttribute(s.dataAfter,oRange.end.toString());
 
 		mRange.style.backgroundImage = view.rangeGradient;
 

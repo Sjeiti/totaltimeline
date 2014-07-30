@@ -61,6 +61,7 @@ iddqd.ns('totaltimeline.view',(function(){
 	}
 
 	// todo: document
+	// todo: remove colors outside the range (0-100%) and calculate boundaries
 	function setGradient(model,range){
 		var iAgoFrom = range.start.ago
 			,iAgoTo = range.end.ago

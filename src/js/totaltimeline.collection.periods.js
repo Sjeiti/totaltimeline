@@ -21,6 +21,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		)
 	;
 
+	// todo: document
 	function handleGetData(data){
 		var aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
 			,iTimes = aTimes.length;
@@ -51,6 +52,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		aCollection.dataLoaded.dispatch(aCollection);
 	}
 
+	// todo: document
 	function populate(fragment,range){
 		var iRangeEnd = range.end.ago
 			,iDuration = range.duration

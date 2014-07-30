@@ -55,6 +55,8 @@ iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 			,parse: parse
 		}
 	;
+
+	// todo: document
 	function parse(o) {
 		// todo: markdown.toHTML(explanation)
 		for (var s in o) {

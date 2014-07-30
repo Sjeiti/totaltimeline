@@ -20,6 +20,7 @@ iddqd.ns('totaltimeline.spreadsheetproxy',(function(iddqd,undefined){
 	;
 
 
+	// todo: document
 	function getData(key,worksheet,callback,options){
 		var sheetUri = sEndpoint
 			.replace(/key/,key)
@@ -28,6 +29,7 @@ iddqd.ns('totaltimeline.spreadsheetproxy',(function(iddqd,undefined){
 		iddqd.network.jsonp(sheetUri,handleGetData.bind(undefined,callback));
 	}
 
+	// todo: document
 	function handleGetData(callback,sheet){
 //		console.log('handleGetData',arguments); // log
 		var aData = [];

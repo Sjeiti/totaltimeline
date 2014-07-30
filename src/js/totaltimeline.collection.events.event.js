@@ -24,19 +24,11 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		})
 	;
 	mEvent.model = oReturn;
-//	mEvent.setAttribute('title',sTitle);
 	mEvent.style.top = sTop;
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 
-//	console.log('mEvent.querySelector',mEvent.offsetHeight); // log .querySelector('h3')
-
-	if (info.slug==='light') {
-		console.log('light',oReturn); // log
-	}
-
 	mTime.style.height = sHeight; // todo: less vars @eventIconSize
-//	mTime.setAttribute('data-before',info.name);
-	mTime.setAttribute('data-after',moment.toString());
+	mTime.setAttribute('data-after',moment.toString()); // todo: better as textContent
 
 	model.entryShown.add(handleEntryShown);
 

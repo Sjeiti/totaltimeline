@@ -99,7 +99,7 @@
 			}
 		}
 
-
+@periodHeight: 1.5rem;
 .periods {
 	.lt;
 	z-index: 1000;
@@ -108,22 +108,24 @@
 }
 	.period {
 		.lt;
-		min-height: 1rem;
-		height: 100%;
+//		min-height: 1rem;
+//		height: 100%;
+		height: @periodHeight;
 		overflow: hidden;
-		font-weight: bold;
+//		font-weight: bold;
 		white-space: nowrap;
 		text-indent: .4rem;
 		pointer-events: none;
 		.gradientDirectional(fade(black,10%),fade(black,2%),80deg);
 		&:hover { .gradientDirectional(fade(white,10%),fade(white,2%),80deg); }
-		.title {
+		h3 {
 			position: relative;
 			display: inline;
 			z-index: 1010;
-			font-weight: bold;
-			font-family: @fontNameBody;
-			font-size: .6rem;
+//			font-weight: bold;
+//			font-family: @fontNameBody;
+//			font-size: .6rem;
+			font: 400 .6rem/ @periodHeight @fontNameBody;
 			color: fade(white,70%);
 			text-rendering: optimizeSpeed;
 			cursor: pointer;

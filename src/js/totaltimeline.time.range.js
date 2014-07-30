@@ -115,16 +115,6 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		change.dispatch(oReturn);
 	}
 
-	/*function inside(time) {
-		var oStartEnd = getInsideStartEnd(time);
-		return !oStartEnd.start&&!oStartEnd.end;
-	}
-
-	function surrounds(time) {
-		var oStartEnd = getInsideStartEnd(time);
-		return oStartEnd.start&&oStartEnd.end;
-	}*/
-
 	/**
 	 *
 	 * @param {moment|range} time
@@ -148,22 +138,12 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		return bCoincides;
 	}
 
+	// todo: document
 	function momentInside(moment){
 		return moment.ago<=start.ago&&moment.ago>=end.ago;
 	}
 
-	/*function getInsideStartEnd(time){
-		var oRange, bStart, bEnd;
-		if (time.factory===moment) {
-			bStart = bEnd = momentInside(time);
-		} else {
-			oRange = time.factory===period?time.range:time;
-			bStart = momentInside(oRange.start);
-			bEnd = momentInside(oRange.end);
-		}
-		return {start:bStart,end:bEnd};
-	}*/
-
+	// todo: document
 	function clone() {
 		return range(start.clone(),end.clone());
 	}

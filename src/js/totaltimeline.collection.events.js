@@ -22,7 +22,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 
 	/**
 	 * Turns the spreadsheet json data into an event list.
-	 * @param {object} sheet
+	 * @param {object} data
 	 */
 	function handleGetData(data){
 		//ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
@@ -48,11 +48,9 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		aCollection.dataLoaded.dispatch(aCollection);
 	}
 
-
-
+	//todo:document
 	function populate(fragment,range){
-		var /*started = 0
-			,*/iRangeStart = range.start.ago
+		var iRangeStart = range.start.ago
 			,iRangeEnd = range.end.ago
 			,iDuration = range.duration
 		;
@@ -69,20 +67,6 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 				fragment.appendChild(mEvent);
 			}
 			oEvent.inside(bInside);
-			/*if (started===0&&iAgo<=iRangeStart) {
-				started++;
-			}
-			if (started===1) {
-				if (iAgo<iRangeEnd) {
-					//break;
-				} else {
-					var mEvent = oEvent.element
-						,fRel = 1-((iAgo-iRangeEnd)/iDuration)
-					;
-					mEvent.style.left = s.getPercentage(fRel);
-					fragment.appendChild(mEvent);
-				}
-			}*/
 		}
 	}
 

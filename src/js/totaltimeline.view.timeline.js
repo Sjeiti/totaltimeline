@@ -181,12 +181,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * When the range changes all view element are recalculated
 	 */
 	function handleRangeChange(){
-//		mView.setAttribute(s.dataBefore,oRange.start.toString());
-//		mView.setAttribute(s.dataAfter,oRange.end.toString());
-
 		mTimeFrom.innerText = oRange.start.toString();
 		mTimeTo.innerText = oRange.end.toString();
-
 		mView.style.backgroundImage = view.rangeGradient;
 		collection.populate(mView,oRange);
 	}

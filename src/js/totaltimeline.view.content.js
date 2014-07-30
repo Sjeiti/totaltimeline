@@ -4,37 +4,32 @@
 iddqd.ns('totaltimeline.view.content',(function(){
 	'use strict';
 
-	var /*s = totaltimeline.string
-		,collection = totaltimeline.collection
-		,*/model
-//		,signals = iddqd.signals
-		,mContent
+	var mContent
 		,mContentWrapper
 		,mFragment = document.createDocumentFragment()
 	;
 
 	function init(model){
-		initVariables(model);
+		initVariables();
 		if (mContent) {
-			initEvents();
+			initEvents(model);
 			initView();
 		}
 	}
 
 	/**
 	 * Initialise Variables
-	 * @param {model} _model
 	 */
-	function initVariables(_model){
-		model = _model;
+	function initVariables(){
 		mContent = document.getElementById('content');
 		mContentWrapper = zen('div.content').pop();
 	}
 
 	/**
 	 * Initialise event listeners (and signals).
+	 * @param {model} model
 	 */
-	function initEvents(){
+	function initEvents(model){
 		model.entryShown.add(handleEntryShown);
 	}
 
@@ -45,11 +40,10 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		mContent.appendChild(mContentWrapper);
 	}
 
+	// todo:document
 	function handleEntryShown(entry) {
-//		console.log('handleEntryShown',Date.now(),entry&&entry.info.name,entry); // log
-//		totaltimeline.view.log('handleEntryShown',entry.info.name);
-//		console.log('handleEntryShown',entry.info.name); // log
-//		model.userAgent.isPhantom&&totaltimeline.view.log('handleEntryShown',Date.now(),entry&&entry.info.name);
+		//console.log('handleEntryShown',Date.now(),entry&&entry.info.name,entry); // log
+		//totaltimeline.view.log('handleEntryShown',entry.info.name);
 		init.currentEntry = entry;
 		emptyView(mContentWrapper);
 		emptyView(mFragment);
@@ -59,28 +53,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 						?entry.moment.toString()
 						:entry.range.start.toString()+' - '+entry.range.end.toString()
 			}));
-//			model.userAgent.isPhantom&&totaltimeline.view.log('\tinnerHTML',mContentWrapper.innerHTML.substr(0,10));
-			/*var mDL = document.createElement('dl');
-			for (var s in entry.info) {
-				var sDD = entry.info[s]
-					,bLink = s==='link'&&sDD!==undefined;
-				// todo: multiple links by \n
-				zen(bLink
-					?'dt{'+s+'}+dd>a[href="'+sDD+'" target=_blank]{'+sDD+'}'
-					:'dt{'+s+'}+dd{'+sDD+'}'
-				).forEach(mDL.appendChild.bind(mDL));
-			}
-			mContent.appendChild(mDL);*/
-//			model.userAgent.isPhantom&&totaltimeline.view.log('\tfoo');
 		}
-//		console.trace();
-//		var errDummy = new Error('dummy');
-//		console.log('dummyError',errDummy);
-		/*var stack = errDummy.stack.replace(/^[^\(]+?[\n$]/gm, '')
-			.replace(/^\s+at\s+/gm, '')
-			.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
-			.split('\n');
-		console.log('stack',stack);*/
 	}
 
 	/**

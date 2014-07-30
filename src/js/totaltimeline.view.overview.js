@@ -6,6 +6,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 
 	var s = totaltimeline.string
 		,time = totaltimeline.time
+		,view = totaltimeline.view
 		//,log = totaltimeline.view.log
 		,model
 		,signals = iddqd.signals
@@ -16,7 +17,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,mOverView
 		,mSpan
 		,mRange
-		,mTime
+		,mTime,mTimeFrom,mTimeTo
 		,iSpanW = 800
 		,fRangeWidth
 		,fRangeStart
@@ -45,9 +46,14 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		// view elements
 		mBody = document.body;
 		mOverView = document.getElementById('overview');
-		mSpan = zen('div.span.show-range>div.range.show-range>time').pop();
-		mRange = mSpan.querySelector('.range');//zen('div.range.show-range>time').pop();
-		mTime = mRange.querySelector('time');
+		//
+		mSpan = zen('div.span>(time+time+div.range>time*3)').pop();
+		//
+		mRange = mSpan.querySelector('.range');
+		var amTime = mRange.querySelectorAll('time');
+		mTimeFrom = amTime[0];
+		mTime = amTime[1];
+		mTimeTo = amTime[2];
 		//
 		// init and detach keypress so keys exist
 		signals.keypress.add(iddqd.fn).detach();
@@ -82,8 +88,12 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function initView(){
 		//mSpan.appendChild(mRange);
 		mOverView.appendChild(mSpan);
-		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
-		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
+		var amTime = mSpan.querySelectorAll(':scope > time');
+		amTime[0].innerText = oSpan.start.toString();
+		amTime[1].innerText = oSpan.end.toString();
+//		console.log('amTime.length',amTime.length); // log
+//		mSpan.setAttribute(s.dataBefore,oSpan.start.toString());
+//		mSpan.setAttribute(s.dataAfter,oSpan.end.toString());
 		//
 		handleResize();
 		handleRangeChange();
@@ -154,9 +164,15 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
 		mRange.style.width = s.getPercentage(fRangeWidth);
 		mRange.style.left = s.getPercentage(fRangeStart);
-		mRange.setAttribute(s.dataBefore,oRange.start.toString());
-		mRange.setAttribute(s.dataAfter,oRange.end.toString());
+
+//		mRange.setAttribute(s.dataBefore,oRange.start.toString());
+//		mRange.setAttribute(s.dataAfter,oRange.end.toString());
+
+		mRange.style.backgroundImage = view.rangeGradient;
+
 		mTime.innerText = time.duration(oRange.duration,2);
+		mTimeFrom.innerText = oRange.start.toString();
+		mTimeTo.innerText = oRange.end.toString();
 	}
 
 

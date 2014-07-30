@@ -9,18 +9,33 @@
 	.lt;
 	.size(100%);
 	padding-top: 1rem;
-	.flex-display(flex);
+//	.flex-display(flex);
 
 	article {
-		.flex(0 0 70%);
+//		.flex(0 0 70%);
+		header {
+			margin-bottom: 1rem;
+			&:after {
+				content: '';
+				clear: both;
+			}
+		}
 		h3, time {
 			display: inline-block;
 		}
 		p {
 			margin: .5rem 0 1rem;
+			&:first-of-type {
+				margin-top: 0;
+			}
+		}
+		img {
+			float: right;
+			max-width: 50%;
+			margin-left: 1rem;
 		}
 	}
-	dl {
+	/*dl {
 		.flex(0 0 30%);
 		dt,dd {
 			display: block;
@@ -32,5 +47,5 @@
 			clear: left;
 			font-weight: bold;
 		}
-	}
+	}*/
 }

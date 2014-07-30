@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 'use strict';
 
-	grunt.registerMultiTask('renderPage', 'Render pages with PhantomJS', function(){
+	grunt.registerMultiTask('renderPages', 'Render pages with PhantomJS', function(){
 
 		var done = this.async()
 			,exec = require('child_process').exec
@@ -12,13 +12,13 @@ module.exports = function(grunt) {
 			,data = this.data
 			,sBaseUri = data.baseUri||'http://localhost.ttl/'
 			,sTargetPath = data.dest||'render/'
-			,aPages = data.pages//['spiral-galaxy','milky-way']
+			,aPages = data.pages
 			,bRenderImage = data.renderImage||false
 			//
 			,iPages = aPages?aPages.length:0
 			,iPage = 0
 			//
-			,sSitemap = 'sitemap.xml'
+			,sSitemap = data.siteMap||sTargetPath+'sitemap.xml'
 			,oSitemap = builder.create('urlset')
 				.att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
 				.att('xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1')
@@ -33,15 +33,16 @@ module.exports = function(grunt) {
 			err&&console.error(err);
 		});
 
-		if (aPages===undefined) { // get list of pages
+		//if (aPages===undefined) { // get list of pages
 			exec('phantomjs src/js/phantomPages.js '+sBaseUri, handleExecPhantomPages);
-		} else { // start rendering the first page
-			nextPage();
-		}
+		//} else { // start rendering the first page
+		//	nextPage();
+		//}
 
 
 		function handleExecPhantomPages(error, stdout){
-			aPages = stdout.replace(/[\n\r]/g,'').split(',');
+			//aPages = stdout.replace(/[\n\r]/g,'').split(',');
+			Array.prototype.push.apply(aPages,stdout.replace(/[\n\r]/g,'').split(','));
 			iPages = aPages.length;
 			console.log('Found',iPages,'pages.'); // log
 			nextPage();
@@ -81,7 +82,7 @@ module.exports = function(grunt) {
 		function whatNext(){
 			iPage++;
 			if (iPage>=iPages) {
-				fs.writeFile(sTargetPath+sSitemap, oSitemap.toString(), handleWriteSitemap);
+				fs.writeFile(sSitemap, oSitemap.toString(), handleWriteSitemap);
 			} else {
 				nextPage();
 			}

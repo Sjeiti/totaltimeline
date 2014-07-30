@@ -304,12 +304,13 @@ module.exports = function (grunt) {
 			,clean: { cwd: 'platforms/android/cordova/', command: 'node clean', output: true }
 		}
 
-		,renderPage: {
+		,renderPages: {
 			main: {
 				baseUri: 'http://localhost.ttl/'
 				,dest: 'temp/cache/'
-//				,pages: ['spiral-galaxy','milky-way']
+				,pages: ['home']
 				,renderImage: false
+				,siteMap: sFolderBuild+'/sitemap.xml'
 			}
 		}
 	});

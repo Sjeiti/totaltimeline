@@ -76,6 +76,7 @@ function getImageThumb(fileName){
 			,oJSON = JSON.parse(sJSON)
 			,oPages = oJSON.query.pages
 		;
+		Utilities.sleep(1000);
 		for (var s in oPages) {
           if (s!==-1) {
             var oPage = oPages[s];

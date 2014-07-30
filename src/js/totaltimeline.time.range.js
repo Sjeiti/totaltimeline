@@ -60,7 +60,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	 */
 	function handleChange(){
 		oReturn.duration = start.ago-end.ago;
-		change.dispatch();
+		change.dispatch(oReturn);
 	}
 
 	/**
@@ -112,7 +112,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		// todo: implement max
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
-		change.dispatch();
+		change.dispatch(oReturn);
 	}
 
 	/*function inside(time) {

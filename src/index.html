@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="style/screen.css">
 </head>
 <body>
-<header>
+<header id="pageHeader">
 	<div>
 		<h2><a href="#13.8Ga/2014">Total Timeline</a></h2>
 		<nav>
@@ -25,22 +25,22 @@
 </header>
 <main>
 	<section id="overview"></section>
-	<section id="timeline" class="show-range">
-	</section>
+	<section id="timeline"></section>
 	<section id="content">
 		<script type="text/html" id="content_tmpl">
 			<article>
-				<h3><%=info.name%></h3>
-				<time><%=time%></time>
-				<%=info.explanation%>
+				<header>
+					<h3><%=info.name%></h3>
+					<time><%=time%></time>
+				</header>
+				<img src="<%=info.thumb%>" /><%=info.explanation%>
 				<p><%=info.wikimedia%></p>
 				<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey&&info.wikimediakey.split(':')[0]%>">wikipedia</a>
 			</article>
-			<p><img src="<%=info.thumb%>" /></p>
 		</script>
 	</section>
 </main>
-<footer><div>Total Timeline</div></footer>
+<!--<footer><div>Total Timeline</div></footer>-->
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -83,6 +83,7 @@
 <script src="js/totaltimeline.collection.events.js"></script>
 <script src="js/totaltimeline.collection.events.event.js"></script>
 <script src="js/totaltimeline.location.js"></script>
+<script src="js/totaltimeline.view.js"></script>
 <script src="js/totaltimeline.view.log.js"></script>
 <script src="js/totaltimeline.view.overview.js"></script>
 <script src="js/totaltimeline.view.timeline.js"></script>

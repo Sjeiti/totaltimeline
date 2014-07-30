@@ -101,7 +101,7 @@ iddqd.ns('totaltimeline.location',(function(history){
 					,iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
 				;
 				oRange.animate(iAgoStart,iAgoEnd,function(){
-					console.log('doneanimating'); // log
+					//console.log('doneanimating'); // log
 				});
 			}
 		} else {

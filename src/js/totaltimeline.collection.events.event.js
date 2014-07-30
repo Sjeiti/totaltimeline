@@ -9,10 +9,9 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 
 	var s = totaltimeline.string
 		,model = totaltimeline.model
-		,sTitle = info.name+' '+moment.toString()
-		,mWrap = zen('div.event-wrap>(div.line+(div.event>a[href=/'+info.slug+']{'+sTitle+'}))').pop()
+		,mWrap = zen('div.event-wrap>(time+(div.event>a[href=/'+info.slug+']>h3{'+info.name+'}))').pop()
 		,mEvent = mWrap.querySelector('.event')
-		,mLine = mWrap.querySelector('.line')
+		,mTime = mWrap.querySelector('time')
 		,fTop = 0.9*iddqd.math.prng.random(Math.abs(moment.value<18000?10000*moment.value:moment.value))
 		,sTop = s.getPercentage(fTop)
 		,sHeight = s.getPercentage(1-fTop)
@@ -25,10 +24,16 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		})
 	;
 	mEvent.model = oReturn;
-	mEvent.setAttribute('title',sTitle);
+//	mEvent.setAttribute('title',sTitle);
 	mEvent.style.top = sTop;
 	info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
-	mLine.style.height = sHeight;
+
+//	console.log('mEvent.querySelector',mEvent.offsetHeight); // log .querySelector('h3')
+
+	mTime.style.height = sHeight; // todo: less vars @eventIconSize
+//	mTime.setAttribute('data-before',info.name);
+	mTime.setAttribute('data-after',moment.toString());
+
 	model.entryShown.add(handleEntryShown);
 
 	mWrap.addEventListener(s.click,function (e){

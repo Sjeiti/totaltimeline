@@ -2,25 +2,44 @@
 	.gradientVertical(@colorGrayDark,@colorGrayDarker);
 	position: relative;
 	padding: 0 @screenPadding;
+	@numberPadding: .3rem;
+	time { font: @fontTime; }
 	.span {
 		position: relative;
 		.size(100%);
-		&:before, &:after {
+		/*&:before, &:after {
 			margin: 0 @innerPadding 0;
+		}*/
+		>time {
+			.lt;
+			padding: @numberPadding 1px 0;
+			z-index: 1;
+			&:last-of-type { left: auto; right: 0; }
 		}
 	}
 	.range {
 		.lt;
 		.size(100%);
 		min-width: 1px;
-		.gradientVertical(@colorRangeLight,@colorRange);
+//		.gradientVertical(@colorRangeLight,@colorRange);
+		.box-shadow(0 16px 32px fade(black,50%) inset);
 		overflow: hidden;
+		border: 1px solid fade(white,50%);
+		border-width: 0 1px;
 		&:before, &:after {
 			margin: 1rem @innerPadding 0;
 		}
-	}
-	time {
-		display: block;
-		text-align: center;
+		>time {
+			&:nth-child(2) {
+				display: block;
+				text-align: center;
+				padding-top: @numberPadding;
+			}
+			&:first-of-type, &:last-of-type {
+				.lb;
+				padding-bottom: @numberPadding;
+			}
+			&:last-of-type { left: auto; right: 0; }
+		}
 	}
 }

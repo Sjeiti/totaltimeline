@@ -8,13 +8,10 @@ iddqd.ns('totaltimeline',(function(iddqd){
 	'use strict';
 	iddqd.onDOMReady(function(){
 		var ttl = totaltimeline
-			,model = ttl.model
-			,view = ttl.view
-			,location = ttl.location;
+			,model = ttl.model;
 		model();
-		view.overview(model);
-		view.timeline(model);
-		view.content(model);
-		location(model);
+		ttl.view(model);
+		ttl.location(model);
 	});
+	return {};
 })(iddqd));

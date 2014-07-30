@@ -10,7 +10,7 @@ body {
 	.align-items(stretch);
 }
 
-header {
+#pageHeader {
 	.flex-basis(2rem);
 	h1, h2 {
 		display: inline-block;
@@ -31,8 +31,14 @@ main {
 }
 	#overview {	.flex-basis(2rem); height: 2rem; }
 	#timeline {	.flex-grow(1); }
-	#content {	.flex-grow(1); }
+	#content {
+		.flex-grow(1);
+		.align-self(center);
+		width: 100%;
+		max-width: 800px;
+	}
 
+/*
 footer {
 	.flex-basis(1rem);
-}
+}*/

@@ -60,8 +60,8 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 
 	// todo: document
 	function inside(is){
-		//console.log('event.inside',is,mEvent.classList.contains(s.selected)); // log
-		if (!is&&mEvent.classList.contains(s.selected)) {
+		//console.log('event.inside',is,mWrap.classList.contains(s.selected)); // log
+		if (!is&&mWrap.classList.contains(s.selected)) {
 			model.entryShown.dispatch();
 		}
 	}

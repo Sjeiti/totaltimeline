@@ -5,8 +5,9 @@
 iddqd.ns('totaltimeline.view',(function(){
 	'use strict';
 
-	var s = totaltimeline.string
+	var getPercentage = totaltimeline.string.getPercentage
 		,time = totaltimeline.time
+		,color = iddqd.math.color
 
 		,iLight1 = 150E6
 		,iLight2 = 1E9
@@ -20,6 +21,7 @@ iddqd.ns('totaltimeline.view',(function(){
 			,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
 			,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
 			,{time:time.NOW,						color:'#D8945A'}
+			,{time:time.NOW-1,						color:'#F7C367'}
 			,{time:-1E9,							color:'#8A5246'}
 			,{time:-9E9,							color:'#460505'}
 		]
@@ -61,24 +63,50 @@ iddqd.ns('totaltimeline.view',(function(){
 	}
 
 	// todo: document
-	// todo: remove colors outside the range (0-100%) and calculate boundaries
 	function setGradient(model,range){
 		var iAgoFrom = range.start.ago
 			,iAgoTo = range.end.ago
 			,iDeltaRange = range.duration
-			,aGradient = [];
+			,aGradient = []
+			//
+			,bZeroSet = false
+			,oLastColor
+		;
+		function getAverageColor(last,current,pos,low){
+			var fPosStart = last.pos
+				,fPart = (pos-(low?0:1))/(pos-fPosStart)
+				,oColorAvrg = color(current.color).average(color(last.color),fPart)
+			;
+			return oColorAvrg.toString()+(low?' 0%':' 100%');
+		}
 		for (var i=0,l=aBackgroundColors.length;i<l;i++) {
 			var oColor = aBackgroundColors[i]
-				,iTime = oColor.time;
-			if (true||iTime<=iAgoFrom&&iTime>=iAgoTo) {
-				//console.log('color',iTime,1-(iTime-iAgoTo)/iDeltaRange); // log
-				var fPos = s.getPercentage(1-(iTime-iAgoTo)/iDeltaRange);
-				aGradient.push(oColor.color+' '+fPos);
+				,iTime = oColor.time
+				,bTimeLow = iTime>iAgoFrom
+				,bTimeHigh = iTime<iAgoTo
+				,bTimeMiddle = !bTimeLow&&!bTimeHigh
+				,fPos = 1-(iTime-iAgoTo)/iDeltaRange
+			;
+			// calculate average color when one or both colors are outside the range
+			if (
+				(!bZeroSet&&bTimeMiddle&&i!==0&&iTime!==iAgoFrom)
+				||bTimeHigh
+			) {
+				if (!bZeroSet&&bTimeHigh) {
+					aGradient.push(getAverageColor(oLastColor,oColor,fPos,true));
+				}
+				aGradient.push(getAverageColor(oLastColor,oColor,fPos,!bTimeHigh));
+				if (bTimeHigh) break;
+				bZeroSet = true;
 			}
+			// set the gradient position for values inside the range
+			if (bTimeMiddle) {
+				aGradient.push(oColor.color+' '+getPercentage(fPos));
+			}
+			oLastColor = oColor;
+			oLastColor.pos = fPos;
 		}
 		init.rangeGradient = model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')';
-		//mView.style.backgroundImage = '-webkit-linear-gradient(left, #171B30 0%, #2E4346 33%, #657851 66%, #D8945A 100%)';
-		//console.log('backgroundImage: ','-webkit-linear-gradient(left,'+aGradient.join(',')+')'); // log
 	}
 
 	return init;

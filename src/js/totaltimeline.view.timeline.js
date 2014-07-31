@@ -8,17 +8,20 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,view = totaltimeline.view
 		//,log = totaltimeline.view.log
 		,collection = totaltimeline.collection
-		,model
 		,signals = iddqd.signals
 		,keys
 		,oRange
-		,aEvents
-		,aPeriods
+		//
 		,mBody
 		,mView
+		,mOverlay
 		,mTimeFrom
 		,mTimeTo
+		//
+		,iBgPos = 0
+		//
 		,iViewW
+		,iViewH
 		,iViewL
 		,bOver = false
 		,aTouchXLast = []
@@ -38,16 +41,14 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 
 	/**
 	 * Initialise Variables
-	 * @param {model} _model
+	 * @param {model} model
 	 */
-	function initVariables(_model){
-		model = _model;
+	function initVariables(model){
 		oRange = model.range;
-		aEvents = model.events;
-		aPeriods = model.periods;
 		// view elements
 		mBody = document.body;
 		mView = document.getElementById('timeline');
+		mOverlay = zen('div.overlay').pop();
 		mTimeFrom = document.createElement('time');
 		mTimeTo = document.createElement('time');
 		// init and detach keypress so keys exist
@@ -63,7 +64,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		signals.resize.add(handleResize);
 		// is over
 		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
-			mView.addEventListener(event,handleSpanMouse,!false);
+			mView.addEventListener(event,handleSpanMouse,false);
 		});
 		// drag
 		mView.addEventListener(s.mousedown,handleViewMouseClick,false);
@@ -71,14 +72,16 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		mBody.addEventListener(s.mouseup,handleViewMouseClick,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
-		oRange.change.add(handleRangeChange);
 		// collection
 		collection.forEach(function(col){
 			col.dataLoaded.add(handleRangeChange);
 		});
 		// touch
-		mView.addEventListener(s.touchstart,handleTouchStart,!false);
+		mView.addEventListener(s.touchstart,handleTouchStart,false);
 		mView.addEventListener(s.touchmove,handleTouchMove,false);
+		// range
+		oRange.change.add(handleRangeChange);
+		oRange.change.add(moveBackgroundOverlay);
 	}
 
 	/**
@@ -87,6 +90,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	function initView(){
 		mView.appendChild(mTimeFrom);
 		mView.appendChild(mTimeTo);
+		mView.appendChild(mOverlay);
 		handleResize();
 		handleRangeChange();
 	}
@@ -97,6 +101,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 */
 	function handleResize(){//ow,oh,w,h
 		iViewW = mView.offsetWidth;
+		iViewH = mView.offsetHeight;
 		iViewL = mView.offsetLeft;
 	}
 
@@ -180,7 +185,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	/**
 	 * When the range changes all view element are recalculated
 	 */
-	function handleRangeChange(){
+	function handleRangeChange(){ // todo: possibly refactor since also called by collection -> col.dataLoaded
 		mTimeFrom.innerText = oRange.start.toString();
 		mTimeTo.innerText = oRange.end.toString();
 		mView.style.backgroundImage = view.rangeGradient;
@@ -253,6 +258,19 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		while (iX--) {
 			aTouchXLast[iX] = aTouchX[iX];
 		}
+	}
+
+	// todo: document
+	function moveBackgroundOverlay(range,oldrange){
+		var iCurrentDuration = range.duration
+			,iRangeCenter = range.end.ago + iCurrentDuration/2
+			,iOldRangeCenter = oldrange.end.ago + oldrange.duration/2
+			,iDeltaCenter = iRangeCenter - iOldRangeCenter
+			,iOffset = iDeltaCenter/iCurrentDuration*iViewW
+		;
+		// background-size is contain so mod by iViewH to prevent errors
+		iBgPos = (iBgPos + Math.round(iOffset))%iViewH;
+		mOverlay.style.backgroundPosition = iBgPos+'px 0';
 	}
 
 	return init;

@@ -28,7 +28,12 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	'use strict';
 	var time = totaltimeline.time
 		,moment = time.moment
-		,change = new signals.Signal()
+		//
+		,sgChange = new signals.Signal()
+		,iOldStartAgo = start.ago
+		,iOldEndAgo = end.ago
+		,oOldRange
+		//
 		,oReturn = iddqd.factory(range,{
 			toString: function(){return '[object range, '+start.toString()+' - '+end.toString()+']';}
 
@@ -42,7 +47,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 			,max: max
 
 			,duration: start.ago-end.ago
-			,change: change
+			,change: sgChange
 			,moveStart: moveStart
 
 			,coincides: coincides
@@ -60,7 +65,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 	 */
 	function handleChange(){
 		oReturn.duration = start.ago-end.ago;
-		change.dispatch(oReturn);
+		dispatchChange();
 	}
 
 	/**
@@ -83,7 +88,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		// todo: implement max
 	}
 
-	// todo: document // no overload!
+	// todo: document // no overload! (see set)
 	function animate(startAgo,endAgo,callback){
 		/*if (arguments.length===1) { // assume range
 			endAgo = startAgo.end.ago;
@@ -101,6 +106,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 
 	/**
 	 * Moves the range by setting the start moment. End moment is recalculated.
+	 * Duration stays the same so end and start are set without dispatching moment.change.
 	 * @param {number} ago
 	 * @fires Change signal.
 	 */
@@ -112,11 +118,23 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		// todo: implement max
 		start.set(ago,false);
 		end.set(ago-oReturn.duration,false);
-		change.dispatch(oReturn);
+		dispatchChange();
+	}
+
+	//todo:document
+	function dispatchChange() {
+		if (oOldRange===undefined) { // only create oOldRange on dispatchChange to prevent recursion
+			oOldRange = range(moment(iOldStartAgo),moment(iOldEndAgo));
+		}
+		sgChange.dispatch(oReturn,oOldRange);
+		//
+		oOldRange.start.set(start.ago,false);
+		oOldRange.end.set(end.ago,false);
+		oOldRange.duration = start.ago-end.ago;
 	}
 
 	/**
-	 *
+	 * todo:document
 	 * @param {moment|range} time
 	 * @returns {boolean}
 	 */
@@ -143,7 +161,7 @@ iddqd.ns('totaltimeline.time.range',function range(start,end,min,max){
 		return moment.ago<=start.ago&&moment.ago>=end.ago;
 	}
 
-	// todo: document
+	// todo: document... maybe remove
 	function clone() {
 		return range(start.clone(),end.clone());
 	}

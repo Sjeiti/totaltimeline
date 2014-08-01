@@ -124,7 +124,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 * Removes all children from an HTMLElement.
 		 * @param {HTMLElement} element
 		 */
-		function emptyView(element){
+		function emptyView(element){ // todo: move to utils
 			while (element.childNodes.length) {
 				element.removeChild(element.firstChild);
 			}

@@ -91,6 +91,9 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Initialise view
 	 */
 	function initView(){
+		while (mOverView.childNodes.length) { // todo: move to utils (also in collection)
+			mOverView.removeChild(mOverView.firstChild);
+		}
 		mOverView.appendChild(mSpan);
 		handleResize();
 		handleRangeChange();

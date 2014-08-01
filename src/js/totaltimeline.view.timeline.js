@@ -86,6 +86,9 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Initialise view
 	 */
 	function initView(){
+		while (mView.childNodes.length) { // todo: move to utils (also in collection)
+			mView.removeChild(mView.firstChild);
+		}
 		mView.appendChild(mTimeFrom);
 		mView.appendChild(mTimeTo);
 		mView.appendChild(mOverlay);

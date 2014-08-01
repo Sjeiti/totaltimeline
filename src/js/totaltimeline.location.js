@@ -17,6 +17,18 @@ iddqd.ns('totaltimeline.location',(function(history){
 	function init(model){
 		oModel = model;
 		//
+//		console.log('location.href',location.href); // log
+		var sPath = location.pathname.substr(1)
+			,sHash = location.hash.substr(1)
+			,sGetQ = location.href.split('?q=').pop().split('#')[0];
+//		console.log('sPath',sPath); // log
+//		console.log('sHash',sHash); // log
+		if (sHash!==sPath) {
+			location.hash = sPath;
+		} else if (sHash!==sGetQ) {
+			location.hash = sGetQ;
+		}
+		//
 		log = totaltimeline.view.log;
 		oRange = oModel.range;
 		//

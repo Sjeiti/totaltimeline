@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 			}
 			,root: {
 				files: ['src/*']
-				,tasks: ['copy:build']
+				,tasks: ['copy:buildRoot']
 				,options: {
 					spawn: false
 				}
@@ -132,6 +132,16 @@ module.exports = function (grunt) {
 				,src: ['**']
 				,dest: sFolderBuild+'/vendor/'
 				,filter: 'isFile'
+			}
+			,buildRoot: {
+				files: [{ // index
+					expand: true
+					,cwd: sFolderSrc+'/'
+					,src: ['*']
+					,dest: sFolderBuild+'/'
+					,filter: 'isFile'
+					,dot: true
+				}]
 			}
 			,build: {
 				files: [
@@ -313,7 +323,7 @@ module.exports = function (grunt) {
 		,renderPages: {
 			main: {
 				baseUri: 'http://localhost.ttl/'
-				,dest: 'temp/cache/'
+				,dest: sFolderBuild+'/cache/'//'temp/cache/'
 				,pages: ['home']
 				,renderImage: false
 				,siteMap: sFolderBuild+'/sitemap.xml'

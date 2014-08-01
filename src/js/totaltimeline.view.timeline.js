@@ -24,7 +24,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,iViewH
 		,iViewL
 		,bOver = false
-		,aTouchXLast = []
 		//
 		,bViewMouseDown = false
 		,iMouseXOffsetDelta = 0
@@ -77,8 +76,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 			col.dataLoaded.add(handleRangeChange);
 		});
 		// touch
-		mView.addEventListener(s.touchstart,handleTouchStart,false);
-		mView.addEventListener(s.touchmove,handleTouchMove,false);
+		totaltimeline.touch(mView,handleTouchMove);
 		// range
 		oRange.change.add(handleRangeChange);
 		oRange.change.add(moveBackgroundOverlay);
@@ -192,50 +190,33 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		collection.populate(mView,oRange);
 	}
 
-	/**
-	 * Handles touchstart event to scroll or zoom the timeline.
-	 */
-	function handleTouchStart() {
-		aTouchXLast.length = 0;
-	}
 
 	/**
 	 * Handles touchmove event to scroll or zoom the timeline.
 	 * @param {Event} e
+	 * @param {Number} numTouches
+	 * @param {Array} touches
+	 * @param {Number} numLastTouches
+	 * @param {Array} lastTouches
 	 */
-	function handleTouchMove(e) {
-		var touches = e.touches
-			,iX = touches.length
-			,aTouchX = []
-			,iXLast = aTouchXLast.length
-		;
-		for (var i=0;i<iX;i++) {
-			aTouchX.push(touches[i].pageX);
-		}
-		// sort if length===2: old fashioned swap is way faster than sort: http://jsperf.com/array-length-2-sort
-		if (iX===2&&aTouchX[0]>aTouchX[1]) {
-			var tmp = aTouchX[0];
-			aTouchX[0] = aTouchX[1];
-			aTouchX[1] = tmp;
-		}
-
-		if (iX===iXLast) {
-			if (iX===1) {
-				oRange.moveStart(oRange.start.ago+(aTouchX[0]-aTouchXLast[0])*(oRange.duration/mView.offsetWidth));
+	function handleTouchMove(e,numTouches,touches,numLastTouches,lastTouches) {
+		if (numTouches===numLastTouches) {
+			if (numTouches===1) {
+				oRange.moveStart(oRange.start.ago+(touches[0]-lastTouches[0])*(oRange.duration/mView.offsetWidth));
 				e.preventDefault();
-			} else if (iX===2) {
+			} else if (numTouches===2) {
 				// reverse interpolation to find new start and end points
 				var iRangeDuration = oRange.duration
 					//
-					,iTouch1Last = aTouchXLast[0]
-					,iTouch2Last = aTouchXLast[1]
+					,iTouch1Last = lastTouches[0]
+					,iTouch2Last = lastTouches[1]
 					,fTouch1LastTime = oRange.start.ago - (iTouch1Last/iViewW)*iRangeDuration
 					,fTouch2LastTime = oRange.end.ago + (1-iTouch2Last/iViewW)*iRangeDuration
 					,iTouchWLast = iTouch2Last-iTouch1Last
 					,iTouchLastDuration = (iTouchWLast/iViewW)*iRangeDuration
 					//
-					,iTouch1 = aTouchX[0]
-					,iTouch2 = aTouchX[1]
+					,iTouch1 = touches[0]
+					,iTouch2 = touches[1]
 					,iTouchW = iTouch2-iTouch1
 					//
 					,fPart1 = iTouch1/iViewW
@@ -257,9 +238,9 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 				e.preventDefault();
 			}
 		}
-		aTouchXLast.length = 0;
-		while (iX--) {
-			aTouchXLast[iX] = aTouchX[iX];
+		lastTouches.length = 0;
+		while (numTouches--) {
+			lastTouches[numTouches] = touches[numTouches];
 		}
 	}
 

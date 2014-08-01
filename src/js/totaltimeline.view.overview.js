@@ -83,7 +83,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		oRange.change.add(handleRangeChange);
 		// touch
 		mRange.addEventListener(s.touchstart,handleTouchStart,false);
-		mSpan.addEventListener(s.touchmove,handleTouchMove,false);
+		totaltimeline.touch(mSpan,handleTouchMove);
+		//mSpan.addEventListener(s.touchmove,handleTouchMove,false);
 	}
 
 	/**
@@ -180,20 +181,17 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	/**
 	 * Handles touchmove event to scroll or zoom the timeline.
 	 * @param {Event} e
+	 * @param {Number} numTouches
+	 * @param {Array} touches
+	 * @param {Number} numLastTouches
+	 * @param {Array} lastTouches
 	 */
-	function handleTouchMove(e) {
-		var aTouchX = [];
-		Array.prototype.forEach.call(e.touches,function(touch) {
-			aTouchX.push(touch.pageX);
-		});
-		if (aTouchX.length===1){
-			rangeMove(aTouchX[0]);
+	function handleTouchMove(e,numTouches,touches){//},numLastTouches,lastTouches) {
+		if (numTouches===1){
+			rangeMove(touches[0]);
 			e.preventDefault();
-		} else if (aTouchX.length===2){
-			if (aTouchX[0]>aTouchX[1]) {
-				aTouchX.push(aTouchX.shift());
-			}
-			oRange.set(relativeOffset(aTouchX[0]),relativeOffset(aTouchX[1]));
+		} else if (numTouches===2){
+			oRange.set(relativeOffset(touches[0]),relativeOffset(touches[1]));
 			e.preventDefault();
 		}
 	}

@@ -187,6 +187,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * When the range changes all view element are recalculated
 	 */
 	function handleRangeChange(){ // todo: possibly refactor since also called by collection -> col.dataLoaded
+//		console.log('handleRangeChange'); // log
 		mTimeFrom.innerText = oRange.start.toString();
 		mTimeTo.innerText = oRange.end.toString();
 		mView.style.backgroundImage = view.rangeGradient;

@@ -6,11 +6,11 @@
 iddqd.ns('totaltimeline.collection.events',(function(){
 	'use strict';
 
-	var s = totaltimeline.string
-		,collection = totaltimeline.collection
+	var collection = totaltimeline.collection
 		,time = totaltimeline.time
 		,moment = time.moment
 		,eventInfo = time.eventInfo
+		,getPercentage = totaltimeline.util.getPercentage
 		//
 		,aCollection = collection.add(
 			'events'
@@ -63,7 +63,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 				var mEvent = oEvent.element
 					,fRel = 1-((iAgo-iRangeEnd)/iDuration)
 				;
-				mEvent.style.left = s.getPercentage(fRel);
+				mEvent.style.left = getPercentage(fRel);
 				fragment.appendChild(mEvent);
 			}
 			oEvent.inside(bInside);

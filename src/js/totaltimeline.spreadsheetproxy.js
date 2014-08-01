@@ -4,6 +4,9 @@
 iddqd.ns('totaltimeline.spreadsheetproxy',(function(iddqd,undefined){
 	'use strict';
 
+	// see: https://developers.google.com/gdata/samples/spreadsheet_sample
+	// see: https://developers.google.com/google-apps/spreadsheets/
+
 	var sEndpoint = 'https://spreadsheets.google.com/feeds/list/key/worksheet/public/values?'//alt=json-in-script'
 		,oOptions = {
 			alt: 'json-in-script'

@@ -1,45 +1,23 @@
 /**
- * Sting objects and methods.
+ * Sting objects.
  * @namespace totaltimeline.string
  */
-iddqd.ns('totaltimeline.string',(function(){
-	'use strict';
-
-	/**
-	 * Turns a floating point into a percentage.
-	 * @name totaltimeline.string.getPercentage
-	 * @method
-	 * @param float
-	 * @returns {string}
-	 */
-	function getPercentage(float){
-		return 100*float+'%';
-	}
-
-	//todo:doc/rename
-	function slug(s) {
-		return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
-	}
-
-	return {
-		/** @constant totaltimeline.string.dataBefore
-		 * @default 'data-before' */
-		dataBefore: 'data-before'
-		/** @constant totaltimeline.string.dataAfter
-		 * @default 'data-after' */
-		,dataAfter: 'data-after'
-		,mouseover: 'mouseover'
-		,mouseout: 'mouseout'
-		,mousemove: 'mousemove'
-		,mousedown: 'mousedown'
-		,mouseup: 'mouseup'
-		,touchstart: 'touchstart'
-		,touchmove: 'touchmove'
-		,touchend: 'touchend'
-		,selected: 'selected'
-		,drag: 'drag'
-		,click: 'click'
-		,getPercentage: getPercentage
-		,slug: slug
-	};
-})());
+iddqd.ns('totaltimeline.string',{
+	/** @constant totaltimeline.string.dataBefore
+	 * @default 'data-before' */
+	dataBefore: 'data-before'
+	/** @constant totaltimeline.string.dataAfter
+	 * @default 'data-after' */
+	,dataAfter: 'data-after'
+	,mouseover: 'mouseover'
+	,mouseout: 'mouseout'
+	,mousemove: 'mousemove'
+	,mousedown: 'mousedown'
+	,mouseup: 'mouseup'
+	,touchstart: 'touchstart'
+	,touchmove: 'touchmove'
+	,touchend: 'touchend'
+	,selected: 'selected'
+	,drag: 'drag'
+	,click: 'click'
+});

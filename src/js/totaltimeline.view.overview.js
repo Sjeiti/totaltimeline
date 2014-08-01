@@ -7,6 +7,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	var s = totaltimeline.string
 		,time = totaltimeline.time
 		,view = totaltimeline.view
+		,getPercentage = totaltimeline.util.getPercentage
 		//,log = totaltimeline.view.log
 		,model
 		,signals = iddqd.signals
@@ -162,8 +163,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	function handleRangeChange(){
 		fRangeWidth = Math.min(1,oRange.duration/oSpan.duration);
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
-		mRange.style.width = s.getPercentage(fRangeWidth);
-		mRange.style.left = s.getPercentage(fRangeStart);
+		mRange.style.width = getPercentage(fRangeWidth);
+		mRange.style.left = getPercentage(fRangeStart);
 
 		mRange.style.backgroundImage = view.rangeGradient;
 

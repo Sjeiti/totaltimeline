@@ -6,40 +6,40 @@ iddqd.ns('totaltimeline.location',(function(history){
 
 	var time = totaltimeline.time
 		,formatAnnum = time.formatAnnum
+		,collection = totaltimeline.collection
 		,log
-		,oModel
+		,entryShown
 		,oRange
 		,sLocationOriginalPath = location.pathname
 //		,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
 		,sDocumentTitle = document.title
+		,bFirstChange = true
 	;
 
 	function init(model){
-		oModel = model;
-		//
-//		console.log('location.href',location.href); // log
 		var sPath = location.pathname.substr(1)
-			,sHash = location.hash.substr(1)
-			,sGetQ = location.href.split('?q=').pop().split('#')[0];
-//		console.log('sPath',sPath); // log
-//		console.log('sHash',sHash); // log
+			,sHash = location.href.indexOf('#')!==-1?location.hash.substr(1):''
+			,sGetQ = location.href.indexOf('?')!==-1?location.href.split('?q=').pop().split('#')[0]:'';
+
+		entryShown = model.entryShown;
+		log = totaltimeline.view.log;
+		oRange = model.range;
+
+		// fist set hash according to incoming uri
 		if (sHash!==sPath) {
-			location.hash = sPath;
+			sHash = sPath;
 		} else if (sHash!==sGetQ) {
-			location.hash = sGetQ;
+			sHash = sGetQ;
 		}
 		//
-		log = totaltimeline.view.log;
-		oRange = oModel.range;
 		//
 		oRange.change.add(handleRangeChange);
 		window.addEventListener('popstate', handlePopstate, false);
 		//
-		oModel.entryShown.add(handleEntryShown);
+		entryShown.add(handleEntryShown);
 		//
 		oRange.set(time.UNIVERSE,time.NOW);
-		updated(location.hash.substr(1));
-		//console.log('init',location.hash.substr(1)); // log
+		updated(sHash);
 	}
 
 	// todo: document
@@ -47,11 +47,6 @@ iddqd.ns('totaltimeline.location',(function(history){
 		if (oRange.start.ago===time.UNIVERSE&&oRange.end.ago===time.NOW) {
 			update();
 		} else {
-			/*update(
-				formatAnnum(oRange.start.ago,2,false)
-				,formatAnnum(oRange.end.ago,2,false)
-			);*/
-			//oModel.view.content.currentEntry
 			update(totaltimeline.view.content.currentEntry,oRange);// todo: not null if something is selected
 		}
 	}
@@ -75,34 +70,23 @@ iddqd.ns('totaltimeline.location',(function(history){
 	 * Handles changes after location has changed.
 	 * @param {string} path Path without leading slash (or hash)
 	 */
-	function updated(path,hash){
+	function updated(path,hash){ // todo:document param
 		//log('location.updated',path,':',hash);
+		//console.log('location.updated',path,':',hash); // log
 		var bNoHash = hash===undefined||hash===''
 			,sPath = bNoHash?path:hash
-		;
-		var aPath
+			,aPath
 			,iPath;
 		if (sPath.length>0) {
 			aPath = sPath.split('/');
 			iPath = aPath.length;
 			// Event
 			if  (iPath===1||iPath===3) {
-				var sLocationSlug = aPath[0]
-					,oCollection = totaltimeline.collection
-					,showSlugInstance = function(){
-//						console.log('showSlugInstance'); // log
-						var oSlugInst = oCollection.getEntryBySlug(sLocationSlug);
-						if (oSlugInst) {
-							oCollection.dataLoaded.remove(showSlugInstance);
-//							setTimeout(oModel.entryShown.dispatch.bind(this,oSlugInst), 140 );
-							oModel.entryShown.dispatch(oSlugInst);
-						}
-					}
-				;
-				if (oCollection.length!==oCollection.loaded) {
-					oCollection.dataLoaded.add(showSlugInstance);
+				var sLocationSlug = aPath[0];
+				if (collection.length!==collection.loaded) {
+					collection.dataLoaded.add(showSlugInstance.bind(null,sLocationSlug));
 				} else {
-					showSlugInstance();
+					showSlugInstance(sLocationSlug);
 				}
 			}
 			// Range
@@ -111,12 +95,29 @@ iddqd.ns('totaltimeline.location',(function(history){
 					,iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
 					,iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
 				;
-				oRange.animate(iAgoStart,iAgoEnd,function(){
-					//console.log('doneanimating'); // log
-				});
+				// don't animate the very first time
+				if (bFirstChange) {
+					oRange.set(iAgoStart,iAgoEnd);
+					bFirstChange = false;
+				} else {
+					oRange.animate(iAgoStart,iAgoEnd);// callback
+				}
 			}
 		} else {
 			oRange.animate(time.UNIVERSE,time.NOW);
+		}
+	}
+
+	// todo: document
+	function showSlugInstance(slug){
+		var oSlugInst = collection.getEntryBySlug(slug)
+			,bHasSlugInst = !!oSlugInst;
+		if (bHasSlugInst) {
+			collection.dataLoaded.remove(showSlugInstance);
+			entryShown.dispatch(oSlugInst);
+		} else {
+			var oPage = totaltimeline.pages.getEntryBySlug(slug);
+			oPage&&entryShown.dispatch({info:oPage});
 		}
 	}
 

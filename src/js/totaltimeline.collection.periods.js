@@ -6,12 +6,12 @@
 iddqd.ns('totaltimeline.collection.periods',(function(){
 	'use strict';
 
-	var s = totaltimeline.string
-		,collection = totaltimeline.collection
+	var collection = totaltimeline.collection
 		,time = totaltimeline.time
 		,moment = time.moment
 		,range = time.range
 		,eventInfo = time.eventInfo
+		,getPercentage = totaltimeline.util.getPercentage
 		//
 		,aCollection = collection.add(
 			'periods'
@@ -71,8 +71,8 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 				if ((fRelLeft+fRelWidth)>1) {
 					fRelWidth = 1 - fRelLeft;
 				}
-				mPeriod.style.left = s.getPercentage(fRelLeft);
-				mPeriod.style.width = s.getPercentage(fRelWidth);
+				mPeriod.style.left = getPercentage(fRelLeft);
+				mPeriod.style.width = getPercentage(fRelWidth);
 				fragment.appendChild(mPeriod);
 			}
 		});

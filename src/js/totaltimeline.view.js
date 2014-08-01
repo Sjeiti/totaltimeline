@@ -5,7 +5,7 @@
 iddqd.ns('totaltimeline.view',(function(){
 	'use strict';
 
-	var getPercentage = totaltimeline.string.getPercentage
+	var getPercentage = totaltimeline.util.getPercentage
 		,time = totaltimeline.time
 		,color = iddqd.math.color
 

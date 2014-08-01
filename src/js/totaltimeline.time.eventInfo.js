@@ -31,7 +31,7 @@
 iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 	'use strict';
 	var _ = (function(u){return u;})()
-		,slug = totaltimeline.string.slug
+		,slug = totaltimeline.util.slug
 		,oEventInfo = {
 			name:_
 			,slug:_

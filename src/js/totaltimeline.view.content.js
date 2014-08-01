@@ -4,7 +4,10 @@
 iddqd.ns('totaltimeline.view.content',(function(){
 	'use strict';
 
-	var mContent
+	var collection = totaltimeline.collection
+		,event = collection.events.event
+		,period = collection.periods.period
+		,mContent
 		,mContentWrapper
 		,mFragment = document.createDocumentFragment()
 	;
@@ -48,10 +51,14 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		emptyView(mContentWrapper);
 		emptyView(mFragment);
 		if (entry) {
+			var sTime = '';
+			if (entry.factory===event) {
+				sTime = entry.moment.toString();
+			} else if (entry.factory===period) {
+				sTime = entry.range.start.toString()+' - '+entry.range.end.toString();
+			}
 			mContentWrapper.innerHTML = iddqd.tmpl('content_tmpl',iddqd.extend(entry,{
-				time: entry.factory===totaltimeline.collection.events.event
-						?entry.moment.toString()
-						:entry.range.start.toString()+' - '+entry.range.end.toString()
+				time: sTime
 			}));
 		}
 	}

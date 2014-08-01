@@ -31,74 +31,85 @@
 	.event-wrap {
 		.lt;
 		height: 100%;
-		pointer-events: auto;
-		time { display: none; }
-		&.selected, &:hover {
-			z-index: 3000;
-			/*.event {
-				background-color: @colorHighlight;
-				.border-radius(50%);
-				.box-shadow(0 0 4px @colorHighlight);
-				overflow: visible;
-			}*/
-			h3 {
-				display: block;
-				.lt(-1.5*@eventIconSize,1.2*@eventIconSize);
-				width: 4*@eventIconSize;
-				font: 700 .8rem/1rem @fontNameBody;
-				text-shadow: 0 0 4px black;
-				text-align: center;
-			}
-			time {
-				display: block;
-				.lb(-@eventIconSize);
-				width: 2*@eventIconSize;
-				pointer-events: none;
-				overflow: hidden;
-				&:before {
-					content: '';
-					display: block;
-					.lt(@eventIconSize,2*@eventIconSize);
-					border-right: 1px solid fade(white,50%);
-					height: 100%;
-				}
-				&:after {
-					.lb;
-					display: block;
-					width: 2*@eventIconSize;
-					font: @fontTime;
-					text-align: center;
-				}
-			}
-		}
-	}
-
 		.event {
 			.lt;
 			z-index: 1020;
 			.size(@eventSize);
-			.transform(translateX(-.5*@eventSize));
-			.border-radius(@eventSize/2);
+			.border-radius(50%);
+
+			pointer-events: auto;
+
 			background-color: #c2c85d;
 			background-size: cover;
 			cursor: pointer;
+
+			.transition(~'all 10ms ease-in-out');
+			.transition-property(~'width, height');
+			.transform(translate(-50%,-50%));
 
 			&[class^="event icon-"] {
 				background-color: transparent;
 				.border-radius(0);
 				.size(@eventIconSize);
-				.transform(translateX(-.5*@eventIconSize));
+				.origin;
 			}
 
+		}
+		h3, time {
+//			display: none;
+			visibility: hidden;
+			opacity: 0;
+			.transition;
+		}
+		time {
+			.lb(-@eventIconSize);
+			width: 2*@eventIconSize;
+			overflow: hidden;
+			&:before {
+				content: '';
+				display: block;
+				.lt(@eventIconSize,2*@eventIconSize);
+				border-right: 1px solid fade(white,50%);
+				height: 100%;
+			}
+			&:after {
+				.lb;
+				display: block;
+				width: 2*@eventIconSize;
+				font: @fontTime;
+				text-align: center;
+			}
+		}
+		&.selected, &:hover {
+			z-index: 3000;
+			.event {
+				.transition-duration(250ms);
+				&[class^="event icon-"] {
+					.size(2*@eventIconSize);
+				}
+			}
+			h3, time {
+//				display: block;
+				visibility: visible;
+				opacity: 1;
+			}
+			h3 {
+				.lt(-2*@eventIconSize,0);
+				margin-top: @eventIconSize;
+				width: 4*@eventIconSize;
+				font: 700 .8rem/1rem @fontNameBody;
+				text-shadow: 0 0 4px black;
+				text-align: center;
+			}
 			a {
 				position: relative;
 				display: inline-block;
 				.size(100%);
 				color: inherit;
-				pointer-events: none;
-				h3 { display: none; }
 			}
 		}
+	}
+
 
 @periodHeight: 1.5rem;
 .periods {

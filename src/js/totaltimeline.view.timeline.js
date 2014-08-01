@@ -204,22 +204,26 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * @param {Event} e
 	 */
 	function handleTouchMove(e) {
-		var aTouchX = []
-			,iX
+		var touches = e.touches
+			,iX = touches.length
+			,aTouchX = []
 			,iXLast = aTouchXLast.length
 		;
-		Array.prototype.forEach.call(e.touches,function(touch) {
-			aTouchX.push(touch.pageX);
-		});
-		iX = aTouchX.length;
+		for (var i=0;i<iX;i++) {
+			aTouchX.push(touches[i].pageX);
+		}
+		// sort if length===2: old fashioned swap is way faster than sort: http://jsperf.com/array-length-2-sort
+		if (iX===2&&aTouchX[0]>aTouchX[1]) {
+			var tmp = aTouchX[0];
+			aTouchX[0] = aTouchX[1];
+			aTouchX[1] = tmp;
+		}
+
 		if (iX===iXLast) {
 			if (iX===1) {
 				oRange.moveStart(oRange.start.ago+(aTouchX[0]-aTouchXLast[0])*(oRange.duration/mView.offsetWidth));
 				e.preventDefault();
 			} else if (iX===2) {
-				if (aTouchX[0]>aTouchX[1]) {
-					aTouchX.push(aTouchX.shift());
-				}
 				// reverse interpolation to find new start and end points
 				var iRangeDuration = oRange.duration
 					//
@@ -246,7 +250,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 					,iNewStart =	Math.floor(fTouch1LastTime + fPart1WDuration)
 					,iNewEnd =		Math.floor(fTouch2LastTime - fPart2WDuration)
 				;
-				//
 				oRange.set(
 					iNewStart
 					,iNewEnd

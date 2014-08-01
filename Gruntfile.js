@@ -287,6 +287,12 @@ module.exports = function (grunt) {
 			dest: 'src/style/svgIcons.less'
 		  }
 		}
+		,pngIcons: {
+		  main: {
+			src: 'design/pngExport/',
+			dest: 'src/style/svgIcons.less'
+		  }
+		}
 
 		,version_git: {
 			main: {

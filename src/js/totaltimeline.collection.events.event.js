@@ -9,7 +9,7 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 
 	var s = totaltimeline.string
 		,model = totaltimeline.model
-		,mWrap = zen('div.event-wrap>(time+(div.event+a[href=/'+info.slug+']>h3{'+info.name+'}))').pop()
+		,mWrap = zen('div.event-wrap>(time+(div.event+h3>a[href=/'+info.slug+']{'+info.name+'}))').pop()
 		,mEvent = mWrap.querySelector('.event')
 		,mTitle = mWrap.querySelector('h3')
 		,mTime = mWrap.querySelector('time')

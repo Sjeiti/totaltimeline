@@ -2,14 +2,14 @@
  * todo: document
  * @namespace totaltimeline.pages
  */
-iddqd.ns('totaltimeline.pages',(function(undefined){
+iddqd.ns('totaltimeline.pages',(function(){
 	'use strict';
 
 	var sgPagesLoaded = new signals.Signal()
 		,oReturn = {
 			getData: getData
 			,length: 0
-			,pagesLoaded: sgPagesLoaded
+			,loaded: sgPagesLoaded
 			,getEntryBySlug: getEntryBySlug
 		}
 	;

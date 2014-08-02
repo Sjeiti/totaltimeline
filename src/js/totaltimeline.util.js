@@ -35,9 +35,20 @@ iddqd.ns('totaltimeline.util',(function(){
 		}
 	}
 
+	/**
+	 * Removes all children from an HTMLElement.
+	 * @param {HTMLElement} element
+	 */
+	function emptyElement(element){ // todo: move to utils
+		while (element.childNodes.length) {
+			element.removeChild(element.firstChild);
+		}
+	}
+
 	return {
 		getPercentage: getPercentage
 		,slug: slug
 		,getCssValuePrefix: getCssValuePrefix
+		,emptyElement: emptyElement
 	};
 })());

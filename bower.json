@@ -1,6 +1,6 @@
 {
   "name": "totaltimeline",
-  "version": "0.1.41",
+  "version": "0.1.48",
   "dependencies": {
     "es5-shim": "*",
     "signals": "~1.0.0",

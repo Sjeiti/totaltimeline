@@ -1,7 +1,7 @@
 {
   "name": "totaltimeline",
   "description": "Total Timeline",
-  "version": "0.1.41",
+  "version": "0.1.48",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "devDependencies": {
     "load-grunt-tasks": "~0.4.0",

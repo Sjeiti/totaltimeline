@@ -23,23 +23,22 @@ module.exports = function (grunt) {
 			js: {
 				files: ['src/js/*.js']
 				,tasks: ['js']
-				,options: {
-					spawn: false
-				}
+				,options: { spawn: false }
 			}
 			,less: {
 				files: ['src/style/*.less']
 				,tasks: ['less:build']
-				,options: {
-					spawn: false
-				}
+				,options: { spawn: false }
 			}
 			,root: {
 				files: ['src/*']
 				,tasks: ['copy:buildRoot']
-				,options: {
-					spawn: false
-				}
+				,options: { spawn: false }
+			}
+			,index: {
+				files: ['src/index.html']
+				,tasks: ['updateTestScript']
+				,options: { spawn: false }
 			}
 		}
 
@@ -327,6 +326,15 @@ module.exports = function (grunt) {
 				,pages: ['home']
 				,renderImage: false
 				,siteMap: sFolderBuild+'/sitemap.xml'
+			}
+		}
+
+		,updateTestScript: {
+			main: {
+				src: sFolderSrc+'/index.html'
+				,dest: sFolderSrc+'/test/index.html'
+				,find: 'src="'
+				,replace: 'src="..'
 			}
 		}
 	});

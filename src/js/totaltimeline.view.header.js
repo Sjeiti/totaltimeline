@@ -9,6 +9,7 @@ iddqd.ns('totaltimeline.view.header',(function(){
 		,mView
 		,mNav
 		,mNavUl
+		,mSearch
 	;
 
 	function init(model) {
@@ -19,12 +20,16 @@ iddqd.ns('totaltimeline.view.header',(function(){
 
 	function initVariables() {
 		mView = document.getElementById('pageHeader');
-		mNav = mView.querySelector('nav');
-		mNavUl = mNav.querySelector('ul');
+		if (mView) {
+			mNav = mView.querySelector('nav');
+			mNavUl = mNav.querySelector('ul');
+			mSearch = mView.querySelector('input');
+			console.log('mSearch',mSearch); // log
+		}
 	}
 
 	function initEvents() {
-		pages.loaded.add(handlePagesLoaded);
+		mView&&pages.loaded.add(handlePagesLoaded);
 	}
 
 	function initView() {

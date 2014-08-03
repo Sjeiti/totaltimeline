@@ -1,4 +1,5 @@
 #pageHeader {
+	div { position: relative; }
 	a { color: @colorText; }
 	h2 {
 		font: bold 1rem/2rem 'Yanone Kaffeesatz', sans-serif;
@@ -10,14 +11,30 @@
 			margin-left: .5rem;
 		}
 	}
-	input {
+
+
+	#search {
 		float: right;
-		padding: .3rem .2rem;
+		width: 30%;
+		height: 2rem;
+		padding: 0 .8rem;
 		border: 0;
 		background-color: #888;
 		.box-shadow(2px 4px 8px fade(black,30%) inset);
-		margin: 2px;
-		line-height: 1rem;
+		line-height: 2rem;
 		color: black;
+	}
+	#searchResult {
+		.rt;
+		top: 2rem;
+		z-index: 4000;
+		width: 30%;
+		background-color: #888;
+		.box-shadow(-4px 8px 16px fade(black,30%));
+		a {
+			display: inline-block;
+			padding: .1rem .8rem;
+			width: 100%;
+		}
 	}
 }

@@ -4,7 +4,7 @@
 iddqd.ns('totaltimeline.view.timeline',(function(){
 	'use strict';
 
-	var s = totaltimeline.string
+	var string = totaltimeline.string
 		,view = totaltimeline.view
 		//,log = totaltimeline.view.log
 		,collection = totaltimeline.collection
@@ -62,13 +62,13 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		// resize
 		signals.resize.add(handleResize);
 		// is over
-		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
+		[string.mouseover,string.mouseout,string.mousemove].forEach(function(event){
 			mView.addEventListener(event,handleSpanMouse,false);
 		});
 		// drag
-		mView.addEventListener(s.mousedown,handleViewMouseClick,false);
-		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
-		mBody.addEventListener(s.mouseup,handleViewMouseClick,false);
+		mView.addEventListener(string.mousedown,handleViewMouseClick,false);
+		mBody.addEventListener(string.mousemove,handleBodyMouseMove,false);
+		mBody.addEventListener(string.mouseup,handleViewMouseClick,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		// collection
@@ -111,7 +111,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * @param e
 	 */
 	function handleSpanMouse(e){
-		bOver = e.type!==s.mouseout;
+		bOver = e.type!==string.mouseout;
 	}
 
 	/**
@@ -119,7 +119,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * @param e
 	 */
 	function handleViewMouseClick(e){
-		bViewMouseDown = e.type===s.mousedown;
+		bViewMouseDown = e.type===string.mousedown;
 		if (bViewMouseDown) {
 			iMouseXOffsetDelta = 0;
 			iMouseXOffsetLast = e.clientX;//.offsetX;

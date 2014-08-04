@@ -4,11 +4,11 @@
 iddqd.ns('totaltimeline.touch',function(element, moveCallback, startCallback){
 	'use strict';
 
-	var s = totaltimeline.string
+	var string = totaltimeline.string
 		,aTouchXLast = [];
 
-	element.addEventListener(s.touchstart,handleTouchStart,false);
-	element.addEventListener(s.touchmove,handleTouchMove,false);
+	element.addEventListener(string.touchstart,handleTouchStart,false);
+	element.addEventListener(string.touchmove,handleTouchMove,false);
 
 	/**
 	 * Handles touchstart event to scroll or zoom the timeline.

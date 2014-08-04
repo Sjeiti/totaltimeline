@@ -6,7 +6,7 @@
 iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,offset){
 	'use strict';
 
-	var s = totaltimeline.string
+	var string = totaltimeline.string
 		,model = totaltimeline.model
 		,mElement = document.createElement('div')
 		,oReturn = iddqd.factory(period,{
@@ -35,7 +35,7 @@ iddqd.ns('totaltimeline.collection.periods.period',function period(range,info,of
 	 */
 	function handleEntryShown(entry){
 		var bIs = entry&&entry.info===info;
-		mElement.classList.toggle(s.selected,bIs);
+		mElement.classList.toggle(string.selected,bIs);
 		bIs&&model.range.animate(range.start.ago,range.end.ago);
 	}
 

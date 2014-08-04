@@ -9,6 +9,7 @@ iddqd.ns('totaltimeline.string',{
 	/** @constant totaltimeline.string.dataAfter
 	 * @default 'data-after' */
 	,dataAfter: 'data-after'
+	// events
 	,mouseover: 'mouseover'
 	,mouseout: 'mouseout'
 	,mousemove: 'mousemove'
@@ -17,7 +18,14 @@ iddqd.ns('totaltimeline.string',{
 	,touchstart: 'touchstart'
 	,touchmove: 'touchmove'
 	,touchend: 'touchend'
-	,selected: 'selected'
+	,scroll: 'scroll'
 	,drag: 'drag'
 	,click: 'click'
+	,keyup: 'keyup'
+	,change: 'change'
+	,focus: 'focus'
+	,blur: 'blur'
+	//
+	,selected: 'selected'
+	,visible: 'visible'
 });

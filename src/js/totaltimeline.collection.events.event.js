@@ -7,7 +7,7 @@
 iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	'use strict';
 
-	var s = totaltimeline.string
+	var string = totaltimeline.string
 		,model = totaltimeline.model
 		,getPercentage = totaltimeline.util.getPercentage
 		//
@@ -51,16 +51,16 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 	function handleEntryShown(entry){
 		// toggle won't work in Safari
 		if (entry&&entry.info===info) {
-			mWrap.classList.add(s.selected);
+			mWrap.classList.add(string.selected);
 		} else {
-			mWrap.classList.remove(s.selected);
+			mWrap.classList.remove(string.selected);
 		}
 	}
 
 	// todo: document
 	function inside(is){
 		//console.log('event.inside',is,mWrap.classList.contains(s.selected)); // log
-		if (!is&&mWrap.classList.contains(s.selected)) {
+		if (!is&&mWrap.classList.contains(string.selected)) {
 			model.entryShown.dispatch();
 		}
 	}

@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 	 * @returns {string}
 	 */
 	function blockReplace(source,replace,id){
-		var aSource = source.split(/\n\r|\n|\r/)
+		var aSource = source.replace(/\r/g,'').split(/\n/)
 			,rxStart = new RegExp('<!--\\s?'+id+':js\\s?-->')
 			,rxEnd = new RegExp('<!--\\s?end'+id+'\\s?-->')
 			,bStarted = false
@@ -35,16 +35,27 @@ module.exports = function(grunt) {
 			,data = this.data
 			,sSrc = fs.readFileSync(data.src).toString()
 			,sDst = fs.readFileSync(data.dest).toString()
-			,rxScript = /<script\ssrc="[^"]*"><\/script>/g
-			,aScript = sSrc.match(rxScript)
+			//,rxScript = /<script\ssrc="[^"]*"><\/script>/g
+			//,aScript = sSrc.match(rxScript)
+			,rxBody = /<body[^>]*>((.|[\n\r])*)<\/body>/im
+			,aBody = sSrc.match(rxBody)
+			,sNewLine = '\n'
 			,sSave
 		;
-		if (aScript) {
-			aScript = aScript.map(function(script){
-				return script.replace(data.find,data.replace);
-			});
+		console.log('aBody',aBody.length,aBody[1]); // log
+		if (aBody) {
+			sSave = aBody[1].replace(data.find,data.replace);
+//			aBody = aScript.map(function(script){
+//				return script.replace(data.find,data.replace);
+//			});
 		}
-		sSave = blockReplace(sDst,aScript.join('\n'),'test');
+		sSave = blockReplace(sDst,sNewLine+sSave+sNewLine,'test');
+		//if (aScript) {
+		//	aScript = aScript.map(function(script){
+		//		return script.replace(data.find,data.replace);
+		//	});
+		//}
+		//sSave = blockReplace(sDst,aScript.join('\n'),'test');
 		fs.writeFileSync(this.data.dest,sSave);
 	});
 };

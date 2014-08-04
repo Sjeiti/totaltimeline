@@ -333,7 +333,7 @@ module.exports = function (grunt) {
 			main: {
 				src: sFolderSrc+'/index.html'
 				,dest: sFolderSrc+'/test/index.html'
-				,find: 'src="'
+				,find: /src="/g
 				,replace: 'src="..'
 			}
 		}

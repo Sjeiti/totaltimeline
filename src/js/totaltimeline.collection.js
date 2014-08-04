@@ -56,7 +56,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 	function add(slug,worksheet,callback,_populate){
 //		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
 
-		var s = totaltimeline.string
+		var string = totaltimeline.string
 			,model = totaltimeline.model
 			,aCollection = []
 			,mWrapper = document.createElement('div')
@@ -72,7 +72,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		;
 
 		mWrapper.classList.add(slug);
-		mWrapper.addEventListener(s.click, handleWrapperClick, false);
+		mWrapper.addEventListener(string.click, handleWrapperClick, false);
 
 		collection.push(oReturn);
 		sgDataLoaded.add(function(collectionInstance){

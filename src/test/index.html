@@ -1,26 +1,57 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
-  <meta charset="utf-8">
-
-  <title>QUnit Example</title>
-
-  <link rel="stylesheet" href="../vendor/qunit/qunit/qunit.css">
-
+	<meta charset="utf-8">
+	<title>QUnit Example</title>
+	<link rel="stylesheet" href="../vendor/qunit/qunit/qunit.css">
 </head>
-
 <body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
 
-  <div id="qunit"></div>
-
-  <div id="qunit-fixture"></div>
-
+<div style="width:1px;height:1px;overflow:hidden;">
+	<!-- test:js -->
 
 
-<!-- test:js -->
+<header id="pageHeader">
+	<div>
+		<h2><a href="#about/13.8Ga/2014">Total Timeline</a></h2>
+		<nav>
+			<!--<label for="hamburger"></label>
+			<input type="checkbox" id="hamburger" />-->
+			<ul>
+				<li><a href="#home">home</a></li>
+				<li><a href="#how-to-use">how to use</a></li>
+				<li><a href="#about">about</a></li>
+				<li><a href="#holocene">holocene</a></li>
+			</ul>
+		</nav>
+		<input type="text" id="search" placeholder="Search" autocomplete="off" />
+		<ul id="searchResult"></ul>
+	</div>
+</header>
+<main>
+	<section id="overview"></section>
+	<section id="timeline"></section>
+	<section id="content">
+		<script type="text/html" id="content_tmpl">
+			<article>
+				<header>
+					<h3><%=info.name%></h3>
+					<time><%=time%></time>
+				</header>
+				<img src="..<%=info.thumb%>" /><%=info.explanation%>
+				<p><%=info.wikimedia%></p>
+				<%if (info.wikimediakey){%>
+					<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
+				<%}%>
+			</article>
+		</script>
+	</section>
+</main>
+
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
 <script src="../vendor/es5-shim/es5-shim.js"></script>
 <script src="../vendor/signals/dist/signals.js"></script>
 <script src="../vendor/iddqd/src/iddqd.js"></script>
@@ -42,6 +73,10 @@
 <script src="../vendor/tweenjs/src/Tween.js"></script>
 <script src="../vendor/txtwiki.js/txtwiki.js"></script>
 <script src="../vendor/observe-js/src/observe.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js scripts/main.js -->
 <script src="../js/totaltimeline.js"></script>
 <script src="../js/totaltimeline.string.js"></script>
 <script src="../js/totaltimeline.util.js"></script>
@@ -65,16 +100,30 @@
 <script src="../js/totaltimeline.view.overview.js"></script>
 <script src="../js/totaltimeline.view.timeline.js"></script>
 <script src="../js/totaltimeline.view.content.js"></script>
-<!-- endtest -->
+<!-- endbuild -->
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+	/*(function (b,o,i,l,e,r) {
+		b.GoogleAnalyticsObject = l;
+		b[l] || (b[l] = function () {
+			(b[l].q = b[l].q || []).push(arguments)
+		});
+		b[l].l = +new Date;
+		e = o.createElement(i);
+		r = o.getElementsByTagName(i)[0];
+		e.src = '//www.google-analytics.com/analytics.js';
+		r.parentNode.insertBefore(e,r)
+	}(window,document,'script','ga'));
+	ga('create','UA-XXXXX-X');
+	ga('send','pageview');*/
+</script>
 
 
+	<!-- endtest -->
+</div>
 
-
-
-  <script src="../vendor/qunit/qunit/qunit.js"></script>
-
-  <script src="tests.js"></script>
-
+<script src="../vendor/qunit/qunit/qunit.js"></script>
+<script src="tests.js"></script>
 </body>
-
 </html>

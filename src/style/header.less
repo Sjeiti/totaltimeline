@@ -29,12 +29,16 @@
 	}
 	#searchResult {
 		.rt;
+		display: none;
 		right: -@screenPadding;
 		top: 2rem;
 		z-index: 4000;
 		width: 30%;
 		background-color: @colorGrayDark;
 		.box-shadow(-4px 8px 16px fade(black,30%));
+		&.visible {
+			display: block;
+		}
 		li {
 			&:nth-child(even) { background-color: darken(@colorGrayDark,5%); }
 		}

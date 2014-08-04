@@ -5,8 +5,9 @@ iddqd.ns('totaltimeline.view.header',(function(){
 	'use strict';
 
 	var pages = totaltimeline.pages
-		,util = totaltimeline.util
-//		,log = totaltimeline.view.log
+		,string = totaltimeline.string
+		,emptyElement = totaltimeline.util.emptyElement
+		//,log = totaltimeline.view.log
 		,mView
 		,mNav
 		,mNavUl
@@ -23,21 +24,18 @@ iddqd.ns('totaltimeline.view.header',(function(){
 
 	function initVariables() {
 		mView = document.getElementById('pageHeader');
-		if (mView) {// todo: refactor test
-			mNav = mView.querySelector('nav');
-			mNavUl = mNav.querySelector('ul');
-			mSearch = document.getElementById('search');
-			mSearchResult = document.getElementById('searchResult');
-		}
+		mNav = mView.querySelector('nav');
+		mNavUl = mNav.querySelector('ul');
+		mSearch = document.getElementById('search');
+		mSearchResult = document.getElementById('searchResult');
 	}
 
 	function initEvents() {
-		if (mView) {// todo: refactor test
-			pages.loaded.add(handlePagesLoaded);
-			mSearch.addEventListener('keyup',handleKeyUp);
-			mSearch.addEventListener('focus',handleFocusBlur);
-			mSearch.addEventListener('blur',handleFocusBlur);
-		}
+		pages.loaded.add(handlePagesLoaded);
+		mSearch.addEventListener(string.keyup,handleKeyUp);
+		mSearch.addEventListener(string.change,handleKeyUp);
+		mSearch.addEventListener(string.focus,handleFocusBlur);
+		mSearch.addEventListener(string.blur,handleFocusBlur);
 	}
 
 	/*function initView() {
@@ -45,7 +43,7 @@ iddqd.ns('totaltimeline.view.header',(function(){
 
 	// todo: document
 	function handlePagesLoaded() {
-		mNavUl.innerHTML = ''; // todo: refactor
+		emptyElement(mNavUl);
 		var mFragment = document.createDocumentFragment();
 		for (var i=0,l=pages.length;i<l;i++) {
 			var oPage = pages[i];
@@ -56,7 +54,7 @@ iddqd.ns('totaltimeline.view.header',(function(){
 
 	// todo: document
 	function handleKeyUp(){
-		var sSearch = mSearch.value.toLocaleLowerCase()
+		var sSearch = mSearch.value.toLowerCase()
 			,aFound = []
 			,collection = totaltimeline.collection
 			,pages = totaltimeline.pages
@@ -84,8 +82,8 @@ iddqd.ns('totaltimeline.view.header',(function(){
 				aFound.push([iResult,oPage]);
 			}
 		}
-		util.emptyElement(mSearchFragment);
-		util.emptyElement(mSearchResult);
+		emptyElement(mSearchFragment);
+		emptyElement(mSearchResult);
 		aFound.sort(function(a,b){
 			return a[0]>b[0]?-1:1;
 		});
@@ -100,11 +98,11 @@ iddqd.ns('totaltimeline.view.header',(function(){
 
 	// todo: document
 	function handleFocusBlur(e){
-		if (e.type==='focus') {
-			mSearchResult.style.display = 'block';
+		if (e.type===string.focus) {
+			mSearchResult.classList.add(string.visible);
 		} else {
 			setTimeout(function(){
-				mSearchResult.style.display = 'none';
+				mSearchResult.classList.remove(string.visible);
 			},400);
 		}
 	}

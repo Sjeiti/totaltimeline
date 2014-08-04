@@ -11,7 +11,7 @@
 <body>
 <header id="pageHeader">
 	<div>
-		<h2><a href="#13.8Ga/2014">Total Timeline</a></h2>
+		<h2><a href="#about/13.8Ga/2014">Total Timeline</a></h2>
 		<nav>
 			<!--<label for="hamburger"></label>
 			<input type="checkbox" id="hamburger" />-->
@@ -38,7 +38,9 @@
 				</header>
 				<img src="<%=info.thumb%>" /><%=info.explanation%>
 				<p><%=info.wikimedia%></p>
-				<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey&&info.wikimediakey.split(':')[0]%>">wikipedia</a>
+				<%if (info.wikimediakey){%>
+					<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
+				<%}%>
 			</article>
 		</script>
 	</section>

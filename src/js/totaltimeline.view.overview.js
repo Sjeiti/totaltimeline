@@ -4,7 +4,7 @@
 iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	'use strict';
 
-	var s = totaltimeline.string
+	var string = totaltimeline.string
 		,time = totaltimeline.time
 		,view = totaltimeline.view
 		,getPercentage = totaltimeline.util.getPercentage
@@ -72,18 +72,18 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		// resize
 		signals.resize.add(handleResize);
 		// is over
-		[s.mouseover,s.mouseout,s.mousemove].forEach(function(event){
+		[string.mouseover,string.mouseout,string.mousemove].forEach(function(event){
 			mOverView.addEventListener(event,handleOverViewMouse,false);
 		});
 		// drag
-		mRange.addEventListener(s.mousedown,handleRangeMouseClick,false);
-		mBody.addEventListener(s.mousemove,handleBodyMouseMove,false);
-		mBody.addEventListener(s.mouseup,handleRangeMouseClick,false);
+		mRange.addEventListener(string.mousedown,handleRangeMouseClick,false);
+		mBody.addEventListener(string.mousemove,handleBodyMouseMove,false);
+		mBody.addEventListener(string.mouseup,handleRangeMouseClick,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
 		// touch
-		mRange.addEventListener(s.touchstart,handleTouchStart,false);
+		mRange.addEventListener(string.touchstart,handleTouchStart,false);
 		totaltimeline.touch(mSpan,handleTouchMove);
 		//mSpan.addEventListener(s.touchmove,handleTouchMove,false);
 	}
@@ -113,7 +113,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * @param e
 	 */
 	function handleOverViewMouse(e){
-		bOver = e.type!==s.mouseout;
+		bOver = e.type!==string.mouseout;
 	}
 
 	/**
@@ -121,7 +121,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * @param e
 	 */
 	function handleRangeMouseClick(e){
-		bRangeMouseDown = e.type===s.mousedown;
+		bRangeMouseDown = e.type===string.mousedown;
 		if (bRangeMouseDown) iMouseXOffset = e.offsetX;
 		if (bRangeMouseDown) {
 			iMouseXOffsetDelta = 0;
@@ -161,7 +161,7 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Changes view to reflect changes in the 'range' object.
 	 */
 	function handleRangeChange(){
-		fRangeWidth = Math.min(1,oRange.duration/oSpan.duration);
+		fRangeWidth = oRange.duration/oSpan.duration;//Math.min(1,oRange.duration/oSpan.duration);
 		fRangeStart = 1-oRange.start.ago/oSpan.duration;
 		mRange.style.width = getPercentage(fRangeWidth);
 		mRange.style.left = getPercentage(fRangeStart);

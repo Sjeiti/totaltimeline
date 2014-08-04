@@ -10,6 +10,8 @@ iddqd.ns('totaltimeline.view.content',(function(){
 		,event = collection.events.event
 		,period = collection.periods.period
 		,resize = iddqd.signals.resize
+		//
+		,oRange
 		,mContent
 		,oContentStyle
 		,mContentWrapper
@@ -25,7 +27,7 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	;
 
 	function init(model){
-		initVariables();
+		initVariables(model);
 		initEvents(model);
 		initView();
 	}
@@ -33,7 +35,8 @@ iddqd.ns('totaltimeline.view.content',(function(){
 	/**
 	 * Initialise Variables
 	 */
-	function initVariables(){
+	function initVariables(model){
+		oRange = model.range;
 		mContent = document.getElementById('content');
 		oContentStyle = iddqd.style.select('#content');
 		mContentWrapper = zen('div.content').pop();
@@ -69,6 +72,16 @@ iddqd.ns('totaltimeline.view.content',(function(){
 			var sTime = '';
 			if (entry.factory===event) {
 				sTime = entry.moment.toString();
+				// scroll if entry is not within view
+				if (!oRange.coincides(entry.moment)) {
+					var iAgo = entry.moment.ago
+						,iDuration = oRange.duration
+						,iNewStart = iAgo + iDuration/2
+						,iNewEnd = iAgo - iDuration/2
+					;
+					// have to add callback because animation immediately cancels content entry
+					oRange.animate(iNewStart,iNewEnd,handleEntryShown.bind(null,entry));
+				}
 			} else if (entry.factory===period) {
 				sTime = entry.range.start.toString()+' - '+entry.range.end.toString();
 			}

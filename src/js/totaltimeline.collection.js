@@ -7,6 +7,11 @@ iddqd.ns('totaltimeline.collection',(function(){
 	'use strict';
 
 	var sgCollectionDataLoaded = new signals.Signal()
+		//
+		,aReferenceItem = []
+		,aReferenceSlug = []
+		,aReferenceName = []
+		//
 		,collection = {
 			length: 0
 			,loaded: 0
@@ -16,6 +21,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 			,getEntryBySlug: getEntryBySlug
 		}
 	;
+	sgCollectionDataLoaded.add(handleCollectionDataLoaded);
 
 	/**
 	 * Callback method for the Ajax spreadsheet request.
@@ -75,10 +81,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 		mWrapper.addEventListener(string.click, handleWrapperClick, false);
 
 		collection.push(oReturn);
-		sgDataLoaded.add(function(collectionInstance){
-			collection.loaded++;
-			sgCollectionDataLoaded.dispatch(collectionInstance);
-		},null,-1); // should be the last to called
+		sgDataLoaded.add(handleDataLoaded,null,-1); // should be the last to called
 
 		/**
 		 * Handles the click event on the wrapper.
@@ -89,6 +92,24 @@ iddqd.ns('totaltimeline.collection',(function(){
 				,oModel = mTarget.model;
 			oModel&&oModel.info&&model.entryShown.dispatch(oModel);
 		}
+
+		/**
+		 * Handles sgDataLoaded signal. At this point the collection instance has finished processing the loaded data.
+		 * @param collectionInstance
+		 */
+		function handleDataLoaded(collectionInstance){
+			for (var i=0,l=collectionInstance.length;i<l;i++) {
+				var oItem = collectionInstance[i]
+					,oInfo = oItem.info;
+				aReferenceItem.push(oItem);
+				aReferenceSlug.push(oInfo.slug);
+				aReferenceName.push(oInfo.name);
+			}
+			//
+			collection.loaded++;
+			sgCollectionDataLoaded.dispatch(collectionInstance);
+		}
+
 
 		/**
 		 * Initialises JSONP call.
@@ -134,6 +155,32 @@ iddqd.ns('totaltimeline.collection',(function(){
 	}
 
 	/**
+	 * All data is loaded so we now cross-reference text with anchors.
+	 * todo: refactor more effeciently
+	 * todo: replace strings more accurately (spaces and points)
+	 */
+	function handleCollectionDataLoaded(){
+		for (var i=0,l=aReferenceItem.length;i<l;i++) {
+			var oItem = aReferenceItem[i]
+				,oInfo = oItem.info
+				,sCopy = oInfo.wikimedia
+			;
+			for (var m=0,n=aReferenceSlug.length;m<n;m++) {
+				var sSlug = aReferenceSlug[m]
+					,sName = aReferenceName[m]
+					,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','gi')
+					//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
+					,aMatch = sCopy.match(rxMatch)
+				;
+				if (sSlug!==oInfo.slug&&aMatch) {
+					sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>');
+				}
+				oInfo.wikimedia = sCopy;
+			}
+		}
+	}
+
+	/**
 	 * Populates all the collections for a range into a view.
 	 * @name totaltimeline.collection.populate
 	 * @method
@@ -147,16 +194,14 @@ iddqd.ns('totaltimeline.collection',(function(){
 	}
 
 	// todo: document
+	// todo: check name: is it entry or item or what
 	function getEntryBySlug(_slug){
-		for (var i=0,l=collection.length;i<l;i++) {
-			var oCollectionInstance = collection[i];
-			for (var j=0,k=oCollectionInstance.length;j<k;j++) {
-				var oInstance = oCollectionInstance[j];
-				if (oInstance.info.slug===_slug) {
-					return oInstance;
-				}
-			}
+		var oEntry
+			,iIndex = aReferenceSlug.indexOf(_slug);
+		if (iIndex!==-1) {
+			oEntry = aReferenceItem[iIndex];
 		}
+		return oEntry;
 	}
 
 	return iddqd.extend(collection,{

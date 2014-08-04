@@ -168,7 +168,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 			for (var m=0,n=aReferenceSlug.length;m<n;m++) {
 				var sSlug = aReferenceSlug[m]
 					,sName = aReferenceName[m]
-					,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','gi')
+					,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
 					//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
 					,aMatch = sCopy.match(rxMatch)
 				;

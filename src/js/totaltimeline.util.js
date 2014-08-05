@@ -45,10 +45,30 @@ iddqd.ns('totaltimeline.util',(function(){
 		}
 	}
 
+	function canWebGL(){
+		var bCanWebGL = false;
+		if (window.WebGLRenderingContext) {
+			try {
+				var canvas = document.createElement('canvas');
+				var context = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+				if(!context) {
+					// browser supports WebGL but initialization failed
+//					console.log("webgl is supported but here is another problem, visit http://get.webgl.org/troubleshooting");
+				} else {
+					bCanWebGL = true;
+				}
+			} catch(err) {
+//				console.log("webgl is supported but here is another problem, visit http://get.webgl.org/troubleshooting");
+			}
+		}
+		return bCanWebGL;
+	}
+
 	return {
 		getPercentage: getPercentage
 		,slug: slug
 		,getCssValuePrefix: getCssValuePrefix
 		,emptyElement: emptyElement
+		,canWebGL: canWebGL
 	};
 })());

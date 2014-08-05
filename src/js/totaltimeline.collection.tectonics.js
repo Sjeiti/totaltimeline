@@ -9,10 +9,10 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 	var collection = totaltimeline.collection
 		,string = totaltimeline.string
-		,moment = totaltimeline.time.moment
 		,imageLoad = iddqd.image.load
+		,animate = iddqd.signals.animate
 		,time = totaltimeline.time
-		//,moment = time.moment
+		,moment = time.moment
 		//,range = time.range
 		,eventInfo = time.eventInfo
 		//,getPercentage = totaltimeline.util.getPercentage
@@ -50,6 +50,8 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		]
 		//
 		,mBody
+		,mWrapper
+		,mRenderer
 		//
 		,scene
 		,camera
@@ -65,13 +67,18 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		,fRotX = 0
 		,fRotY = 0
 		//
-		,aInstance = collection.add(
+		,aInstance
+	;
+	if (totaltimeline.util.canWebGL()) {
+		aInstance = collection.add(
 			'tectonics'
 			,undefined
 			,handleGetData.bind(null,aImages)
 			,populate
-		)
-	;
+			,true
+		);
+		mWrapper = aInstance.wrapper;
+	}
 
 	// todo: document
 	function handleGetData(data){
@@ -95,11 +102,13 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		});
 	}
 
+	// todo: document
 	function imagesLoaded(){
-		initView();
+		window.WebGLRenderingContext&&initView();
 		aInstance.dataLoaded.dispatch(aInstance);
 	}
 
+	// todo: document
 	function initView(){
 		mBody = document.body;
 		var mScene = document.createElement('div')
@@ -123,7 +132,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 		renderer = new THREE.WebGLRenderer( { alpha: true } );
 		renderer.setSize( iSize,iSize );
-//		mScene.appendChild( renderer.domElement );
+		mRenderer = renderer.domElement;
 
 		/////////////
 
@@ -153,19 +162,20 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
 		directionalLight.position.set( -1, 1, 1 ).normalize();
 		scene.add( directionalLight );
-
-		/////////////
-
-		iddqd.signals.animate.add(handleAnimate);
 	}
 
+	// todo: document
 	function handleMouseDown(){
 		document.addEventListener(string.mousemove,handleMouseMove,false);
 	}
+
+	// todo: document
 	function handleMouseUp(){
 		document.removeEventListener(string.mousemove,handleMouseMove,false);
 		iLastX = -1;
 	}
+
+	// todo: document
 	function handleMouseMove(e){
 		var mouseX = e.clientX;
 		var mouseY = e.clientY;
@@ -181,30 +191,36 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		e.preventDefault();
 	}
 
+	// todo: document
 	function handleAnimate(deltaT){
-
 		fSpdX *= fFrc;
 		fSpdY *= fFrc;
-
 		fRotX += fSpdX;
 		fRotY += fSpdY;
-
 		fRotY += 0.0001*deltaT;
-
 		mesh.rotation.x = fRotX;
 		mesh.rotation.y = fRotY;
-
 		renderer.render(scene, camera);
 	}
 
 	// todo: document
-	function populate(fragment,range){//fragment,range
-		var iClosest = setTextureImage(range);
-		if ((iClosest<101E6)&&renderer) {
-			fragment.appendChild(renderer.domElement);
+	function populate(fragment,range){
+		if (renderer) {
+			var iClosest = setTextureImage(range)
+				,bIsChild = mRenderer.parentNode===mWrapper
+				,bVisible = iClosest<101E6
+			;
+			if (bVisible&&!bIsChild) {
+				mWrapper.appendChild( mRenderer );
+				animate.add(handleAnimate);
+			} else if (!bVisible&&bIsChild) {
+				mWrapper.removeChild( mRenderer );
+				animate.remove(handleAnimate);
+			}
 		}
 	}
 
+	// todo: document
 	function setTextureImage(range){
 		var iClosest = 4E9;
 		if (texture&&range) {

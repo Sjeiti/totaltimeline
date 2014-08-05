@@ -59,7 +59,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 * @param {totaltimeline.collection~add-populate} populate The method that populates the collection.
 	 * @return {collectionInstance} Collection instance object.
 	 */
-	function add(slug,worksheet,callback,_populate){
+	function add(slug,worksheet,callback,_populate,staticView){
 //		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
 
 		var string = totaltimeline.string
@@ -68,6 +68,7 @@ iddqd.ns('totaltimeline.collection',(function(){
 			,mWrapper = document.createElement('div')
 			,mFragment = document.createDocumentFragment()
 			,sgDataLoaded = new signals.Signal()
+			,bStaticView = !!staticView
 			,oReturn = iddqd.extend(aCollection,{
 				wrapper: mWrapper
 				,fragment: mFragment
@@ -136,10 +137,14 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 */
 		function populate(view,range){
 			// todo: refactor more efficiently: only add/remove what is needed
-			emptyView(mWrapper);
-			emptyView(mFragment);
-			_populate(mFragment,range);
-			mWrapper.appendChild(mFragment);//.cloneNode(true)
+			if (bStaticView) {
+				_populate(null,range);
+			} else {
+				emptyView(mWrapper);
+				emptyView(mFragment);
+				_populate(mFragment,range);
+				mWrapper.appendChild(mFragment);//.cloneNode(true)
+			}
 			if (mWrapper.parentNode!==view) {
 				view.appendChild(mWrapper);
 			}

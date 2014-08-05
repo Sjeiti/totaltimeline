@@ -13,7 +13,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		,eventInfo = time.eventInfo
 		,getPercentage = totaltimeline.util.getPercentage
 		//
-		,aCollection = collection.add(
+		,aInstance = collection.add(
 			'periods'
 			,2
 			,handleGetData
@@ -41,15 +41,15 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 						break;
 					}
 				}
-				var oPeriod = aCollection.period(
+				var oPeriod = aInstance.period(
 					range(moment(iFrom),moment(iTo))
 					,eventInfo().parse(entry)
 					,iOffset
 				);
-				aCollection.push(oPeriod);
+				aInstance.push(oPeriod);
 			}
 		});
-		aCollection.dataLoaded.dispatch(aCollection);
+		aInstance.dataLoaded.dispatch(aInstance);
 	}
 
 	// todo: document
@@ -57,7 +57,7 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		var iRangeEnd = range.end.ago
 			,iDuration = range.duration
 		;
-		aCollection.forEach(function(period){
+		aInstance.forEach(function(period){
 			if (period.coincides(range)) {
 				var mPeriod = period.element
 					,iAgo = period.range.start.ago
@@ -78,5 +78,5 @@ iddqd.ns('totaltimeline.collection.periods',(function(){
 		});
 	}
 
-	return aCollection;
+	return aInstance;
 })());

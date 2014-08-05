@@ -117,11 +117,15 @@ iddqd.ns('totaltimeline.collection',(function(){
 		 */
 		function getData(){
 //			iddqd.network.jsonp(sheetUri,callback);
-			totaltimeline.spreadsheetproxy.getData(
-				totaltimeline.model.spreadsheetKey
-				,worksheet
-				,callback
-			);
+			if (worksheet>0===false) {
+				callback&&callback();
+			} else if (callback) {
+				totaltimeline.spreadsheetproxy.getData(
+					totaltimeline.model.spreadsheetKey
+					,worksheet
+					,callback
+				);
+			}
 //			window['_'+slug] = callback;
 //			iddqd.loadScript('/data/_'+slug+'.js');
 		}
@@ -165,17 +169,19 @@ iddqd.ns('totaltimeline.collection',(function(){
 				,oInfo = oItem.info
 				,sCopy = oInfo.wikimedia
 			;
-			for (var m=0,n=aReferenceSlug.length;m<n;m++) {
-				var sSlug = aReferenceSlug[m]
-					,sName = aReferenceName[m]
-					,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-					//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
-					,aMatch = sCopy.match(rxMatch)
-				;
-				if (sSlug!==oInfo.slug&&aMatch) {
-					sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>');
+			if (sCopy) {
+				for (var m=0,n=aReferenceSlug.length;m<n;m++) {
+					var sSlug = aReferenceSlug[m]
+						,sName = aReferenceName[m]
+						,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
+						//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
+						,aMatch = sCopy.match(rxMatch)
+					;
+					if (sSlug!==oInfo.slug&&aMatch) {
+						sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>');
+					}
+					oInfo.wikimedia = sCopy;
 				}
-				oInfo.wikimedia = sCopy;
 			}
 		}
 	}

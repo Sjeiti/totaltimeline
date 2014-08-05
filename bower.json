@@ -10,7 +10,8 @@
     "markdown": "~0.5.0",
     "tweenjs": "*",
     "txtwiki.js": "git://github.com/joaomsa/txtwiki.js.git",
-    "observe-js": "~0.3.4"
+    "observe-js": "~0.3.4",
+    "threejs": "*"
   },
   "devDependencies": {
     "qunit": "~1.14.0"

@@ -27,7 +27,7 @@ iddqd.ns('totaltimeline.view',(function(){
 		]
 	;
 
-	function init(model){
+	function view(model){
 		initVariables();
 		initEvents(model);
 		initView(model);
@@ -37,7 +37,7 @@ iddqd.ns('totaltimeline.view',(function(){
 	 * Initialise variables
 	 */
 	function initVariables(){
-		init.rangeGradient = '';
+		view.rangeGradient = '';
 	}
 
 	/**
@@ -52,10 +52,10 @@ iddqd.ns('totaltimeline.view',(function(){
 	 * Initialise views
 	 */
 	function initView(model){
-		init.header(model);
-		init.overview(model);
-		init.timeline(model);
-		init.content(model);
+		view.header(model);
+		view.overview(model);
+		view.timeline(model);
+		view.content(model);
 	}
 
 	// todo: document
@@ -107,8 +107,8 @@ iddqd.ns('totaltimeline.view',(function(){
 			oLastColor = oColor;
 			oLastColor.pos = fPos;
 		}
-		init.rangeGradient = model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')';
+		view.rangeGradient = model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')';
 	}
 
-	return init;
+	return view;
 })());

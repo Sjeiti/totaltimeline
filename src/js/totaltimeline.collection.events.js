@@ -12,7 +12,7 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		,eventInfo = time.eventInfo
 		,getPercentage = totaltimeline.util.getPercentage
 		//
-		,aCollection = collection.add(
+		,aInstance = collection.add(
 			'events'
 			,1
 			,handleGetData
@@ -35,17 +35,17 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 				,bExclude = entry.exclude==='1'
 			;
 			if (oMoment&&!bExclude) {
-				aCollection.push(aCollection.event(
+				aInstance.push(aInstance.event(
 					oMoment
 					,eventInfo().parse(entry)
 				));
 			}
 		});
 		// sort events by ago
-		aCollection.sort(function(eventA,eventB){
+		aInstance.sort(function(eventA,eventB){
 			return eventA.moment.ago>eventB.moment.ago?-1:1;
 		});
-		aCollection.dataLoaded.dispatch(aCollection);
+		aInstance.dataLoaded.dispatch(aInstance);
 	}
 
 	//todo:document
@@ -54,8 +54,8 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 			,iRangeEnd = range.end.ago
 			,iDuration = range.duration
 		;
-		for (var i=0,l=aCollection.length;i<l;i++) {
-			var oEvent = aCollection[i]
+		for (var i=0,l=aInstance.length;i<l;i++) {
+			var oEvent = aInstance[i]
 				,iAgo = oEvent.moment.ago
 				,bInside = iAgo<=iRangeStart&&iAgo>=iRangeEnd
 			;
@@ -70,5 +70,5 @@ iddqd.ns('totaltimeline.collection.events',(function(){
 		}
 	}
 
-	return aCollection;
+	return aInstance;
 })());

@@ -4,6 +4,8 @@
 	# Remove trailing slash
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R]
+    # Except stuff from some folders
+    RewriteRule ^(data|js|style)($|/) - [L]
 	# otherwise use regular index.html
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d

@@ -123,7 +123,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 		renderer = new THREE.WebGLRenderer( { alpha: true } );
 		renderer.setSize( iSize,iSize );
-		mScene.appendChild( renderer.domElement );
+//		mScene.appendChild( renderer.domElement );
 
 		/////////////
 
@@ -177,16 +177,19 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		fSpdY -= (iLastX - mouseX) / 1000;
 		iLastX = mouseX;
 		iLastY = mouseY;
+		e.stopPropagation();
+		e.preventDefault();
 	}
 
-	function handleAnimate(){//deltaT
-		//mesh.rotation.y += 0.0001*deltaT;
+	function handleAnimate(deltaT){
 
 		fSpdX *= fFrc;
 		fSpdY *= fFrc;
 
 		fRotX += fSpdX;
 		fRotY += fSpdY;
+
+		fRotY += 0.0001*deltaT;
 
 		mesh.rotation.x = fRotX;
 		mesh.rotation.y = fRotY;
@@ -196,13 +199,16 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 	// todo: document
 	function populate(fragment,range){//fragment,range
-		setTextureImage(range);
+		var iClosest = setTextureImage(range);
+		if ((iClosest<101E6)&&renderer) {
+			fragment.appendChild(renderer.domElement);
+		}
 	}
 
 	function setTextureImage(range){
+		var iClosest = 4E9;
 		if (texture&&range) {
 			var iRangeCenterAgo = range.start.ago - range.duration/2
-				,iClosest = 4E9
 				,oItem = aInstance[0]
 			;
 			// find closest to range center
@@ -218,6 +224,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 			texture.image = oItem.img;
 			texture.needsUpdate = true;
 		}
+		return iClosest;
 	}
 
 	return aInstance;

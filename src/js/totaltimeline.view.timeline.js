@@ -25,7 +25,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		,iViewL
 		,bOver = false
 		//
-		,bViewMouseDown = false
 		,iMouseXOffsetDelta = 0
 		,iMouseXOffsetLast = 0
 	;
@@ -66,9 +65,8 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 			mView.addEventListener(event,handleSpanMouse,false);
 		});
 		// drag
-		mView.addEventListener(string.mousedown,handleViewMouseClick,false);
-		mBody.addEventListener(string.mousemove,handleBodyMouseMove,false);
-		mBody.addEventListener(string.mouseup,handleViewMouseClick,false);
+		mView.addEventListener(string.mousedown,handleViewMouseDownUp,false);
+		mBody.addEventListener(string.mouseup,handleViewMouseDownUp,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		// collection
@@ -118,11 +116,14 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Handles click event. Determines when the mouse is down and stores the offset with the target.
 	 * @param e
 	 */
-	function handleViewMouseClick(e){
-		bViewMouseDown = e.type===string.mousedown;
-		if (bViewMouseDown) {
+	function handleViewMouseDownUp(e){
+//		console.log('timeline',e.type); // log
+		if (e.type===string.mousedown) {
 			iMouseXOffsetDelta = 0;
 			iMouseXOffsetLast = e.clientX;//.offsetX;
+			document.addEventListener(string.mousemove,handleDocumentMouseMove,false);
+		} else {
+			document.removeEventListener(string.mousemove,handleDocumentMouseMove,false);
 		}
 	}
 
@@ -130,14 +131,12 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Handles move event and moves mRange if the mouse is down.
 	 * @param e
 	 */
-	function handleBodyMouseMove(e){
-		if (bViewMouseDown) {
-			var iOffsetX = e.clientX;
-			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
-			iMouseXOffsetLast = iOffsetX;
-			if (iMouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
-				oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
-			}
+	function handleDocumentMouseMove(e){
+		var iOffsetX = e.clientX;
+		iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
+		iMouseXOffsetLast = iOffsetX;
+		if (iMouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
+			oRange.moveStart(oRange.start.ago + Math.round(iMouseXOffsetDelta/mView.offsetWidth*oRange.duration));
 		}
 	}
 

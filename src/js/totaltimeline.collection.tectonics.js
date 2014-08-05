@@ -122,9 +122,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 		mBody.appendChild(mScene);
 
-		mScene.addEventListener(string.mousedown,handleMouseDown,false);
-		mBody.addEventListener(string.mouseup,handleMouseUp,false);
-
+//		mWrapper.addEventListener(string.click, handleWrapperClick, false);
 		/////////////
 
 		scene = new THREE.Scene();
@@ -133,6 +131,9 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		renderer = new THREE.WebGLRenderer( { alpha: true } );
 		renderer.setSize( iSize,iSize );
 		mRenderer = renderer.domElement;
+
+		mRenderer.addEventListener(string.mousedown,handleMouseDownUp,true);
+		mBody.addEventListener(string.mouseup,handleMouseDownUp,true);
 
 		/////////////
 
@@ -165,14 +166,16 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 	}
 
 	// todo: document
-	function handleMouseDown(){
-		document.addEventListener(string.mousemove,handleMouseMove,false);
-	}
-
-	// todo: document
-	function handleMouseUp(){
-		document.removeEventListener(string.mousemove,handleMouseMove,false);
-		iLastX = -1;
+	function handleMouseDownUp(e){
+		console.log('tectonics',e.type); // log
+		if (e.type===string.mousedown) {
+			document.addEventListener(string.mousemove,handleMouseMove,true);
+			e.stopPropagation();
+//			e.preventDefault();
+		} else {
+			document.removeEventListener(string.mousemove,handleMouseMove,true);
+			iLastX = -1;
+		}
 	}
 
 	// todo: document
@@ -187,8 +190,6 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		fSpdY -= (iLastX - mouseX) / 1000;
 		iLastX = mouseX;
 		iLastY = mouseY;
-		e.stopPropagation();
-		e.preventDefault();
 	}
 
 	// todo: document

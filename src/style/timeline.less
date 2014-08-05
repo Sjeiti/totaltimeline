@@ -32,11 +32,14 @@
 	}
 }
 
-.events {
+.events, .periods, .tectonics {
 	.lt;
 	z-index: 1000;
 	.size(100%);
 	pointer-events: none;
+}
+
+.events {
 }
 	.event-wrap {
 		.lt;
@@ -126,9 +129,6 @@
 
 @periodHeight: 1.5rem;
 .periods {
-	.lt;
-	z-index: 1000;
-	.size(100%);
 	overflow: hidden;
 }
 	.period {
@@ -167,16 +167,10 @@
 	}
 
 .tectonics {
-	.lt;
 	z-index: 999;
-	.size(100%);
 	overflow: hidden;
-//		pointer-events: auto;
-//	&:hover {
-//		z-index: 3000;
-//	}
 	canvas {
-		.lt(50%);
+		.lb(50%);
 		margin-left: -150px;
 		pointer-events: auto;
 //		margin: 0 auto;

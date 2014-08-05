@@ -24,7 +24,6 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		,fRangeStart
 		,bOver = false
 		,iMouseXOffset = 0
-		,bRangeMouseDown = false
 	;
 
 	function init(model){
@@ -76,9 +75,8 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 			mOverView.addEventListener(event,handleOverViewMouse,false);
 		});
 		// drag
-		mRange.addEventListener(string.mousedown,handleRangeMouseClick,false);
-		mBody.addEventListener(string.mousemove,handleBodyMouseMove,false);
-		mBody.addEventListener(string.mouseup,handleRangeMouseClick,false);
+		mRange.addEventListener(string.mousedown,handleRangeMouseDownUp,false);
+		mBody.addEventListener(string.mouseup,handleRangeMouseDownUp,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
@@ -120,29 +118,29 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 	 * Handles click event. Determines when the mouse is down and stores the offset with mSpan.
 	 * @param e
 	 */
-	function handleRangeMouseClick(e){
-		bRangeMouseDown = e.type===string.mousedown;
-		if (bRangeMouseDown) iMouseXOffset = e.offsetX;
-		if (bRangeMouseDown) {
+	function handleRangeMouseDownUp(e){
+		if (e.type===string.mousedown) {
+			iMouseXOffset = e.offsetX;
 			iMouseXOffsetDelta = 0;
 			iMouseXOffsetLast = e.clientX;
+			document.addEventListener(string.mousemove,handleDocumentMouseMove,false);
+		} else {
+			document.removeEventListener(string.mousemove,handleDocumentMouseMove,false);
 		}
 	}
-	var iMouseXOffsetDelta = 0;
-	var iMouseXOffsetLast = 0;
+	var iMouseXOffsetDelta = 0; // todo: hoist
+	var iMouseXOffsetLast = 0; // todo: hoist
 
 	/**
 	 * Handles move event and moves mRange if the mouse is down.
 	 * @param e
 	 */
-	function handleBodyMouseMove(e){
-		if (bRangeMouseDown) {
-			// todo: rangeMove? ... This is relative... rangeMove is ~absolute
-			var iOffsetX = e.clientX;//offsetX;
-			iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
-			iMouseXOffsetLast = iOffsetX;
-			oRange.moveStart(oRange.start.ago - Math.round(iMouseXOffsetDelta/iSpanW*oSpan.duration));
-		}
+	function handleDocumentMouseMove(e){
+		// todo: rangeMove? ... This is relative... rangeMove is ~absolute
+		var iOffsetX = e.clientX;//offsetX;
+		iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
+		iMouseXOffsetLast = iOffsetX;
+		oRange.moveStart(oRange.start.ago - Math.round(iMouseXOffsetDelta/iSpanW*oSpan.duration));
 	}
 
 	/**

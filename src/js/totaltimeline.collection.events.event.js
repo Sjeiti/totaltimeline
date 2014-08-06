@@ -16,7 +16,9 @@ iddqd.ns('totaltimeline.collection.events.event', function event(moment,info){
 		,mTitle = mWrap.querySelector('h3')
 		,mTime = mWrap.querySelector('time')
 //		,fTop = 0.9*iddqd.math.prng.random(Math.abs(moment.value<18000?10000*moment.value:moment.value))
-		,fTop = 0.5 + 0.6*(iddqd.math.prng.random(123E4+Math.abs(moment.value<18000?10000*moment.value:moment.value))-0.5)
+		,iName = info.name.split('').map(function(s){return s.charCodeAt();}).reduce(function(a,b){return a+b;},0)
+		,iSeed = iName*143E4 + Math.abs(moment.value<2E4?1E4*moment.value:moment.value)
+		,fTop = 0.5 + 0.6*(iddqd.math.prng.random(iSeed)-0.5)
 //		,fTop = Math.random()<0.5?0.1:0.9
 		,sTop = getPercentage(fTop)
 		,sHeight = getPercentage(1-fTop)

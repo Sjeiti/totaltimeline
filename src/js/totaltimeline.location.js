@@ -21,8 +21,8 @@ iddqd.ns('totaltimeline.location',(function(history){
 			,sHash = location.href.indexOf('#')!==-1?location.hash.substr(1):''
 			,sGetQ = location.href.indexOf('?')!==-1?location.href.split('?q=').pop().split('#')[0]:'';
 
-		if (sPath.indexOf('src/test/index.html')) {
-			return;
+		if (sPath.indexOf('src/test/index.html')!==-1) {
+			return; // prevent rewrite in test
 		}
 
 		entryShown = model.entryShown;
@@ -114,6 +114,7 @@ iddqd.ns('totaltimeline.location',(function(history){
 
 	// todo: document
 	function showSlugInstance(slug){
+		console.log('showSlugInstance',slug); // log
 		var oSlugInst = collection.getEntryBySlug(slug)
 			,bHasSlugInst = !!oSlugInst;
 		if (bHasSlugInst) {

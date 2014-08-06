@@ -76,7 +76,6 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 		});
 		// drag
 		mRange.addEventListener(string.mousedown,handleRangeMouseDownUp,false);
-		mBody.addEventListener(string.mouseup,handleRangeMouseDownUp,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		oRange.change.add(handleRangeChange);
@@ -124,8 +123,10 @@ iddqd.ns('totaltimeline.view.overview',(function(iddqd){
 			iMouseXOffsetDelta = 0;
 			iMouseXOffsetLast = e.clientX;
 			document.addEventListener(string.mousemove,handleDocumentMouseMove,false);
+			mBody.addEventListener(string.mouseup,handleRangeMouseDownUp,false);
 		} else {
 			document.removeEventListener(string.mousemove,handleDocumentMouseMove,false);
+			mBody.removeEventListener(string.mouseup,handleRangeMouseDownUp,false);
 		}
 	}
 	var iMouseXOffsetDelta = 0; // todo: hoist

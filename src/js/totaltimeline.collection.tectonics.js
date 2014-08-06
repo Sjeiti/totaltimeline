@@ -59,6 +59,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		,mesh
 		,texture
 		//
+		,bMouseDown = false
 		,iLastX = -1
 		,iLastY = -1
 		,fFrc = 0.9
@@ -112,7 +113,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 	function initView(){
 		mBody = document.body;
 		var mScene = document.createElement('div')
-			,iSize = 300;
+			,iSize = 400;
 
 		mScene.style.width = iSize+'px';
 		mScene.style.height = iSize+'px';
@@ -133,7 +134,6 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		mRenderer = renderer.domElement;
 
 		mRenderer.addEventListener(string.mousedown,handleMouseDownUp,true);
-		mBody.addEventListener(string.mouseup,handleMouseDownUp,true);
 
 		/////////////
 
@@ -141,6 +141,8 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 		var material = new THREE.MeshPhongMaterial({
 			map: texture
+			,bumpMap: texture
+			,bumpScale: 0.005
 			,color: 0xFFFFFF
 			,ambient: 0xFFFFFF
 			,specular: 0x886633
@@ -148,13 +150,13 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 			,shading: THREE.SmoothShading
 		});
 
-		var geometry = new THREE.SphereGeometry(2, 16, 8);
+		var geometry = new THREE.SphereGeometry(2, 32, 24);
 
 		mesh = new THREE.Mesh( geometry, material );
 		mesh.rotation.y = 1;
 		scene.add( mesh );
 
-		camera.position.z = 3.5;
+		camera.position.z = 3.3;
 
 		/////////////
 
@@ -167,13 +169,14 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 
 	// todo: document
 	function handleMouseDownUp(e){
-		console.log('tectonics',e.type); // log
-		if (e.type===string.mousedown) {
+		bMouseDown = e.type===string.mousedown;
+		if (bMouseDown) {
 			document.addEventListener(string.mousemove,handleMouseMove,true);
+			mBody.addEventListener(string.mouseup,handleMouseDownUp,true);
 			e.stopPropagation();
-//			e.preventDefault();
 		} else {
 			document.removeEventListener(string.mousemove,handleMouseMove,true);
+			mBody.removeEventListener(string.mouseup,handleMouseDownUp,true);
 			iLastX = -1;
 		}
 	}
@@ -198,7 +201,7 @@ iddqd.ns('totaltimeline.collection.tectonics',(function(undefined){
 		fSpdY *= fFrc;
 		fRotX += fSpdX;
 		fRotY += fSpdY;
-		fRotY += 0.0001*deltaT;
+		if (!bMouseDown) fRotY += 0.0001*deltaT;
 		mesh.rotation.x = fRotX;
 		mesh.rotation.y = fRotY;
 		renderer.render(scene, camera);

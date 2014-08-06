@@ -38,6 +38,7 @@ iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 			,icon:_
 			,importance:_
 			,accuracy:_
+			,tags:[]
 
 			,explanation:_
 			,wikimediakey:_
@@ -64,6 +65,8 @@ iddqd.ns('totaltimeline.time.eventInfo',function(objectToParse){
 				oEventInfo[s] = o[s];
 				if (s==='name') {
 					oEventInfo.slug = slug(o[s]);
+				} else if (s==='tags') {
+					oEventInfo.tags = o[s].split(',').map(function(s){return s.replace(/^\s*|\s*$/g,'');}).filter(function(s){return !s.match(/^[\s\n\t]*$/);});
 				}
 			}
 		}

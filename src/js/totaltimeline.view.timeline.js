@@ -66,7 +66,6 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		});
 		// drag
 		mView.addEventListener(string.mousedown,handleViewMouseDownUp,false);
-		mBody.addEventListener(string.mouseup,handleViewMouseDownUp,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
 		// collection
@@ -117,13 +116,14 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * @param e
 	 */
 	function handleViewMouseDownUp(e){
-//		console.log('timeline',e.type); // log
 		if (e.type===string.mousedown) {
 			iMouseXOffsetDelta = 0;
 			iMouseXOffsetLast = e.clientX;//.offsetX;
 			document.addEventListener(string.mousemove,handleDocumentMouseMove,false);
+			mBody.addEventListener(string.mouseup,handleViewMouseDownUp,false);
 		} else {
 			document.removeEventListener(string.mousemove,handleDocumentMouseMove,false);
+			mBody.removeEventListener(string.mouseup,handleViewMouseDownUp,false);
 		}
 	}
 

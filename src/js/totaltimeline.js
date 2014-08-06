@@ -1,6 +1,6 @@
 /**
  * @namespace totaltimeline
- * @version 0.1.48
+ * @version 0.1.62
  * @author Ron Valstar (http://www.sjeiti.com/)
  * @copyright Ron Valstar <ron@ronvalstar.nl>
  */

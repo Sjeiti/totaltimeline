@@ -1,4 +1,5 @@
 #timeline {
+	.user-select;
 	position: relative;
 	margin: 0 @screenPadding;
 	background-color: #615d78;
@@ -170,9 +171,8 @@
 	z-index: 999;
 	overflow: hidden;
 	canvas {
-		.lb(50%);
-		margin-left: -150px;
+		display: block;
+		margin: 3% auto 0;
 		pointer-events: auto;
-//		margin: 0 auto;
 	}
 }

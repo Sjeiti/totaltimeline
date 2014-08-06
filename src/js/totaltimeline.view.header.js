@@ -45,7 +45,7 @@ iddqd.ns('totaltimeline.view.header',(function(){
 	function handlePagesLoaded() {
 		emptyElement(mNavUl);
 		var mFragment = document.createDocumentFragment();
-		for (var i=0,l=pages.length;i<l;i++) {
+		for (var i=1,l=pages.length;i<l;i++) { // first page not in menu
 			var oPage = pages[i];
 			mFragment.appendChild(zen('li>a[href=#'+oPage.slug+']{'+oPage.name+'}').pop());
 		}

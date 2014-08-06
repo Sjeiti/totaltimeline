@@ -169,23 +169,40 @@ iddqd.ns('totaltimeline.collection',(function(){
 	 * todo: replace strings more accurately (spaces and points)
 	 */
 	function handleCollectionDataLoaded(){
-		for (var i=0,l=aReferenceItem.length;i<l;i++) {
+		for (var i=0,j=aReferenceItem.length;i<j;i++) {
 			var oItem = aReferenceItem[i]
 				,oInfo = oItem.info
 				,sCopy = oInfo.wikimedia
 			;
 			if (sCopy) {
 				for (var m=0,n=aReferenceSlug.length;m<n;m++) {
-					var sSlug = aReferenceSlug[m]
-						,sName = aReferenceName[m]
-						,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-						//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
-						,aMatch = sCopy.match(rxMatch)
-					;
-					if (sSlug!==oInfo.slug&&aMatch) {
-						sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>');
+					if (m!==i) {
+						var sSlug = aReferenceSlug[m]
+							,sName = aReferenceName[m]
+							,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
+							//,rxMatch = new RegExp('([\\s]('+sName+')[\\s\\.,])','gi')
+							,aMatch = sCopy.match(rxMatch)
+							,bMatch = !!aMatch
+						;
+						if (!bMatch) {
+							var oRefItem = aReferenceItem[m]
+								,oRefInfo = oRefItem.info
+								,aTags = oRefInfo.tags
+								,iTags = aTags.length
+							;
+							for (var k=0;k<iTags;k++) {
+								sName = aTags[k];
+								rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i');
+								aMatch = sCopy.match(rxMatch);
+								bMatch = !!aMatch;
+								if (bMatch) break;
+							}
+						}
+						if (sSlug!==oInfo.slug&&bMatch) {
+							sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>');
+						}
+						oInfo.wikimedia = sCopy;
 					}
-					oInfo.wikimedia = sCopy;
 				}
 			}
 		}

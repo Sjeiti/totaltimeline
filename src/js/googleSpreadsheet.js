@@ -17,7 +17,89 @@ var sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query
  * @param {string} subject The article subject.
  */
 function getWikiMedia(subject){
-	var sParagraph = '';
+	var sParagraphs = '';
+	if (subject!=='') {
+		var oSubject = splitSubject(subject)
+			,sJSON = UrlFetchApp.fetch(sEndPointEn+serialize(extend({titles:oSubject.page},oGetVars)))
+			,sContent = getPageContent(JSON.parse(sJSON))
+		;
+		sParagraphs = parseWikiMedia(sContent,oSubject.heading,oSubject.paragraphs);
+		Utilities.sleep(1000);
+	}
+	return sParagraphs;
+}
+
+/**
+ * Parses the wiki text and returns specific paragraphs
+ * @param {string} content The content.
+ * @param {string} heading The heading to search for.
+ * @param {array} paragraphs Array of paragraphs to parse.
+ */
+function parseWikiMedia(content,heading,paragraphs){
+	var aContent = content
+			.replace(/<!--[^>]*-->/g,'') // remove html comments
+			.replace(/<([^\/>]+)>[^<]*<\/([^>]+)>|<([^\/>]+)\/>/g,'') // remove html
+			.replace(/\n^\s*\|[^\n]*/gm,'') // remove | stuff
+			.replace(/\{\{[^\{\}]*\}\}/g,'') // remove {{stuff}}
+
+			.split(/\n/g)
+			.filter(function(line){
+				return !line.match(/^[\s\n\t]*$/) // empty lines
+					&&!line.match(/^\s?\[\[[A-Z][a-z]+:/) // File:|Image:|Other: stuff
+				;
+			})
+		,aNewContent = []
+	;
+	for (var i=0,k=aContent.length;i<k;i++) {
+		if (heading===''||aContent[i].match(new RegExp('=\\s?'+heading+'\\s?='))) {
+			for (var j=0,l=paragraphs.length;j<l;j++) {
+				var iPar = paragraphs[j]
+					,sParagraph = txtwiki.parseWikitext(aContent[i+1+iPar]);
+				aNewContent.push(sParagraph);
+			}
+			break;
+		}
+	}
+	return aNewContent.join('\n');
+}
+
+/**
+ * Takes a subject and splits it into page, heading and paragraphs
+ * @param subject
+ * @returns {page:'',heading:'',paragraphs:''}
+ */
+function splitSubject(subject){
+	var oSubject = {};
+	if (subject!=='') {
+		var aSubject = subject.split(/[:#]/)
+			,bHash = subject.indexOf('#')!==-1
+			,bPar = subject.indexOf(':')!==-1
+			//
+			,sSubject = aSubject.shift()
+			,sHash = bHash?aSubject.shift().replace(/_/g,' '):''
+			,sPar = bPar&&aSubject.shift()
+			,aPar = []
+			,aTempPar = (sPar?sPar.split(','):['0'])
+		;
+		aTempPar.forEach(function(s){
+			var a = s.split('-');
+			if (a.length>1) {
+				for (var i=parseInt(a[0],10),l=parseInt(a[1],10);i<=l;i++) {
+					aPar.push(i);
+				}
+			} else {
+				aPar.push(parseInt(s,10));
+			}
+		});
+		oSubject.page = sSubject;
+		oSubject.heading = sHash;
+		oSubject.paragraphs = aPar;
+	}
+	return oSubject;
+}
+
+/*function getWikiJSON(subject){
+	var sJSON = '';
 	if (subject!=='') {
 		//return UrlFetchApp.fetch(sEndPointEn+'Pannotia');
 		var aSubject = subject.split(/[:#]/)
@@ -28,34 +110,11 @@ function getWikiMedia(subject){
 			,sHash = bHash&&aSubject.shift().replace('_',' ')
 			,sPar = bPar&&aSubject.shift()
 			,iPar = sPar&&parseInt(sPar,10)||0
-			,sJSON = UrlFetchApp.fetch(sEndPointEn+serialize(extend({titles:sSubject},oGetVars)))
-			,sContent = getPageContent(JSON.parse(sJSON))
-				.replace(/<!--[^>]*-->/g,'') // remove html comments
-				.replace(/<([^\/>]+)>[^<]*<\/([^>]+)>|<([^\/>]+)\/>/g,'') // remove html
-				.replace(/\n^\s*\|[^\n]*/gm,'') // remove | stuff
-				.replace(/\{\{[^\{\}]*\}\}/g,'') // remove {{stuff}}
-			,aContent = sContent
-				.split(/\n/g)
-				.filter(function(line){
-					return !line.match(/^[\s\n\t]*$/) // empty lines
-						&&!line.match(/^\s?\[\[File/) // File stuff
-					;
-				})
 		;
-		Utilities.sleep(1000);
-		if (bHash) {
-			for (var i=0,l=aContent.length;i<l;i++) {
-				if (aContent[i].match(new RegExp('=\\s?'+sHash+'\\s?='))) {
-					sParagraph = txtwiki.parseWikitext(aContent[i+1+iPar]);
-					break;
-				}
-			}
-		} else {
-			sParagraph = txtwiki.parseWikitext(aContent[iPar]);
-		}
+		sJSON = UrlFetchApp.fetch(sEndPointEn+serialize(extend({titles:sSubject},oGetVars)));
 	}
-	return sParagraph;
-}
+	return sJSON;
+}*/
 
 function getImageThumb(fileName){
 	var sThumbnailSource = ''

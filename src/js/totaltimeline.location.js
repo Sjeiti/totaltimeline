@@ -21,6 +21,10 @@ iddqd.ns('totaltimeline.location',(function(history){
 			,sHash = location.href.indexOf('#')!==-1?location.hash.substr(1):''
 			,sGetQ = location.href.indexOf('?')!==-1?location.href.split('?q=').pop().split('#')[0]:'';
 
+		if (sPath.indexOf('src/test/index.html')) {
+			return;
+		}
+
 		entryShown = model.entryShown;
 		log = totaltimeline.view.log;
 		oRange = model.range;

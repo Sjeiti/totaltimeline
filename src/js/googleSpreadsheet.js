@@ -36,12 +36,12 @@ function getWikiMedia(subject){
  * @param {array} paragraphs Array of paragraphs to parse.
  */
 function parseWikiMedia(content,heading,paragraphs){
-	var aContent = content
+	content = content
 			.replace(/<!--[^>]*-->/g,'') // remove html comments
-			.replace(/<([^\/>]+)>[^<]*<\/([^>]+)>|<([^\/>]+)\/>/g,'') // remove html
-			.replace(/\n^\s*\|[^\n]*/gm,'') // remove | stuff
-			.replace(/\{\{[^\{\}]*\}\}/g,'') // remove {{stuff}}
-
+			.replace(/<([^\/>]+)>[^<]*<\/([^>]+)>|<([^\/>]+)\/>/g,''); // remove html
+	// and a scary while loop to remove nested {{stuff}}
+	while(content!==(content=content.replace(/\{\{[^\{\}]*\}\}/gm,''))){}
+	var aContent = content
 			.split(/\n/g)
 			.filter(function(line){
 				return !line.match(/^[\s\n\t]*$/) // empty lines
@@ -49,12 +49,14 @@ function parseWikiMedia(content,heading,paragraphs){
 				;
 			})
 		,aNewContent = []
+		,bHeading = heading!==''
 	;
+	//console.log('aContent',content,aContent,heading,paragraphs); // log
 	for (var i=0,k=aContent.length;i<k;i++) {
-		if (heading===''||aContent[i].match(new RegExp('=\\s?'+heading+'\\s?='))) {
+		if (!bHeading||aContent[i].match(new RegExp('=\\s?'+heading+'\\s?='))) {
 			for (var j=0,l=paragraphs.length;j<l;j++) {
 				var iPar = paragraphs[j]
-					,sParagraph = txtwiki.parseWikitext(aContent[i+1+iPar]);
+					,sParagraph = txtwiki.parseWikitext(aContent[i+(bHeading?1:0)+iPar]);
 				aNewContent.push(sParagraph);
 			}
 			break;

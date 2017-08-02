@@ -1,4 +1,4 @@
-# Noooooooooooooooooooo
+# Total timeline
 
 * [Project setup](#project-setup)
 * [Version control](#version-control)

@@ -1,0 +1,115 @@
+<!doctype html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<title>Total Timeline</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="stylesheet" href="/style/screen.css">
+</head>
+<body>
+<header id="pageHeader">
+	<div>
+		<h2><a href="#totaltimeline/13.8Ga/2014">Total Timeline</a></h2>
+		<nav>
+			<!--<label for="hamburger"></label>
+			<input type="checkbox" id="hamburger" />-->
+			<ul></ul>
+		</nav>
+		<input type="text" id="search" placeholder="Search" autocomplete="off" />
+		<ul id="searchResult"></ul>
+	</div>
+</header>
+<main>
+	<section id="overview"></section>
+	<section id="timeline"></section>
+	<section id="content">
+		<script type="text/html" id="content_tmpl">
+			<article>
+				<header>
+					<h3><%=info.name%></h3>
+					<time><%=time%></time>
+				</header>
+				<img src="<%=info.thumb%>" /><%=info.explanation%>
+				<p><%=info.wikimedia%></p>
+				<%if (info.wikimediakey){%>
+					<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
+				<%}%>
+			</article>
+		</script>
+	</section>
+</main>
+
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="/vendor/es5-shim/es5-shim.js"></script>
+<script src="/vendor/signals/dist/signals.js"></script>
+<script src="/vendor/iddqd/src/iddqd.js"></script>
+<script src="/vendor/iddqd/src/iddqd.math.color.js"></script>
+<script src="/vendor/iddqd/src/iddqd.math.vector.js"></script>
+<script src="/vendor/iddqd/src/iddqd.math.prng.js"></script>
+<script src="/vendor/iddqd/src/iddqd.internal.js"></script>
+<script src="/vendor/iddqd/src/iddqd.internal.native.string.js"></script>
+<script src="/vendor/iddqd/src/iddqd.network.jsonp.js"></script>
+<script src="/vendor/iddqd/src/iddqd.network.xhttp.js"></script>
+<script src="/vendor/iddqd/src/iddqd.image.js"></script>
+<script src="/vendor/iddqd/src/iddqd.style.js"></script>
+<script src="/vendor/iddqd/src/iddqd.capabilities.js"></script>
+<script src="/vendor/iddqd/src/iddqd.signals.js"></script>
+<script src="/vendor/iddqd/src/iddqd.animate.js"></script>
+<script src="/vendor/zen/dist/zen.js"></script>
+<script src="/vendor/hammerjs/hammer.js"></script>
+<script src="/vendor/markdown/lib/markdown.js"></script>
+<script src="/vendor/tweenjs/src/Tween.js"></script>
+<script src="/vendor/txtwiki.js/txtwiki.js"></script>
+<script src="/vendor/observe-js/src/observe.js"></script>
+<script src="/vendor/threejs/build/three.min.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js scripts/main.js -->
+<script src="/js/totaltimeline.js"></script>
+<script src="/js/totaltimeline.string.js"></script>
+<script src="/js/totaltimeline.util.js"></script>
+<script src="/js/totaltimeline.time.js"></script>
+<script src="/js/totaltimeline.time.moment.js"></script>
+<script src="/js/totaltimeline.time.range.js"></script>
+<script src="/js/totaltimeline.time.eventInfo.js"></script>
+<script src="/js/totaltimeline.model.js"></script>
+<script src="/js/totaltimeline.spreadsheetproxy.js"></script>
+<script src="/js/totaltimeline.pages.js"></script>
+<script src="/js/totaltimeline.collection.js"></script>
+<script src="/js/totaltimeline.collection.periods.js"></script>
+<script src="/js/totaltimeline.collection.periods.period.js"></script>
+<script src="/js/totaltimeline.collection.events.js"></script>
+<script src="/js/totaltimeline.collection.events.event.js"></script>
+<script src="/js/totaltimeline.collection.tectonics.js"></script>
+<script src="/js/totaltimeline.location.js"></script>
+<script src="/js/totaltimeline.touch.js"></script>
+<script src="/js/totaltimeline.view.js"></script>
+<script src="/js/totaltimeline.view.header.js"></script>
+<script src="/js/totaltimeline.view.log.js"></script>
+<script src="/js/totaltimeline.view.overview.js"></script>
+<script src="/js/totaltimeline.view.timeline.js"></script>
+<script src="/js/totaltimeline.view.content.js"></script>
+<!-- endbuild -->
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+	/*(function (b,o,i,l,e,r) {
+		b.GoogleAnalyticsObject = l;
+		b[l] || (b[l] = function () {
+			(b[l].q = b[l].q || []).push(arguments)
+		});
+		b[l].l = +new Date;
+		e = o.createElement(i);
+		r = o.getElementsByTagName(i)[0];
+		e.src = '//www.google-analytics.com/analytics.js';
+		r.parentNode.insertBefore(e,r)
+	}(window,document,'script','ga'));
+	ga('create','UA-XXXXX-X');
+	ga('send','pageview');*/
+</script>
+</body>
+</html>

@@ -4,11 +4,32 @@
   "version": "0.1.62",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
-    "serve": "node ./task/serve src 8385"
+    "build": "npm run clean && npm run dir && npm run js && npm run less && npm run copy",
+    "copy": "cp src/index.html dist/index.html | cp -r src/static dist",
+    "lint": "eslint src/js/index.js",
+    "js": "webpack --config webpack.config.js",
+    "serve": "node ./task/serve dist 8385",
+    "less": "lessc src/style/screen.less dist/style/screen.css",
+    "dir": "mkdirp dist/js",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-babili": "0.0.12",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.17.2",
+    "eslint": "^4.3.0",
     "express": "^4.15.3",
+    "less": "^2.7.2",
+    "mkdirp": "^0.5.1",
+    "open": "0.0.5",
+    "rimraf": "^2.6.1",
+    "serve-static": "^1.12.3",
+    "webpack": "^3.4.1"
+  },
+  "_devDependencies": {
     "glob": "~3.2.7",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "~0.5.0",
@@ -27,9 +48,10 @@
     "load-grunt-tasks": "~0.4.0",
     "mkdirp": "~0.5.0",
     "node-zip": "~1.1.0",
-    "open": "0.0.5",
-    "serve-static": "^1.12.3",
     "time-grunt": "~0.3.1",
     "xmlbuilder": "~2.3.0"
+  },
+  "dependencies": {
+    "signals": "^1.0.0"
   }
 }

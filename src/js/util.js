@@ -46,9 +46,15 @@ export function getFragment(str){
   return fragment
 }
 
+//todo:doc/rename
+export function slug(s) {
+  return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+}
+
 export default {
   parseOptions
   ,isJSONString
   ,isObjectString
   ,getFragment
+  ,slug
 }

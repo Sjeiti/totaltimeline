@@ -3,7 +3,7 @@ import {getFragment} from './util'
 
 const writable = true
 create(
-  'data-foo'
+  'data-console'
   ,{
     init(){
       console.log('init',this,this.element)
@@ -13,10 +13,13 @@ create(
       this._pre = this.element.querySelector('pre')
       this.output('console')
       console.log = this.output.bind(this)
+      /*window.addEventListener('error',e=>{
+        this.output(JSON.stringify(e))
+      })*/
       window.addEventListener('error', (msg, url, line, col, error)=>{
-        this.output(msg, url, line, col, error)
+        this.output('err',msg, url, line, col, error)
       })
-      this.output('console') 
+
       Object.assign(this._pre.style,{
         width: '100%', 
         backgroundColor: '#888',

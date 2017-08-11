@@ -23,6 +23,8 @@ const sEndpoint = 'https://spreadsheets.google.com/feeds/list/key/worksheet/publ
 
 // todo: document
 export function getData(key,worksheet,callback,options){
+  
+
   var sheetUri = sEndpoint
     .replace(/key/,key)
     .replace(/worksheet/,worksheet)

@@ -1,5 +1,5 @@
 import {create} from './component'
-import {getFragment} from './util'
+import {getFragment} from '../util'
 
 const writable = true
 create(

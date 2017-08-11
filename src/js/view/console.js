@@ -1,7 +1,8 @@
 import {create} from './component'
-import {getFragment} from './util'
+import {getFragment} from '../util'
 
 const writable = true
+let oldLog
 create(
   'data-console'
   ,{
@@ -12,6 +13,7 @@ create(
       )
       this._pre = this.element.querySelector('pre')
       this.output('console')
+      oldLog = console.log
       console.log = this.output.bind(this)
       /*window.addEventListener('error',e=>{
         this.output(JSON.stringify(e))
@@ -21,7 +23,7 @@ create(
       })
 
       Object.assign(this._pre.style,{
-        width: '100%', 
+        width: '100%',
         backgroundColor: '#888',
         border: '1px solid gray'
       })
@@ -29,7 +31,9 @@ create(
     ,output(...s){
       const text = this._pre.textContent + '\n' + s.join(' ') //Array.prototype.slice.call(arguments).join(' ')
         ,split = text.split(/\n/g);
-      this._pre.textContent = split.slice(Math.max(split.length-22,0)).join('\n');
+      this._pre.textContent = split.slice(Math.max(split.length-22,0)).join('\n')
+
+      oldLog&&oldLog(...s)
     }
   }
   ,{

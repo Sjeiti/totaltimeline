@@ -1,4 +1,4 @@
-import {parseOptions} from './util'
+import {parseOptions} from '../util'
 
 /**
  * A component factory

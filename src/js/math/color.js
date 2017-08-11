@@ -11,6 +11,43 @@ const FF = Math.pow(2,8)-1
   ,rgb2int = (r,g,b)=>r<<16|g<<8|b
   ,int2rgb = i=>[(i>>16)&FF,(i>>8)&FF,i&FF]
   ,int2hex = i=>'#'+i.toString(16).padStart(6,'0')
+  ,fBr = 0.241
+  ,fBg = 0.691
+  ,fBb = 0.068
+  ,brightness = c=>{
+    const r = c.r/FF, g = c.g/FF, b = c.b/FF
+    return r*r*fBr + g*g*fBg + b*b*fBb
+  }
+  ,rgb2hsl = (r,g,b)=>{
+    const max = Math.max(r,g,b)
+      ,min = Math.min(r,g,b)
+      ,a = max+min
+      ,d = max-min
+    let h,s,l = a/2
+    if (max===min) {
+      h = s = 0
+    } else {
+      s = l>0.5?d/(2-d):d/a
+      switch(max){
+        case r: h = (g-b)/d+(g<b?6:0); break;
+        case g: h = (b-r)/d+2; break;
+        case b: h = (r-g)/d+4; break;
+      }
+      h /= 6
+    }
+    return {h,s,l}
+  }
+  ,hue2rgb = (p,q,t)=>
+
+    {
+		if (t<0) t += 1;
+		if (t>1) t -= 1;
+		if (t<1/6) return p + (q-p)*6*t;
+		if (t<1/2) return q;
+		if (t<2/3) return p + (q-p)*(2/3-t)*6;
+		return p;
+	}
+  //
   ,writable = true
   ,proto = {
     set(...values){
@@ -108,15 +145,27 @@ const FF = Math.pow(2,8)-1
     ,divide(f){
       return this.multiply(1/f)
     }
-    /*,brightness
-    ,huey
-    ,saturation
+    /*,huey(f) {
+      if (!bHSL) {
+        const {h,s,l} = rgb2hsl(this.r,this.g,this.b)
+        Object.assign(this,{h,s,l})
+      }
+      if (f===undefined) {
+        return this.h
+      } else {
+        this.h = f;
+        makeHSL2RGB();
+        return oReturn;
+      }
+    }*/
+    /*,saturation
     ,lightness*/
     ,toString(){return this.hex}
   }
 
+
 function isColor(c){
-  return c.prototype===proto
+  return Object.getPrototypeOf(c)===proto
 }
 
 export default function color(...values){
@@ -125,7 +174,13 @@ export default function color(...values){
     ,r: {writable}
     ,g: {writable}
     ,b: {writable}
+    ,h: {writable}
+    ,s: {writable}
+    ,l: {writable}
     ,hex: {writable}
     ,rgba: {writable}
+    ,brightness: {
+      get: function(){return brightness(this)}
+    }
   }).set(...values)
 }

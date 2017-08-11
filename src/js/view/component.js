@@ -18,15 +18,15 @@ const
       Object.seal(this)
       this.element = elm
       this.options = parseOptions(opts)
-      this.html = document.createDocumentFragment()
-      while (elm.firstChild) this.html.appendChild(elm.firstChild)
+      // this.html = document.createDocumentFragment()
+      // while (elm.firstChild) this.html.appendChild(elm.firstChild)
       return this
     }
   }
   ,baseProperties = {
     element: {writable}
     ,options: {writable}
-    ,html: {writable}
+    // ,html: {writable}
   }
 
 /**

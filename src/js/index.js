@@ -10,8 +10,17 @@
 
 import model from './model'
 import view from './view'
-import './view/console'
+
+import './view/header'
 import './view/search'
+import './view/overview'
+import './view/timeline'
+import './view/content'
+import './view/console'
+
+import './collection/events'
+
+
 
 view(model)
 

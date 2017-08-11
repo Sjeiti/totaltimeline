@@ -1,9 +1,9 @@
 import {create} from './component'
-// import {getFragment} from '../util'
+// import {getFragment} from './util'
 
 // const writable = true
 create(
-  'data-timeline'
+  'data-overview'
   ,{
     init(){
     //   const parent = this.element.parentNode

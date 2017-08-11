@@ -51,10 +51,16 @@ export function slug(s) {
   return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 }
 
+//todo:doc
+export function emptyElement(elm) {
+  while (elm.firstChild) elm.parentNode.removeChild(elm.firstChild)
+}
+
 export default {
   parseOptions
   ,isJSONString
   ,isObjectString
   ,getFragment
   ,slug
+  ,emptyElement
 }

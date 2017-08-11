@@ -1,56 +1,46 @@
 <!doctype html>
 <html class="no-js">
 <head>
-	<meta charset="utf-8">
-	<title>Total Timeline</title>
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<link rel="shortcut icon" href="/favicon.ico">
-	<link rel="stylesheet" href="/style/screen.css">
+  <meta charset="utf-8">
+  <title>Total Timeline</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style/screen.css">
 </head>
 <body>
-<header id="pageHeader">
-	<div>
-		<h2><a href="#totaltimeline/13.8Ga/2014">Total Timeline</a></h2>
-		<nav>
-			<!--<label for="hamburger"></label>
-			<input type="checkbox" id="hamburger" />-->
-			<ul></ul>
-		</nav>
-    <div data-search>asdf</div>
-		<!--<input type="text" id="search" placeholder="Search" autocomplete="off" />
-    <ul id="searchResult"></ul>-->
-	</div>
+<header data-header id="pageHeader">
+  <div>
+    <h2><a href="#totaltimeline/13.8Ga/2014">Total Timeline</a></h2>
+    <nav><ul></ul></nav>
+      <div data-search>asdf</div>
+  </div>
 </header>
 <main>
-	<section data-overview id="overview"></section>
-	<section data-timeline id="timeline"></section>
-	<section data-content id="content">
-		<script type="text/html" id="content_tmpl">
-			<article>
-				<header>
-					<h3><%=info.name%></h3>
-					<time><%=time%></time>
-				</header>
-				<img src="<%=info.thumb%>" /><%=info.explanation%>
-				<p><%=info.wikimedia%></p>
-				<%if (info.wikimediakey){%>
-					<a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
-				<%}%>
-			</article>
-		</script>
-	</section>
+  <section data-overview id="overview"></section>
+  <section data-timeline id="timeline"></section>
+  <section data-content id="content">
+    <script type="text/html" id="content_tmpl">
+      <article>
+        <header>
+          <h3><%=info.name%></h3>
+          <time><%=time%></time>
+        </header>
+        <img src="<%=info.thumb%>" /><%=info.explanation%>
+        <p><%=info.wikimedia%></p>
+        <%if (info.wikimediakey){%>
+          <a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
+        <%}%>
+      </article>
+    </script>
+  </section>
 </main>
-
 <div data-console></div>
-<script>
-window.addEventListener('error',({message,lineno,filename,error})=>{
-  document.write([message,lineno,filename,error].join(' '))
-})
-</script>
+<!--<script>
+  window.addEventListener('error',({message,lineno,filename,error})=>{
+    document.write([message,lineno,filename,error].join(' '))
+  })
+</script>-->
 <script src="js/index.js"></script>
-
-</body>
-</html>
 </body>
 </html>

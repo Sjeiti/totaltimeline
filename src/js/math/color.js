@@ -61,7 +61,7 @@ const FF = Math.pow(2,8)-1
           if (r.match(/^rgb/gi)) {
             setRgbString(r)
           } else {
-            setHex(r)
+            this.setHex(r)
           }
         } else if (type==='number'){
           this.setInteger(r)
@@ -85,7 +85,7 @@ const FF = Math.pow(2,8)-1
         const [r,g,b] = s
         s = r+r+g+g+b+b
       }
-      return setInteger(parseInt(s,16))
+      return this.setInteger(parseInt(s,16))
     }
     ,setRgbString(s){
       const rgbm = v.match(/\d+/g)
@@ -102,10 +102,7 @@ const FF = Math.pow(2,8)-1
       return this
     }
     ,randomize(){
-      this.integer = 0xFFFFFF*Math.random()<<0;
-	    this.makeInt2RGB()
-      this.makeInt2Hex()
-      return this
+      return this.setInteger(0xFFFFFF*Math.random()<<0)
     }
     ,clone(){
       return color(this.integer)

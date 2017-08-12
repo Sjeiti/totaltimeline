@@ -1,13 +1,11 @@
 import Signal from 'signals'
+import model from '../model'
 
 /**
  * A collection of {@link collectionInstance}s
  * @namespace totaltimeline.collection
  * @property {number} length
  */
-// iddqd.ns('totaltimeline.collection',(function(){
-// 	'use strict';
-
 
 	var sgCollectionDataLoaded = new Signal()
 		//
@@ -65,24 +63,22 @@ import Signal from 'signals'
 	function add(slug,worksheet,callback,_populate,staticView){
 //		sheetUri = sheetUri.replace(/key/,totaltimeline.model.spreadsheetKey);
 
-		var string = totaltimeline.string
-			,model = totaltimeline.model
-			,aCollection = []
+		var aCollection = []
 			,mWrapper = document.createElement('div')
 			,mFragment = document.createDocumentFragment()
 			,sgDataLoaded = new Signal()
 			,bStaticView = !!staticView
-			,oReturn = iddqd.extend(aCollection,{
+			,oReturn = Object.assign(aCollection,{
 				wrapper: mWrapper
 				,fragment: mFragment
-				,populate: populate
-				,getData: getData
+				,populate
+				,getData
 				,dataLoaded: sgDataLoaded
 			})
 		;
 
 		mWrapper.classList.add(slug);
-		mWrapper.addEventListener(string.click, handleWrapperClick, false);
+		mWrapper.addEventListener('click', handleWrapperClick, false);
 
 		collection.push(oReturn);
 		sgDataLoaded.add(handleDataLoaded,null,-1); // should be the last to called
@@ -120,7 +116,6 @@ import Signal from 'signals'
 		 * @memberof collectionInstance
 		 */
 		function getData(){
-//			iddqd.network.jsonp(sheetUri,callback);
 			if (worksheet>0===false) {
 				callback&&callback();
 			} else if (callback) {
@@ -131,7 +126,7 @@ import Signal from 'signals'
 				);
 			}
 //			window['_'+slug] = callback;
-//			iddqd.loadScript('/data/_'+slug+'.js');
+//			loadScript('/data/_'+slug+'.js');
 		}
 
 		/**
@@ -235,7 +230,6 @@ import Signal from 'signals'
 		return oEntry;
 	}
 
-	// return iddqd.extend(collection,{
 	Object.assign(collection,{
 		/**
 		 * @name totaltimeline.collection.splice
@@ -264,4 +258,3 @@ import Signal from 'signals'
 	});
 
 	export default collection
-// })());

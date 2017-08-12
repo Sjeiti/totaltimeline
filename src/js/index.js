@@ -1,12 +1,3 @@
-// import readyState from './signal/readyState'
-// import time from './time'
-// import moment from './time/moment'
-// import range from './time/range'
-// import animate from './animate'
-
-// import {getData} from './spreadsheetProxy'
-// import eventInfo from './time/eventInfo'
-// import color from './math/color'
 
 import model from './model'
 import view from './view'
@@ -20,9 +11,9 @@ import './view/console'
 
 import './collection/events'
 
-
-
 view(model)
+
+
 
 // const c1 = color(33,234,22)
 //   ,c2 = color(123,214,122)
@@ -35,9 +26,6 @@ view(model)
 // console.log('color(15)',color(15)); // todo: remove log
 
 // console.log(time.formatAnnum(time.UNIVERSE,2))
-//
-// readyState.add(console.log.bind(console))
-// console.log('rs',document.readyState)
 //
 // console.log(moment(2838))
 // console.log(moment(1974,moment.YEAR))

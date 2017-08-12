@@ -68,7 +68,7 @@ function setGradient(model,range){
     ,iDeltaRange = range.duration
     ,aGradient = []
     //
-  let oLastColor
+  let oLastColor = color()
     ,bZeroSet = false
 
   function getAverageColor(last,current,pos,low){

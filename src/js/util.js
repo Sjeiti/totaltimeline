@@ -56,6 +56,10 @@ export function emptyElement(elm) {
   while (elm.firstChild) elm.parentNode.removeChild(elm.firstChild)
 }
 
+export function getPercentage(f){
+  return float=>100*float+'%'
+}
+
 export default {
   parseOptions
   ,isJSONString
@@ -63,4 +67,5 @@ export default {
   ,getFragment
   ,slug
   ,emptyElement
+  ,getPercentage
 }

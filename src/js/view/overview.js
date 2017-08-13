@@ -17,42 +17,10 @@ create(
       //////////////////////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////////////////////
 
-      var oSpan
-        ,oRange
-        ,mBody
-        ,mOverView
-        ,mSpan
-        ,mRange
-        ,mTime,mTimeFrom,mTimeTo
-        ,iSpanW = 800
-        ,fRangeWidth
-        ,fRangeStart
-        ,bOver = false
-        ,iMouseXOffset = 0
-      ;
-
-      // function init(model){
-        initVariables();
-        if (mOverView) {
-          initEvents();
-          initView();
-        }
-      // }
-
-      /**
-       * Initialise Variables
-       * @param {model} _model
-       */
-      function initVariables(){
-        // span and range
-        oSpan = model.span;
-        oRange = model.range;
-        // view elements
-        mBody = document.body;
-        mOverView = document.getElementById('overview');
-        //
-        // mSpan = zen('div.span>(time+time+div.range>time*3)').pop();
-        mSpan = getFragment(`<div class="span">
+      const oSpan = model.span
+        ,oRange = model.range
+        ,body = document.body
+        ,elmSpan = getFragment(`<div class="span">
 	<time>${oSpan.start.toString()}</time>
 	<time>${oSpan.end.toString()}</time>
 	<div class="range">
@@ -61,64 +29,54 @@ create(
 		<time></time>
 	</div>
 </div>`).firstElementChild
-        //
-        mRange = mSpan.querySelector('.range');
-        var amRangeTime = mRange.querySelectorAll('time');
-        mTimeFrom = amRangeTime[0];
-        mTime = amRangeTime[1];
-        mTimeTo = amRangeTime[2];
-        //
-        //
-        // init and detach keypress so keys exist
-        key.press.add(()=>{}).detach()
-      }
+        ,elmRange = elmSpan.querySelector('.range')
+        ,rangeStyle = elmRange.style
+        ,[elmTimeFrom,elmTime,elmTimeTo] = elmRange.querySelectorAll('time')
 
-      /**
-       * Initialise event listeners (and signals).
-       */
-      function initEvents(){
-        // resize
-        resize.add(handleResize);
-        // is over
-        ['mouseover','mouseout','mousemove'].forEach(function(event){
-          mOverView.addEventListener(event,handleOverViewMouse,false);
-        });
-        // drag
-        mRange.addEventListener('mousedown',handleRangeMouseDownUp,false);
-        // wheel
-        mouseWheel.add(handleWheel);
-        oRange.change.add(handleRangeChange);
-        // touch
-        mRange.addEventListener('touchstart',handleTouchStart,false);
-        touch(mSpan,handleTouchMove);
-        //mSpan.addEventListener(s.touchmove,handleTouchMove,false);
-      }
+      let iSpanW = 800
+        ,bOver = false
+        ,iMouseXOffset = 0
+        ,iMouseXOffsetDelta = 0
+        ,iMouseXOffsetLast = 0
 
-      /**
-       * Initialise view
-       */
-      function initView(){
-        while (mOverView.childNodes.length) { // todo: move to utils (also in collection)
-          mOverView.removeChild(mOverView.firstChild);
-        }
-        mOverView.appendChild(mSpan);
-        handleResize();
-        handleRangeChange();
+      // Initialise event listeners (and signals).
+      // init and detach keypress so keys exist
+      key.press.add(()=>{}).detach()
+      // resize
+      resize.add(onResize);
+      // is over
+      ['mouseover','mouseout','mousemove'].forEach(e=>this.element.addEventListener(e,onOverViewMouse,false))
+      // drag
+      elmRange.addEventListener('mousedown',onRangeMouseDownUp,false);
+      // wheel
+      mouseWheel.add(onWheel);
+      oRange.change.add(onRangeChange);
+      // touch
+      elmRange.addEventListener('touchstart',onTouchStart,false);
+      touch(elmSpan,onTouchMove);
+      //mSpan.addEventListener(s.touchmove,onTouchMove,false);
+
+      // Initialise view
+      while (this.element.childNodes.length) { // todo: move to utils (also in collection)
+        this.element.removeChild(this.element.firstChild);
       }
+      this.element.appendChild(elmSpan);
+      onResize();
+      onRangeChange();
 
       /**
        * Handle resize Signal
        * Cache view element size on resize
        */
-      function handleResize(){//ow,oh,w,h
-        iSpanW = mSpan.offsetWidth;
+      function onResize(){//ow,oh,w,h
+        iSpanW = elmSpan.offsetWidth;
       }
 
       /**
        * Handles mouse events on mSpan to see when the mouse is inside mSpan.
        * @param e
        */
-      function handleOverViewMouse(e){
+      function onOverViewMouse(e){
         bOver = e.type!=='mouseout';
       }
 
@@ -126,26 +84,24 @@ create(
        * Handles click event. Determines when the mouse is down and stores the offset with mSpan.
        * @param e
        */
-      function handleRangeMouseDownUp(e){
+      function onRangeMouseDownUp(e){
         if (e.type==='mousedown') {
           iMouseXOffset = e.offsetX;
           iMouseXOffsetDelta = 0;
           iMouseXOffsetLast = e.clientX;
-          document.addEventListener('mousemove',handleDocumentMouseMove,false);
-          mBody.addEventListener('mouseup',handleRangeMouseDownUp,false);
+          document.addEventListener('mousemove',onDocumentMouseMove,false);
+          body.addEventListener('mouseup',onRangeMouseDownUp,false);
         } else {
-          document.removeEventListener('mousemove',handleDocumentMouseMove,false);
-          mBody.removeEventListener('mouseup',handleRangeMouseDownUp,false);
+          document.removeEventListener('mousemove',onDocumentMouseMove,false);
+          body.removeEventListener('mouseup',onRangeMouseDownUp,false);
         }
       }
-      var iMouseXOffsetDelta = 0; // todo: hoist
-      var iMouseXOffsetLast = 0; // todo: hoist
 
       /**
        * Handles move event and moves mRange if the mouse is down.
        * @param e
        */
-      function handleDocumentMouseMove(e){
+      function onDocumentMouseMove(e){
         // todo: rangeMove? ... This is relative... rangeMove is ~absolute
         var iOffsetX = e.clientX;//offsetX;
         iMouseXOffsetDelta = iOffsetX-iMouseXOffsetLast;
@@ -158,9 +114,10 @@ create(
        * @param {number} direction Corresponds to wheelDelta
        * @param {Event} e The WheelEvent
        */
-      function handleWheel(direction,e){
+      function onWheel(direction,e){
+        console.log('wheel',direction,e); // todo: remove log
         if (bOver) {
-          if (key[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);
+          if (key[16]) rangeMove(elmRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset);
           else rangeZoom(direction>0,e.clientX);
         }
       }
@@ -168,17 +125,15 @@ create(
       /**
        * Changes view to reflect changes in the 'range' object.
        */
-      function handleRangeChange(){
-        fRangeWidth = oRange.duration/oSpan.duration;//Math.min(1,oRange.duration/oSpan.duration);
-        fRangeStart = 1-oRange.start.ago/oSpan.duration;
-        mRange.style.width = getPercentage(fRangeWidth);
-        mRange.style.left = getPercentage(fRangeStart);
-
-        mRange.style.backgroundImage = view.rangeGradient;
-
-        mTime.innerText = time.duration(oRange.duration,2);
-        mTimeFrom.innerText = oRange.start.toString();
-        mTimeTo.innerText = oRange.end.toString();
+      function onRangeChange(){
+        Object.assign(rangeStyle,{
+          width: getPercentage(oRange.duration/oSpan.duration)
+          ,left: getPercentage(1-oRange.start.ago/oSpan.duration)
+          ,backgroundImage: view.rangeGradient
+        })
+        elmTime.textContent = time.duration(oRange.duration,2)
+        elmTimeFrom.textContent = oRange.start.toString()
+        elmTimeTo.textContent = oRange.end.toString()
       }
 
 
@@ -186,8 +141,8 @@ create(
        * Handles touchstart event to scroll or zoom the timeline.
        * @param {Event} e
        */
-      function handleTouchStart(e) {
-        iMouseXOffset = (e.offsetX||e.touches[0].pageX)-mRange.offsetLeft;
+      function onTouchStart(e) {
+        iMouseXOffset = (e.offsetX||e.touches[0].pageX)-elmRange.offsetLeft;
       }
 
       /**
@@ -195,10 +150,10 @@ create(
        * @param {Event} e
        * @param {Number} numTouches
        * @param {Array} touches
-       * @param {Number} numLastTouches
-       * @param {Array} lastTouches
+       * @_param {Number} numLastTouches
+       * @_param {Array} lastTouches
        */
-      function handleTouchMove(e,numTouches,touches){//},numLastTouches,lastTouches) {
+      function onTouchMove(e,numTouches,touches){//},numLastTouches,lastTouches) {
         if (numTouches===1){
           rangeMove(touches[0]);
           e.preventDefault();
@@ -214,12 +169,13 @@ create(
        * @param {number} mouseX Mouse offset
        */
       function rangeZoom(zoomin,mouseX){
+        console.log('rangeZoom',zoomin,mouseX); // todo: remove log
         var fRangeGrowRate = 0.01111*oSpan.duration<<0
           ,iStart = oRange.start.ago
           ,iEnd = oRange.end.ago
           // offset calculations
-          ,iRangeL = mRange.offsetLeft
-          ,iRangeR = iRangeL+mRange.offsetWidth
+          ,iRangeL = elmRange.offsetLeft
+          ,iRangeR = iRangeL+elmRange.offsetWidth
           ,iDeltaL = iRangeL-mouseX
           ,iDeltaR = mouseX-iRangeR
           ,iDeltaTotal = Math.abs(iDeltaL) + Math.abs(iDeltaR)
@@ -268,8 +224,7 @@ create(
        * @returns {number} Years ago
        */
       function relativeOffset(x) {
-        var fPartLeft = x/iSpanW;
-        return oSpan.duration - Math.floor(fPartLeft*oSpan.duration);
+        return oSpan.duration - Math.floor((x/iSpanW)*oSpan.duration);
       }
       //////////////////////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////////////////////

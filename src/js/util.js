@@ -57,7 +57,7 @@ export function emptyElement(elm) {
 }
 
 export function getPercentage(f){
-  return float=>100*float+'%'
+  return 100*f+'%'
 }
 
 export default {

@@ -5,7 +5,7 @@
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run less && npm run copy",
-    "copy": "shx cp src/index.html dist/index.html | shx cp -r src/static dist",
+    "copy": "shx cp src/index.html dist/index.html | shx cp -r src/static dist | shx cp src/style/*.png dist/style",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",
     "js:watch": "chokidar src/**/*.js -c \"npm run js\"",

@@ -2,13 +2,31 @@ import {random} from '../math/prng'
 import model from '../model'
 import {getPercentage,getFragment} from '../util'
 
+const proto = {
+  toString(){return '[event \''+this.info.name+'\', '+this.moment.value+' '+this.moment.type+']'}
+  ,inside(is){
+    if (!is&&this.element.classList.contains('selected')) {
+      model.entryShown.dispatch()
+    }
+  }
+}
+
 /**
  * @name event
  * @param {moment} moment
  * @param {eventInfo} info
  */
 export default function event(moment,info){
-  var mWrap = getFragment(`<div class="event-wrap"><time></time><div class="event"></div><h3><a href="${info.slug}">${info.name}</a></h3></div>`).firstChild
+  var event = Object.create(proto,{
+      moment: {value:moment}
+      ,info: {value:info}
+      ,element: {value:getFragment(`<div class="event-wrap">
+  <time></time>
+  <div class="event"></div>
+  <h3><a href="${info.slug}">${info.name}</a></h3>
+</div>`).firstChild}
+    })
+    ,mWrap = event.element
     ,mEvent = mWrap.querySelector('.event')
     ,mTitle = mWrap.querySelector('h3')
     ,mTime = mWrap.querySelector('time')
@@ -19,49 +37,25 @@ export default function event(moment,info){
     ,sTop = getPercentage(fTop)
     ,sHeight = getPercentage(1-fTop)
     //
-    ,oReturn = {
-      toString: function(){return '[event \''+info.name+'\', '+moment.value+' '+moment.type+']';}
-      ,moment: moment
-      ,info: info
-      ,element: mWrap
-      ,inside: inside
-    }
-  ;
-  mEvent.model = oReturn;
-  mEvent.style.top = sTop;
-  info.icon!==''&&mEvent.classList.add('icon-'+info.icon);
 
-  mTitle.style.top = sTop;
+  mEvent.model = event
+  mEvent.style.top = sTop
+  info.icon!==''&&mEvent.classList.add('icon-'+info.icon)
 
-  mTime.style.height = sHeight; // todo: less vars @eventIconSize
-  mTime.setAttribute('data-after',moment.toString()); // todo: better as textContent
+  mTitle.style.top = sTop
 
-  model.entryShown.add(handleEntryShown);
+  mTime.style.height = sHeight // todo: less vars @eventIconSize
+  mTime.setAttribute('data-after',moment.toString()) // todo: better as textContent
 
-  /*mWrap.addEventListener(s.click,function (e){
-    console.log('clickEvent',e); // log
-  });*/
+  model.entryShown.add(handleEntryShown)
 
   /**
    * Handles entryShown signal
    * @param {period|event} entry
    */
   function handleEntryShown(entry){
-    // toggle won't work in Safari
-    if (entry&&entry.info===info) {
-      mWrap.classList.add('selected');
-    } else {
-      mWrap.classList.remove('selected');
-    }
+    mWrap.classList.toggle('selected',entry&&entry.info===info)
   }
 
-  // todo: document
-  function inside(is){
-    //console.log('event.inside',is,mWrap.classList.contains(s.selected)); // log
-    if (!is&&mWrap.classList.contains('selected')) {
-      model.entryShown.dispatch();
-    }
-  }
-
-  return oReturn;
+  return event
 }

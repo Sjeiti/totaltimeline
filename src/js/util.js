@@ -51,13 +51,12 @@ export function slug(s) {
   return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 }
 
-//todo:doc
-export function emptyElement(elm) {
-  while (elm.firstChild) elm.parentNode.removeChild(elm.firstChild)
-}
-
 export function getPercentage(f){
   return 100*f+'%'
+}
+
+export function clearChildren(parent){
+  while (parent.firstChild) parent.removeChild(parent.firstChild)
 }
 
 export default {
@@ -66,6 +65,6 @@ export default {
   ,isObjectString
   ,getFragment
   ,slug
-  ,emptyElement
   ,getPercentage
+  ,clearChildren
 }

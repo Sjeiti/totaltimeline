@@ -10,7 +10,7 @@ import {getFragment} from '../util'
 export default function event(moment,info){
   var getPercentage = float=>100*float+'%'
     //
-    ,mWrap = getFragment(`<div class="event-wrap"><time></time><div class="event"></div><h3><a href="${info.slug}">${info.name}</a></h3></div>`)
+    ,mWrap = getFragment(`<div class="event-wrap"><time></time><div class="event"></div><h3><a href="${info.slug}">${info.name}</a></h3></div>`).firstChild
     ,mEvent = mWrap.querySelector('.event')
     ,mTitle = mWrap.querySelector('h3')
     ,mTime = mWrap.querySelector('time')

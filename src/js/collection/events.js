@@ -3,15 +3,14 @@ import event from './event'
 import moment from '../time/moment'
 import eventInfo from '../time/eventInfo'
 import {getData} from '../spreadsheetProxy'
+import {getPercentage} from '../util'
 
 /**
  * Events collection
  * @type collectionInstance
  * @name events
  */
-const getPercentage = float=>100*float+'%'
-		//
-		,events = collection.add(
+const events = collection.add(
 			'events'
 			,1
 			,handleGetData

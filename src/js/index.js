@@ -7,7 +7,7 @@ import './view/search'
 import './view/overview'
 import './view/timeline'
 import './view/content'
-import './view/console'
+// import './view/console'
 
 import './collection/events'
 

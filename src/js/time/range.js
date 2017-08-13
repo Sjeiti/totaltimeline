@@ -73,7 +73,7 @@ const proto = {
 		}
 		// todo: implement max
 		this.start.set(ago,false)
-		this.end.set(ago+this.duration,false)
+		this.end.set(ago-this.duration,false)
 		this._dispatchChange()
 	}
 
@@ -98,7 +98,7 @@ const proto = {
 		}
 		return bCoincides;
 	}
-  
+
   // todo: document... maybe remove
   ,clone(){
     return range(this.start.clone(),this.end.clone())
@@ -134,6 +134,9 @@ const proto = {
   // todo: document
   ,_setDuration(range,start,end){
     (range||this).duration = (start||this.start).ago-(end||this.end).ago
+		if ((range||this).duration===-1) {
+  		console.log('_setDuration',start||this.start,end||this.end); // todo: remove log
+		}
   }
 }
 
@@ -161,7 +164,7 @@ function range(start,end,min,max){
       ,oldRange: {writable}
       ,change: {value:new Signal()}
       ,duration: {writable}
-      ,factory: {value:range}
+      ,factory: {value:range} // todo: remove
     })
 	// todo: check if start > end
   inst._setDuration()

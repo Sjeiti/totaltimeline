@@ -1,5 +1,5 @@
 import {create} from './component'
-import {getFragment,emptyElement} from '../util'
+import {getFragment,clearChildren} from '../util'
 import collection from '../collection'
 import pages from './pages'
 
@@ -16,11 +16,6 @@ create(
       this._result = html.querySelector('ul')
       parent.insertBefore(html,this.element)
       parent.removeChild(this.element)
-
-      console.log('srch',this._input,this._result,this.element.outerHTML)
-
-      //////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////
 
       const elmSearch = this._input
         ,searchResult = this._result
@@ -59,8 +54,8 @@ create(
             aFound.push([iResult,oPage])
           }
         }
-        emptyElement(searchFragment)
-        emptyElement(searchResult)
+        clearChildren(searchFragment)
+        clearChildren(searchResult)
         aFound.sort(function(a,b){
           return a[0]>b[0]?-1:1
         })
@@ -68,7 +63,7 @@ create(
         for (i=0;i<l;i++) {
           let oFind = aFound[i][1]
             ,oInfo = oFind.info||oFind
-          searchResult.appendChild(zen('li>a[href=#'+oInfo.slug+']{'+oInfo.name+'}').pop())
+          searchFragment.appendChild(getFragment(`<li><a href="#${oInfo.slug}">${oInfo.name}</a></li>`))
         }
         searchResult.appendChild(searchFragment)
       }
@@ -94,9 +89,6 @@ create(
         }
         return iValue
       }
-
-      //////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////
     }
   }
   ,{

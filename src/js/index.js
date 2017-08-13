@@ -10,6 +10,7 @@ import './view/content'
 // import './view/console'
 
 import './collection/events'
+import './collection/periods'
 
 view(model)
 

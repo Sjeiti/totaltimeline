@@ -1,4 +1,5 @@
 import collection from './'
+import model from '../model'
 import event from './event'
 import moment from '../time/moment'
 import eventInfo from '../time/eventInfo'
@@ -16,11 +17,9 @@ const events = collection.add(
 			,handleGetData
 			,populate
 		)
-	;
 
-const key = '1wn2bs7T2ZzajyhaQYmJvth3u2ikZv10ZUEpvIB9iXhM'
-  ,worksheet = 1//'events'
-getData(key,worksheet,handleGetData)
+const worksheet = 1//'events'
+getData(model.spreadsheetKey,worksheet,handleGetData)
 
 /**
  * Turns the spreadsheet json data into an event list.

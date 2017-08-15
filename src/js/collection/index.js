@@ -214,7 +214,6 @@ import model from '../model'
 	 * @param {range} range
 	 */
 	function populate(view,range) {
-		console.log('collectionPopulate',view,range); // todo: remove log
 		collection.forEach(function(collectionInstance){
 			collectionInstance.populate(view,range);
 		});

@@ -1,6 +1,5 @@
 
-import model from './model'
-import view from './view'
+import {initialise} from './view/component'
 
 import './view/header'
 import './view/search'
@@ -12,9 +11,10 @@ import './view/content'
 import './collection/events'
 import './collection/periods'
 
-view(model)
+import './model'
+import './view'
 
-
+initialise()
 
 // const c1 = color(33,234,22)
 //   ,c2 = color(123,214,122)

@@ -59,6 +59,20 @@ export function clearChildren(parent){
   while (parent.firstChild) parent.removeChild(parent.firstChild)
 }
 
+// todo:document
+function getCssValuePrefix() {
+  const aPrefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
+    ,mTmp = document.createElement('div')
+    ,sValue = 'linear-gradient(left, #fff, #fff)';
+  for (let i = 0; i < aPrefixes.length; i++) {
+    mTmp.style.backgroundImage = aPrefixes[i] + sValue;
+    if (mTmp.style.backgroundImage) {
+      return aPrefixes[i];
+    }
+    mTmp.style.backgroundImage = '';
+  }
+}
+
 export default {
   parseOptions
   ,isJSONString
@@ -67,4 +81,5 @@ export default {
   ,slug
   ,getPercentage
   ,clearChildren
+  ,getCssValuePrefix
 }

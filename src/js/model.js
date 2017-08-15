@@ -15,7 +15,8 @@ export default {
   ,range: range(moment(time.UNIVERSE),moment(time.NOW),moment(time.UNIVERSE))
   ,spreadsheetKey: '1wn2bs7T2ZzajyhaQYmJvth3u2ikZv10ZUEpvIB9iXhM'
   ,entryShown: new Signal()
-  //,cssPrefix: util.getCssValuePrefix()
+  ,foo: new Signal()
+  ,cssPrefix: util.getCssValuePrefix()
   ,userAgent: {
     isPhantom: navigator.userAgent.match(/PhantomJS/)
   }

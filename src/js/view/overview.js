@@ -1,13 +1,15 @@
 
 import {create} from './component'
 import time from '../time'
-import view from '../'
+import view from './'
 import {getPercentage,getFragment,clearChildren} from '../util'
 import model from '../model'
 import touch from '../touch'
 import key from '../signal/key'
 import resize from '../signal/resize'
 import mouseWheel from '../signal/mouseWheel'
+
+console.log('view',view); // todo: remove log
 
 create(
   'data-overview'
@@ -125,6 +127,7 @@ create(
           ,left: getPercentage(1-range.start.ago/span.duration)
           ,backgroundImage: view.rangeGradient
         })
+        console.log('view.rangeGradient',view.rangeGradient,view); // todo: remove log
         elmTime.textContent = time.duration(range.duration,2)
         elmTimeFrom.textContent = range.start.toString()
         elmTimeTo.textContent = range.end.toString()

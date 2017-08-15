@@ -1,7 +1,7 @@
 
 import {create} from './component'
 import time from '../time'
-import view from '../'
+import view from './'
 import {getFragment,clearChildren} from '../util'
 import collection from '../collection'
 import model from '../model'
@@ -156,7 +156,6 @@ create(
        * When the range changes all view element are recalculated
        */
       function onRangeChange(){ // todo: possibly refactor since also called by collection -> col.dataLoaded
-        console.log('onRangeChange'); // todo: remove log
         elmTimeFrom.innerText = range.start.toString()
         elmTimeTo.innerText = range.end.toString()
         element.style.backgroundImage = view.rangeGradient

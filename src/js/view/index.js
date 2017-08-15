@@ -1,7 +1,7 @@
 import {getPercentage} from '../util'
 import time from '../time'
 import color from '../math/color'
-import {initialise} from './component'
+import model from '../model'
 
 /**
  * @name view
@@ -23,46 +23,22 @@ const iLight1 = 150E6
     ,{time:-9E9,							            color:'#460505'}
   ]
 
+  ,viewProto = {
+    toString(){return '[object View]'}
+  }
+  ,view = Object.create(viewProto,{
+    rangeGradient: {value:getGradient(model.range), writable:true }
+  })
 
-function view(model){
-  initVariables()
-  initEvents(model)
-  initView(model)
-}
+model.range.change.add(handleRangeChange,-1)
 
-/**
- * Initialise variables
- */
-function initVariables(){
-  view.rangeGradient = ''
-}
-
-/**
- * Initialise event listeners (and signals).
- */
-function initEvents(model){
-  model.range.change.add(handleRangeChange.bind(model,model),-1)
-
-}
-
-/**
- * Initialise views
- */
-function initView(model){
-  initialise()
-  // view.header(model)
-  // view.overview(model)
-  // view.timeline(model)
-  // view.content(model)
+// todo: document
+function handleRangeChange(range){
+  view.rangeGradient = getGradient(range)
 }
 
 // todo: document
-function handleRangeChange(model,range){
-  setGradient(model,range)
-}
-
-// todo: document
-function setGradient(model,range){
+function getGradient(range){
   const iAgoFrom = range.start.ago
     ,iAgoTo = range.end.ago
     ,iDeltaRange = range.duration
@@ -105,7 +81,7 @@ function setGradient(model,range){
     oLastColor = oColor
     oLastColor.pos = fPos
   }
-  view.rangeGradient = model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')'
+  return model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')'
 }
 
 export default view

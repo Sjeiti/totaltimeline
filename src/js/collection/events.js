@@ -51,7 +51,6 @@ function handleGetData(data){
 
 //todo:document
 function populate(fragment,range){
-	console.log('events populate',fragment,range); // todo: remove log
 	var iRangeStart = range.start.ago
 		,iRangeEnd = range.end.ago
 		,iDuration = range.duration

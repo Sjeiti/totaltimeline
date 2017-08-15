@@ -127,8 +127,8 @@ const proto = {
 	}
 
   // todo: document
-  ,_momentInside(t){
-    return t.ago<=this.start.ago&&moment.ago>=this.end.ago
+  ,_momentInside(mmt){
+    return mmt.ago<=this.start.ago&&mmt.ago>=this.end.ago
   }
 
   // todo: document

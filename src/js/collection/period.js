@@ -7,7 +7,11 @@ const proto = {
     return '[object period, '+this.info.name+': '+this.range.start.toString()+' - '+this.range.end.toString()+']'
   }
   ,coincides(time){
-    return this.range.coincides(Object.getPrototypeOf(time)===proto?time.range:time)
+    const coin = this.range.coincides(time.range||time)
+    if (this.info.name==='Hadean') {
+      console.log('coincides',coin,time,this.range); // todo: remove log
+    }
+    return this.range.coincides(time.range||time)
   }
 }
 

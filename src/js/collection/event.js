@@ -1,4 +1,5 @@
 import {random} from '../math/prng'
+import animate from '../animate'
 import model from '../model'
 import {getPercentage,getFragment} from '../util'
 
@@ -9,6 +10,19 @@ const proto = {
       model.entryShown.dispatch()
     }
   }
+  ///////////////////////////////////////
+  ,animate(startAgo,endAgo,callback){
+    console.log('event.animate',arguments); // todo: remove log
+    // const iStartFrom = this.start.ago
+    //   ,iStartDelta = startAgo - iStartFrom
+    //   ,iEndFrom = this.end.ago
+    //   ,iEndDelta = endAgo - iEndFrom
+    // animate(1000,f=>{
+    //   const fInOut = animate.quadratic.inOut(f)
+    //   this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
+    // },callback)
+  }
+  ///////////////////////////////////////
 }
 
 /**

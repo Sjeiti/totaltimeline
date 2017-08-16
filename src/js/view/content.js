@@ -42,7 +42,7 @@ create(
 
       // todo:document
       function handleEntryShown(entry) {
-        console.log('handleEntryShown',Date.now(),entry&&entry.info.name,entry); // log
+        // console.log('handleEntryShown',Date.now(),entry&&entry.info.name,entry); // log
         //totaltimeline.view.log('handleEntryShown',entry.info.name)
         that.currentEntry = entry
         clearChildren(mContentWrapper)
@@ -51,7 +51,7 @@ create(
         mContent.scrollTop = 0
         if (entry) {
           let sTime = ''
-          console.log('entry.factory===event',entry.factory===event); // todo: remove log
+          // console.log('entry.factory===event',entry.factory===event); // todo: remove log
           if (entry.factory===event) {
             sTime = entry.moment.toString()
             // scroll if entry is not within view

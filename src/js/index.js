@@ -12,6 +12,7 @@ import './collection/events'
 import './collection/periods'
 
 import './model'
+import './location'
 import './view'
 
 initialise()

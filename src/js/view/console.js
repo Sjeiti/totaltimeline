@@ -25,7 +25,8 @@ create(
       Object.assign(this._pre.style,{
         width: '100%',
         backgroundColor: '#888',
-        border: '1px solid gray'
+        border: '1px solid gray',
+        font: '8px/8px Monospace'
       })
     }
     ,output(...s){

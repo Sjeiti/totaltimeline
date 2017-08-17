@@ -11,7 +11,7 @@ body {
 }
 
 #pageHeader {
-	.flex-basis(2rem);
+	.flex-basis(@headerHeight);
 	h1, h2 {
 		display: inline-block;
 	}
@@ -29,7 +29,10 @@ main {
 	.flex-direction(column);
 	.align-items(stretch);
 }
-	#overview {	.flex-basis(2rem); height: 2rem; }
+	#overview {	
+    .flex-basis(2rem); 
+    height: 2rem;
+  }
 	#timeline {	.flex-grow(1); }
 	#content {
 		.flex-grow(1);

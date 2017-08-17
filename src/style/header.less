@@ -2,11 +2,15 @@
 	div { position: relative; }
 	a { color: @colorText; }
 	h2 {
-		font: bold 1rem/2rem 'Yanone Kaffeesatz', sans-serif;
+    margin: 0;
+		font: bold 1rem/1.6rem 'Yanone Kaffeesatz', sans-serif;
+    line-height: @headerHeight;
 		text-transform: uppercase;
+    transform: translateY(10%);
 	}
 	nav {
-		font: 400 1rem/2rem 'Yanone Kaffeesatz', sans-serif;
+		font: 400 1rem/1.6rem 'Yanone Kaffeesatz', sans-serif;
+    line-height: @headerHeight;
 		a {
 			margin-left: .5rem;
 		}
@@ -16,31 +20,30 @@
 		.rt;
 		right: -@screenPadding;
 		width: 30%;
-		height: 2rem;
+		height: @headerHeight;
 		padding: 0 .8rem;
 		border: 0;
-		ackground-color: @colorGrayDarker;
 		.box-shadow(2px 4px 8px fade(black,30%) inset);
-		line-height: 2rem;
-		color: black;
+		line-height: @headerHeight;
 		&:focus {
-			background-color: @colorGray;
+			background-color: @colorGrayLight;
 		}
 	}
 	#searchResult {
 		.rt;
 		display: none;
 		right: -@screenPadding;
-		top: 2rem;
+    top: @headerHeight;
 		z-index: 4000;
 		width: 30%;
-		background-color: @colorGrayDark;
+		min-width: 12rem;
+		background-color: @colorGrayLighter;
 		.box-shadow(-4px 8px 16px fade(black,30%));
 		&.visible {
 			display: block;
 		}
 		li {
-			&:nth-child(even) { background-color: darken(@colorGrayDark,5%); }
+			&:nth-child(even) { background-color: darken(@colorGrayLight,1%); }
 		}
 		a {
 			display: inline-block;

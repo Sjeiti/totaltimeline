@@ -1,57 +1,66 @@
 #overview {
-	.user-select;
-	//.gradientVertical(@colorGrayDark,@colorGrayDarker);
-	//.gradientVertical(@colorGrayDark,@colorGray);
+  user-select: none;
   background-color: #aaa;
   position: relative;
-	padding: 0 @screenPadding;
+  padding: 0 @screenPadding;
   color: white;
-	@numberPadding: .3rem;
-	&:before {
-		content: '';
-		.lt;
-		display: block;
-		width: @screenPadding;
-		height: 100%;
-		background-color: #ccc;
-	}
-	time { font: @fontTime; }
-	.span {
-		position: relative;
-		.size(100%);
-		>time {
-			.lt;
-			padding: @numberPadding 1px 0;
-			z-index: 1;
-			&:last-of-type { left: auto; right: 0; }
-		}
-	}
-	.range {
-		position: relative;
-		.lt;
-		.size(100%);
-		min-width: 1px;
-		.box-shadow(0 16px 32px fade(black,50%) inset);
-		overflow: hidden;
-		&:before, &:after {
-			content: '';
-			width: 1px;
-			height: 100%;
-			background-color: fade(white,30%);
-		}
-		&:before { .lt; }
-		&:after { .rt; }
-		>time {
-			&:nth-child(2) {
-				display: block;
-				text-align: center;
-				padding-top: @numberPadding;
-			}
-			&:first-of-type, &:last-of-type {
-				.lb;
-				padding: 0 5px @numberPadding;
-			}
-			&:last-of-type { left: auto; right: 0; }
-		}
-	}
+  box-shadow: 5px 5px 16px rgba(0,0,0,0.3) inset;
+
+  &:before {
+    content: '';
+    .lt;
+    display: block;
+    width: @screenPadding;
+    height: 100%;
+    background-color: #ccc;
+  }
+  time {
+    font: @fontTime;
+    padding: 2px 5px;
+  }
+  .span {
+    position: relative;
+    .size(100%);
+    > time {
+      .lt;
+      z-index: 1;
+      &:last-of-type {
+        left: auto;
+        right: 0;
+      }
+    }
+  }
+  .range {
+    position: relative;
+    .lt;
+    .size(100%);
+    min-width: 1px;
+    box-shadow: 0 16px 32px fade(black, 50%) inset;
+    overflow: hidden;
+    &:before, &:after {
+      content: '';
+      width: 1px;
+      height: 100%;
+      background-color: fade(white, 30%);
+    }
+    &:before {
+      .lt;
+    }
+    &:after {
+      .rt;
+    }
+    > time {
+      &:nth-child(2) {
+        display: block;
+        text-align: center;
+      }
+      &:first-of-type, &:last-of-type {
+        .lb;
+      }
+      &:last-of-type {
+        left: auto;
+        right: 0;
+      }
+    }
+  }
 }

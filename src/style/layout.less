@@ -5,13 +5,13 @@ html, body {
 }
 
 body {
-	.flex-display(flex);
-	.flex-direction(column);
-	.align-items(stretch);
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 }
 
 #pageHeader {
-	.flex-basis(@headerHeight);
+	flex-basis: @headerHeight;
 	h1, h2 {
 		display: inline-block;
 	}
@@ -23,20 +23,20 @@ body {
 }
 
 main {
-	.flex-grow(1);
+	flex-grow: 1;
 
-	.flex-display(flex);
-	.flex-direction(column);
-	.align-items(stretch);
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 }
-	#overview {	
-    .flex-basis(2rem); 
+	#overview {
+    flex-basis: 2rem;
     height: 2rem;
   }
-	#timeline {	.flex-grow(1); }
+	#timeline {	flex-grow: 1; }
 	#content {
-		.flex-grow(1);
-		.align-self(center);
+		flex-grow: 1;
+		align-self: center;
 		width: 100%;
 		max-width: 800px;
 	}

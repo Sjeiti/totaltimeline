@@ -1,5 +1,5 @@
 #timeline {
-	.user-select;
+	user-select: none;
 	position: relative;
 	margin: 0 @screenPadding;
   color: white;
@@ -50,7 +50,7 @@
 			.lt;
 			z-index: 1020;
 			.size(@eventSize);
-			.border-radius(50%);
+			border-radius: 50%;
 
 			pointer-events: auto;
 
@@ -58,15 +58,15 @@
 			background-size: cover;
 			cursor: pointer;
 
-			.transition(~'all 10ms ease-in-out');
-			.transition-property(~'width, height');
-			.transform(translate(-50%,-50%));
+			transition: all 10ms ease-in-out;
+			transition-property: width, height;
+			transform: translate(-50%,-50%);
 
 			&[class^="event icon-"] {
 				background-color: transparent;
-				.border-radius(0);
+				border-radius: 0;
 				.size(@eventIconSize);
-				.origin;
+				transform-origin: 50% 50%;
 			}
 
 		}
@@ -75,8 +75,8 @@
 			// todo: animating visibility and opacity sucks performance wise... maybe js?
 			//visibility: hidden;
 			//opacity: 0;
-			//.transition(~'all 200ms linear');
-			//.transition-property(~'visibility, opacity');
+			//transition: all 200ms linear';
+			//transition-property: visibility, opacity';
 			pointer-events: none;
 		}
 		h3 {
@@ -115,7 +115,7 @@
 		&.selected, &:hover {
 			z-index: 3000;
 			.event {
-				.transition-duration(250ms);
+				transition-duration: 250ms;
 				&[class^="event icon-"] {
 					.size(2*@eventIconSize);
 				}

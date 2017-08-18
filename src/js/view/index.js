@@ -26,15 +26,24 @@ const iLight1 = 150E6
   ,viewProto = {
     toString(){return '[object View]'}
   }
+  ,writable = true
   ,view = Object.create(viewProto,{
-    rangeGradient: {value:getGradient(model.range), writable:true }
+    rangeGradient: {writable},
+    colorFirst: {writable},
+    colorLast: {writable}
   })
 
 model.range.change.add(handleRangeChange,-1)
+handleRangeChange(model.range)
 
 // todo: document
 function handleRangeChange(range){
-  view.rangeGradient = getGradient(range)
+  const gradients = getGradient(range)
+  view.rangeGradient = model.cssPrefix+'linear-gradient(left,'+gradients.map(a=>a.join(' ')).join(',')+')'
+  view.colorFirst = gradients[0][0]
+  view.colorLast = gradients[gradients.length-1][0]
+  //console.log(view.rangeGradient)
+  console.log(view.colorFirst,view.colorLast)
 }
 
 // todo: document
@@ -47,13 +56,6 @@ function getGradient(range){
   let oLastColor = color()
     ,bZeroSet = false
 
-  function getAverageColor(last,current,pos,low){
-    const fPosStart = last.pos
-      ,fPart = (pos-(low?0:1))/(pos-fPosStart)
-      ,oColorAvrg = color(current.color).average(color(last.color),fPart)
-
-    return oColorAvrg.toString()+(low?' 0%':' 100%')
-  }
   for (let i=0,l=aBackgroundColors.length;i<l;i++) {
     const oColor = aBackgroundColors[i]
       ,iTime = oColor.time
@@ -76,12 +78,20 @@ function getGradient(range){
     }
     // set the gradient position for values inside the range
     if (bTimeMiddle) {
-      aGradient.push(oColor.color+' '+getPercentage(fPos))
+      aGradient.push([oColor.color,getPercentage(fPos)])
     }
     oLastColor = oColor
     oLastColor.pos = fPos
   }
-  return model.cssPrefix+'linear-gradient(left,'+aGradient.join(',')+')'
+  return aGradient
+}
+
+function getAverageColor(last,current,pos,low){
+  const fPosStart = last.pos
+    ,fPart = (pos-(low?0:1))/(pos-fPosStart)
+    ,oColorAvrg = color(current.color).average(color(last.color),fPart)
+
+  return [oColorAvrg.toString(),(low?'0%':'100%')]
 }
 
 export default view

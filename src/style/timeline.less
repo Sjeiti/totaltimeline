@@ -11,8 +11,7 @@
 		font: @fontTime;
 		&:last-of-type { left: auto; right: 0; }
 	}
-	&:after, &:before {
-		content: '';
+	.before, .after {
 		position: absolute;
 		top: 0;
 		display: block;
@@ -20,8 +19,8 @@
 		height: 100%;
 		background-color: inherit;
 	}
-	&:before { left: -@screenPadding; }
-	&:after { right: -@screenPadding; }
+	.before { left: -@screenPadding; }
+  .after { right: -@screenPadding; }
 	.overlay {
 		content: '';
 		.size(100%);

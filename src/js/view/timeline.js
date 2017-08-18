@@ -24,6 +24,8 @@ create(
         ,elmOverlay = getFragment('<div class="overlay"></div>').firstChild
         ,elmTimeFrom = document.createElement('time')
         ,elmTimeTo = document.createElement('time')
+        ,elmBefore = document.createElement('div')
+        ,elmAfter = document.createElement('div')
         //
         ,backgroundPos = 0
         //
@@ -54,11 +56,16 @@ create(
       // range
       range.change.add(onRangeChange)
       range.change.add(moveBackgroundOverlay)
+      //
+      elmBefore.classList.add('before')
+      elmAfter.classList.add('after')
 
       // Initialise view
       clearChildren(element)
       element.appendChild(elmTimeFrom)
       element.appendChild(elmTimeTo)
+      element.appendChild(elmBefore)
+      element.appendChild(elmAfter)
       element.appendChild(elmOverlay)
       onResize()
       onRangeChange()
@@ -159,6 +166,10 @@ create(
         elmTimeFrom.innerText = range.start.toString()
         elmTimeTo.innerText = range.end.toString()
         element.style.backgroundImage = view.rangeGradient
+        //
+        elmBefore.style.backgroundColor = view.colorFirst
+        elmAfter.style.backgroundColor = view.colorLast
+        //
         collection.populate(element,range)
       }
 

@@ -21,12 +21,16 @@ create(
 	<time>${span.start.toString()}</time>
 	<time>${span.end.toString()}</time>
 	<div class="range">
+    <div class="before"></div>
 		<time></time>
 		<time></time>
 		<time></time>
+    <div class="after"></div>
 	</div>
 </div>`).firstElementChild
         ,elmRange = elmSpan.querySelector('.range')
+        ,elmBefore = elmRange.querySelector('.before')
+        ,elmAfter = elmRange.querySelector('.after')
         ,rangeStyle = elmRange.style
         ,[elmTimeFrom,elmTime,elmTimeTo] = elmRange.querySelectorAll('time')
 
@@ -125,6 +129,10 @@ create(
           ,left: getPercentage(1-range.start.ago/span.duration)
           ,backgroundImage: view.rangeGradient
         })
+        //
+        elmBefore.style.backgroundColor = view.colorFirst
+        elmAfter.style.backgroundColor = view.colorLast
+        //
         elmTime.textContent = time.duration(range.duration,2)
         elmTimeFrom.textContent = range.start.toString()
         elmTimeTo.textContent = range.end.toString()

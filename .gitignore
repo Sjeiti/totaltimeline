@@ -6,3 +6,4 @@ dist
 .idea/tasks.xml
 *.swp
 *.swo
+temp/

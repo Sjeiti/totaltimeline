@@ -15,24 +15,44 @@ const request = require('request')
 
 read(file)
   .then(JSON.parse)
-	.then(events=>[events,Promise.all(events.map(({wikimediakey},i)=>{
-		return new Promise(r=>setTimeout(r,i))
-			.then(()=>wikimediakey&&i<5&&getWikiMedia(wikimediakey)||Promise.resolve(''))
-	}))])
-  .then(([events,texts])=>{
-		console.log('events,texts',events.length,texts); // todo: remove log
-		texts.then(a=>console.log('asdf',a.length,a&&a[0]))
-    // const event = events[6]
-    // getWikiMedia(event.wikimediakey)
-			// // .then(asdf=>console.log(typeof asdf)&&asdf)
-			// .then(console.log.bind(console))
+	.then(events=>Promise.all([
+    events
+    ,Promise.all(events.map(({wikimediakey,wikimedia},i)=>{
+      //if (i===9) wikimedia = ''
+      return wikimediakey&&wikimedia===''
+        ?wait(i*300).then(()=>getWikiMedia(wikimediakey))
+        :false
+    }))
+    ,Promise.all(events.map(({image,thumb},i)=>{
+      if (i===9) thumb = ''
+      return image&&thumb===''
+        ?wait(i*300).then(()=>getImageThumb(image))
+        :false
+    }))
+  ]))
+  .then(([events,texts,images])=>{
+    return events.map((event,i)=>{
+      const txt = texts[i]
+        ,img = images[i]
+      img&&console.log(img)
+      //console.log(i,!!txt)
+      if (txt) event.wikimedia = txt
+      else if (txt==='') console.log('-',event.name)
+      return event
+    })
   })
+  .then(JSON.stringify)
+  //.then(data=>save(file,data))
 
 // getWikiMedia('Big Bang')
 // getWikiMedia('Origin_of_water_on_Earth#Water_in_the_development_of_Earth')
 
 // getImageThumb('Origin_of_water_on_Earth')
+//e.image->e.thumb,e.imagename,e.imageinfo
 
+function wait(millis){
+  return new Promise(r=>setTimeout(r,millis))
+}
 
 function getWikiJson(url,json=true){
   return new Promise((resolve,reject)=>{
@@ -163,7 +183,7 @@ function getImageThumb(fileName){
 	var sThumbnailSource = ''
 		,sPageImage = ''
 		,sImageInfo = ''
-
+    ,p
 	if (fileName!=='') {
 		//http://en.wikipedia.org/w/api.php?titles=Milky%20Way&prop=pageimages&pithumbsize=320&format=json&action=query
 		//http://en.wikipedia.org/w/api.php?titles=ESO-VLT-Laser-phot-33a-07.jpg&prop=pageimages&pithumbsize=320&format=json&action=query
@@ -174,7 +194,27 @@ function getImageThumb(fileName){
 				,format: 'json'
 				,action: 'query'
 			})
-			,sJSON = UrlFetchApp.fetch(sUri)
+      ,p = getWikiJson(sUri)
+        .then(res=>{
+          const oPages = res.query.pages
+          for (var s in oPages) {
+            if (s!==-1) {
+              var oPage = oPages[s]
+              sThumbnailSource = oPage.thumbnail.source
+              sPageImage = oPage.pageimage
+              sImageInfo = getWikiImageInfo(sPageImage)
+              break
+            }
+          }
+          return {
+            sThumbnailSource
+            ,sPageImage
+            ,sImageInfo
+          }
+        })
+  }
+  return p
+		/*	,sJSON = UrlFetchApp.fetch(sUri)
 			,oJSON = JSON.parse(sJSON)
 			,oPages = oJSON.query.pages
 
@@ -190,6 +230,7 @@ function getImageThumb(fileName){
 		}
 	}
   return [[sThumbnailSource,sPageImage,sImageInfo]]
+  */
 }
 
 /**
@@ -197,16 +238,14 @@ function getImageThumb(fileName){
  * @param fileName
  * @returns {string}
  */
-function getWikiImageInfo(fileName) {
+async function getWikiImageInfo(fileName) {
 	var sText = ''
 	if (fileName!=='') {
 		//http://commons.wikimedia.org/w/api.php?titles=File%3AESO-VLT-Laser-phot-33a-07.jpg&format=json&action=query&prop=revisions&rvprop=content
 		var sUri = sEndPointCommons+serialize(extend({
 				titles:'File:'+fileName
 			},oGetVars))
-			,sJSON = UrlFetchApp.fetch(sUri)
-
-		Utilities.sleep(1000)
+	  await sJSON = getWikiJson(sUri)
 		sText = getPageContent(JSON.parse(sJSON)).replace(/\n/g,'\r');//txtwiki.parseWikitext(getPageContent(JSON.parse(sJSON)))
 	}
 	return sText

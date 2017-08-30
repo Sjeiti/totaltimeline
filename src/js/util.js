@@ -60,7 +60,7 @@ export function clearChildren(parent){
 }
 
 // todo:document
-function getCssValuePrefix() {
+export function getCssValuePrefix() {
   const aPrefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
     ,mTmp = document.createElement('div')
     ,sValue = 'linear-gradient(left, #fff, #fff)';
@@ -73,6 +73,26 @@ function getCssValuePrefix() {
   }
 }
 
+export function assignable(arrayProto){
+  const keys = Object.getOwnPropertyNames(arrayProto)
+    ,obj = {}
+  keys.forEach(key=>{
+    const value = arrayProto[key]
+    if (typeof value === 'function') {
+      obj[key] = value
+    }
+  })
+  return obj
+}
+
+/**
+ * Removes all children from an HTMLElement.
+ * @param {Node} element
+ */
+export function emptyNode(element){
+  while (element.firstChild) element.removeChild(element.firstChild)
+}
+
 export default {
   parseOptions
   ,isJSONString
@@ -82,4 +102,6 @@ export default {
   ,getPercentage
   ,clearChildren
   ,getCssValuePrefix
+  ,assignable
+  ,emptyNode
 }

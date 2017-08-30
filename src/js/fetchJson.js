@@ -1,8 +1,8 @@
-export function getData(name){
+export function fetchJson(name){
   return fetch(`/static/${name}.json`)
     .then(response=>response.json())
 }
 
 export default {
-  getData
+  fetchJson
 }

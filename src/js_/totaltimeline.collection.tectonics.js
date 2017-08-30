@@ -1,6 +1,6 @@
 /*global THREE*/
 /**
- * Periods collection
+ * Periods collections
  * @type collectionInstance
  * @namespace totaltimeline.collection.tectonics
  */

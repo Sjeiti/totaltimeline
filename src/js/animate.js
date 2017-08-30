@@ -5,7 +5,7 @@
  * @param {Number} duration Length of animation in milliseconds.
  * @param {Function} step Function called each step with a progress parameter (a 0-1 float).
  * @param {Function} complete Callback function when animation finishes.
- * @return {Object} An animation object with a cancel function.
+ * @returns {Object} An animation object with a cancel function.
  */
 function animate(duration,step,complete){
   let t = Date.now()
@@ -31,7 +31,7 @@ function animate(duration,step,complete){
 }
 export default Object.assign(animate,{
 	linear: {
-		none: k=>k 
+		none: k=>k
 	}
 
 	,quadratic: {

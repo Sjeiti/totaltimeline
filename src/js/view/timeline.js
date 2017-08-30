@@ -3,7 +3,7 @@ import {create} from './component'
 import time from '../time'
 import view from './'
 import {getFragment,clearChildren} from '../util'
-import collection from '../collection'
+import collections from '../collections'
 import model from '../model'
 import touch from '../touch'
 import key from '../signal/key'
@@ -48,9 +48,9 @@ create(
       element.addEventListener('mousedown',onViewMouseDownUp,false)
       // wheel
       mouseWheel.add(onWheel)
-      // collection
-      console.log('collection.length',collection.length); // todo: remove log
-      collection.forEach(col=>col.dataLoaded.add(onRangeChange))
+      // collections
+      console.log('collections.length',collections.length); // todo: remove log
+      collections.forEach(col=>col.dataLoaded.add(onRangeChange))
       // touch
       touch(element,onTouchMove)
       // range
@@ -162,7 +162,7 @@ create(
       /**
        * When the range changes all view element are recalculated
        */
-      function onRangeChange(){ // todo: possibly refactor since also called by collection -> col.dataLoaded
+      function onRangeChange(){ // todo: possibly refactor since also called by collections -> col.dataLoaded
         elmTimeFrom.innerText = range.start.toString()
         elmTimeTo.innerText = range.end.toString()
         element.style.backgroundImage = view.rangeGradient
@@ -170,7 +170,7 @@ create(
         elmBefore.style.backgroundColor = view.colorFirst
         elmAfter.style.backgroundColor = view.colorLast
         //
-        collection.populate(element,range)
+        collections.populate(element,range)
       }
 
 

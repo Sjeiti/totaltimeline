@@ -43,7 +43,7 @@ function handleRangeChange(range){
   view.colorFirst = gradients[0][0]
   view.colorLast = gradients[gradients.length-1][0]
   //console.log(view.rangeGradient)
-  console.log(view.colorFirst,view.colorLast)
+  //console.log(view.colorFirst,view.colorLast)
 }
 
 // todo: document

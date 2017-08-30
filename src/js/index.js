@@ -8,8 +8,8 @@ import './view/timeline'
 import './view/content'
 import './view/console'
 
-import './collection/events'
-import './collection/periods'
+import './collections/events'
+import './collections/periods'
 
 import './model'
 import './location'

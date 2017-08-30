@@ -3,7 +3,7 @@ import {create} from './component'
 import {getFragment,clearChildren} from '../util'
 import model from '../model'
 import resize from '../signal/resize'
-import event from '../collection/event'
+import event from '../collections/event'
 import style from '../style'
 import tmpl from '../tmpl'
 

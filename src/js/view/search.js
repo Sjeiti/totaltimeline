@@ -1,6 +1,6 @@
 import {create} from './component'
 import {getFragment,clearChildren} from '../util'
-import collection from '../collection'
+import collections from '../collections'
 import pages from './pages'
 
 const writable = true
@@ -33,9 +33,9 @@ create(
          let i,l
           ,sText,iResult
 
-        l = collection.length
+        l = collections.length
         for (i=0;i<l;i++) {
-          let aInst = collection[i]
+          let aInst = collections[i]
           for (let j=0,m=aInst.length;j<m;j++) {
             let oItem = aInst[j]
             sText = oItem.info.name+' '+oItem.info.explanation+' '+oItem.info.wikimedia

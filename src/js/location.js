@@ -1,6 +1,6 @@
 
 import time from './time'
-import collection from './collection'
+import collections from './collections'
 import model from './model'
 import content from './view/content'
 import pages from './view/pages'
@@ -78,8 +78,8 @@ function updated(path,hash){ // todo:document param
 		// Event
 		if  (iPath===1||iPath===3) {
 			var sLocationSlug = aPath[0]
-			if (collection.length!==collection.loaded) {
-				collection.dataLoaded.add(showSlugInstance.bind(null,sLocationSlug))
+			if (collections.length!==collections.loaded) {
+				collections.dataLoaded.add(showSlugInstance.bind(null,sLocationSlug))
 			} else {
 				showSlugInstance(sLocationSlug)
 			}
@@ -106,10 +106,10 @@ function updated(path,hash){ // todo:document param
 // todo: document
 function showSlugInstance(slug){
 	console.log('showSlugInstance',slug); // log
-	var oSlugInst = collection.getEntryBySlug(slug)
+	var oSlugInst = collections.getEntryBySlug(slug)
 		,bHasSlugInst = !!oSlugInst
 	if (bHasSlugInst) {
-		collection.dataLoaded.remove(showSlugInstance)
+		collections.dataLoaded.remove(showSlugInstance)
 		entryShown.dispatch(oSlugInst)
 	} else {
 		var oPage = pages.getEntryBySlug(slug)
@@ -123,7 +123,7 @@ function showSlugInstance(slug){
  * @param {range} [range] The current range.
  */
 function update(event,range){
-	console.log('update',event,range); // todo: remove log
+	//console.log('update',event,range); // todo: remove log
 	//console.log('location.update',!!event,!!range); // log
 	var /*currentState = history.state
 		,*/sSlugStart = range&&formatAnnum(range.start.ago,2,false)

@@ -4,7 +4,7 @@ import moment from './time/moment'
 import range from './time/range'
 import util from './util'
 
-//collection.forEach(function(col=>col.getData())
+//collections.forEach(function(col=>col.getData())
 //pages.getData(model)
 
 /**

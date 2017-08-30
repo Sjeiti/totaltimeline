@@ -68,7 +68,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 		mView.addEventListener(string.mousedown,handleViewMouseDownUp,false);
 		// wheel
 		signals.mousewheel.add(handleWheel);
-		// collection
+		// collections
 		collection.forEach(function(col){
 			col.dataLoaded.add(handleRangeChange);
 		});
@@ -83,7 +83,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	 * Initialise view
 	 */
 	function initView(){
-		while (mView.childNodes.length) { // todo: move to utils (also in collection)
+		while (mView.childNodes.length) { // todo: move to utils (also in collections)
 			mView.removeChild(mView.firstChild);
 		}
 		mView.appendChild(mTimeFrom);
@@ -185,7 +185,7 @@ iddqd.ns('totaltimeline.view.timeline',(function(){
 	/**
 	 * When the range changes all view element are recalculated
 	 */
-	function handleRangeChange(){ // todo: possibly refactor since also called by collection -> col.dataLoaded
+	function handleRangeChange(){ // todo: possibly refactor since also called by collections -> col.dataLoaded
 //		console.log('handleRangeChange'); // log
 		mTimeFrom.innerText = oRange.start.toString();
 		mTimeTo.innerText = oRange.end.toString();

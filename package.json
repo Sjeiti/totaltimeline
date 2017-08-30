@@ -5,7 +5,7 @@
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run less && npm run copy",
-    "copy": "shx cp src/index.html dist/index.html | shx cp src/.htaccess dist/.htaccess | shx cp -r src/static dist | shx cp src/style/*.png dist/style",
+    "copy": "shx cp src/index.html dist/index.html || shx cp src/.htaccess dist/.htaccess || shx cp -r src/static dist || shx cp src/style/*.png dist/style",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",
     "js:watch": "chokidar src/**/*.js -c \"npm run js\"",
@@ -29,6 +29,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.17.2",
     "chokidar-cli": "^1.2.0",
+    "copy": "^0.3.0",
     "cssnano": "^3.10.0",
     "eslint": "^4.4.1",
     "eslint-plugin-html": "^3.1.1",

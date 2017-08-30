@@ -1,7 +1,8 @@
 const request = require('request')
-  ,{read,save,log,promiseRestJSON} = require(__dirname+'/utils')
+  ,{read,save} = require(__dirname+'/utils')
   ,{parseWikitext} = require(__dirname+'/txtwiki')
-  ,file = './temp/events.json'
+  ,file = './src/data/events.json'
+  // ,file = './src/data/eras.json'
   //
   ,sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query&prop=revisions&rvprop=content&titles=
 	,sEndPointCommons = 'http://commons.wikimedia.org/w/api.php?'//action=query&prop=revisions&rvprop=content&format=json&titles=File%3AESO-VLT-Laser-phot-33a-07.jpg%7CFile%3AESO-VLT-Laser-phot-33a-07_rsz.jpg%22'
@@ -17,15 +18,15 @@ read(file)
   .then(JSON.parse)
 	.then(events=>Promise.all([
     events
+		// text
     ,Promise.all(events.map(({wikimediakey,wikimedia},i)=>{
-      //if (i===9) wikimedia = ''
-      return wikimediakey&&wikimedia===''
+      return wikimediakey&&(wikimedia===''||wikimedia==='Loading...')//&&i===2
         ?wait(i*300).then(()=>getWikiMedia(wikimediakey))
         :false
     }))
+		// images
     ,Promise.all(events.map(({image,thumb},i)=>{
-      if (i===9) thumb = ''
-      return image&&thumb===''
+      return image&&(thumb===''||thumb==='Loading...')
         ?wait(i*300).then(()=>getImageThumb(image))
         :false
     }))
@@ -34,15 +35,22 @@ read(file)
     return events.map((event,i)=>{
       const txt = texts[i]
         ,img = images[i]
-      img&&console.log(img)
-      //console.log(i,!!txt)
+			// texts
       if (txt) event.wikimedia = txt
       else if (txt==='') console.log('-',event.name)
+			// images
+			if (img&&img.sThumbnailSource) {
+      	event.thumb = img.sThumbnailSource
+				event.imagename = img.sPageImage
+				event.imageinfo = img.sImageInfo
+			} else if (img&&!img.sThumbnailSource) {
+      	console.warn(`no image for event '${event.name}'`);
+			}
       return event
     })
   })
   .then(JSON.stringify)
-  //.then(data=>save(file,data))
+  .then(data=>save(file,data))
 
 // getWikiMedia('Big Bang')
 // getWikiMedia('Origin_of_water_on_Earth#Water_in_the_development_of_Earth')
@@ -54,11 +62,12 @@ function wait(millis){
   return new Promise(r=>setTimeout(r,millis))
 }
 
-function getWikiJson(url,json=true){
+function getWikiJson(url, json=true){
   return new Promise((resolve,reject)=>{
     request({url,json}, (error, response, body)=>{
-      if (!error && response.statusCode === 200) {
-        resolve(body)
+    	const pages = body&&body.query&&body.query.pages
+      if (!error && response.statusCode === 200 && pages) {
+        resolve(pages)
       } else {
         reject(error)
       }
@@ -72,22 +81,14 @@ function getWikiJson(url,json=true){
  * @param {string} subject The article subject.
  */
 function getWikiMedia(subject){
-	console.log('getWikiMedia',subject); // todo: remove log
-	var sParagraphs = ''
-	let p = Promise.resolve(sParagraphs)
+	let promise = Promise.resolve('')
 	if (subject!=='') {
-		var oSubject = splitSubject(subject)
-		p = getWikiJson(sEndPointEn+serialize(extend({titles:oSubject.page},oGetVars)))
-			// .then(JSON.parse)
+		const subjectSplitted = splitSubject(subject)
+		promise = getWikiJson(sEndPointEn+serialize(Object.assign({titles:subjectSplitted.page},oGetVars)))
 			.then(getPageContent)
-			.then(content=>parseWikiMedia(content,oSubject.heading,oSubject.paragraphs))
-			// ,sJSON = UrlFetchApp.fetch(sEndPointEn+serialize(extend({titles:oSubject.page},oGetVars)))
-			// ,sContent = getPageContent(JSON.parse(sJSON))
-		//
-		// sParagraphs = parseWikiMedia(sContent,oSubject.heading,oSubject.paragraphs)
-		// Utilities.sleep(1000)
+			.then(content=>parseWikiMedia(content,subjectSplitted.heading,subjectSplitted.paragraphs))
 	}
-	return p
+	return promise
 }
 
 /**
@@ -102,28 +103,25 @@ function parseWikiMedia(content,heading,paragraphs){
 			.replace(/<([^\/>]+)>[^<]*<\/([^>]+)>|<([^\/>]+)\/>/g,''); // remove html
 	// and a scary while loop to remove nested {{stuff}}
 	while(content!==(content=content.replace(/\{\{[^\{\}]*\}\}/gm,''))){}
-	var aContent = content
+	const aContent = content
 			.split(/\n/g)
 			.filter(function(line){
 				return !line.match(/^[\s\n\t]*$/) // empty lines
 					&&!line.match(/^\s?\[\[[A-Z][a-z]+:/) // File:|Image:|Other: stuff
-
 			})
-		,aNewContent = []
-		,bHeading = heading!==''
-
-	//console.log('aContent',content,aContent,heading,paragraphs); // log
-	for (var i=0,k=aContent.length;i<k;i++) {
-		if (!bHeading||aContent[i].match(new RegExp('=\\s?'+heading+'\\s?='))) {
-			for (var j=0,l=paragraphs.length;j<l;j++) {
-				var iPar = paragraphs[j]
-					,sParagraph = parseWikitext(aContent[i+(bHeading?1:0)+iPar])
-				aNewContent.push(sParagraph)
+		,newContent = []
+		,isHeading = heading!==''
+	for (let i=0,k=aContent.length;i<k;i++) {
+		if (!isHeading||aContent[i].match(new RegExp('=\\s?'+heading+'\\s?='))) {
+			for (let j=0,l=paragraphs.length;j<l;j++) {
+				const iPar = paragraphs[j]
+					,sParagraph = parseWikitext(aContent[i+(isHeading?1:0)+iPar])
+				newContent.push(sParagraph)
 			}
 			break
 		}
 	}
-	return aNewContent.join('\n')
+	return newContent.join('\n')
 }
 
 /**
@@ -161,115 +159,82 @@ function splitSubject(subject){
 	return oSubject
 }
 
-/*function getWikiJSON(subject){
-	var sJSON = ''
-	if (subject!=='') {
-		//return UrlFetchApp.fetch(sEndPointEn+'Pannotia')
-		var aSubject = subject.split(/[:#]/)
-			,bHash = subject.indexOf('#')!==-1
-			,bPar = subject.indexOf(':')!==-1
-			//
-			,sSubject = aSubject.shift()
-			,sHash = bHash&&aSubject.shift().replace('_',' ')
-			,sPar = bPar&&aSubject.shift()
-			,iPar = sPar&&parseInt(sPar,10)||0
-
-		sJSON = UrlFetchApp.fetch(sEndPointEn+serialize(extend({titles:sSubject},oGetVars)))
-	}
-	return sJSON
-}*/
-
+/**
+ *
+ * @param {string} fileName
+ * @returns {Promise|string}
+ * http://en.wikipedia.org/w/api.php?titles=Milky%20Way&prop=pageimages&pithumbsize=320&format=json&action=query
+ * http://en.wikipedia.org/w/api.php?titles=ESO-VLT-Laser-phot-33a-07.jpg&prop=pageimages&pithumbsize=320&format=json&action=query
+ */
 function getImageThumb(fileName){
-	var sThumbnailSource = ''
+	let sThumbnailSource = ''
 		,sPageImage = ''
 		,sImageInfo = ''
-    ,p
+    ,promise
 	if (fileName!=='') {
-		//http://en.wikipedia.org/w/api.php?titles=Milky%20Way&prop=pageimages&pithumbsize=320&format=json&action=query
-		//http://en.wikipedia.org/w/api.php?titles=ESO-VLT-Laser-phot-33a-07.jpg&prop=pageimages&pithumbsize=320&format=json&action=query
-		var sUri = sEndPointEn+serialize({
+		const sUri = sEndPointEn+serialize({
 				titles:fileName
 				,prop: 'pageimages'
 				,pithumbsize: 320
 				,format: 'json'
 				,action: 'query'
 			})
-      ,p = getWikiJson(sUri)
-        .then(res=>{
-          const oPages = res.query.pages
-          for (var s in oPages) {
-            if (s!==-1) {
-              var oPage = oPages[s]
-              sThumbnailSource = oPage.thumbnail.source
-              sPageImage = oPage.pageimage
-              sImageInfo = getWikiImageInfo(sPageImage)
-              break
+    promise = getWikiJson(sUri)
+      .then(result=>{
+        for (let id in result) {
+          if (id!==-1) {
+            const page = result[id]
+            sThumbnailSource = page.thumbnail&&page.thumbnail.source
+            sPageImage = page.pageimage
+            break
+          }
+        }
+        return getWikiImageInfo(sPageImage)
+          .then(result=>{
+            sImageInfo = result
+            return {
+              sThumbnailSource
+              ,sPageImage
+              ,sImageInfo
             }
-          }
-          return {
-            sThumbnailSource
-            ,sPageImage
-            ,sImageInfo
-          }
-        })
+          })
+      })
   }
-  return p
-		/*	,sJSON = UrlFetchApp.fetch(sUri)
-			,oJSON = JSON.parse(sJSON)
-			,oPages = oJSON.query.pages
-
-		Utilities.sleep(1000)
-		for (var s in oPages) {
-          if (s!==-1) {
-            var oPage = oPages[s]
-			sThumbnailSource = oPage.thumbnail.source
-			sPageImage = oPage.pageimage
-            sImageInfo = getWikiImageInfo(sPageImage)
-			break
-          }
-		}
-	}
-  return [[sThumbnailSource,sPageImage,sImageInfo]]
-  */
+  return promise
 }
 
 /**
  * Get image info
  * @param fileName
  * @returns {string}
+ * http://commons.wikimedia.org/w/api.php?titles=File%3AESO-VLT-Laser-phot-33a-07.jpg&format=json&action=query&prop=revisions&rvprop=content
  */
-async function getWikiImageInfo(fileName) {
-	var sText = ''
-	if (fileName!=='') {
-		//http://commons.wikimedia.org/w/api.php?titles=File%3AESO-VLT-Laser-phot-33a-07.jpg&format=json&action=query&prop=revisions&rvprop=content
-		var sUri = sEndPointCommons+serialize(extend({
-				titles:'File:'+fileName
-			},oGetVars))
-	  await sJSON = getWikiJson(sUri)
-		sText = getPageContent(JSON.parse(sJSON)).replace(/\n/g,'\r');//txtwiki.parseWikitext(getPageContent(JSON.parse(sJSON)))
-	}
-	return sText
+function getWikiImageInfo(fileName) {
+	const sUri = sEndPointCommons+serialize(Object.assign({
+			titles:'File:'+fileName
+		},oGetVars))
+	return getWikiJson(sUri)
+		.then(getPageContent)
+		.then(s=>s.replace(/\n/g,'\r'))
 }
 
 /**
  * Get the content from the wiki json object
- * @param {object} json
+ * @param {object} result
  * @returns {string}
  */
-function getPageContent(json){
-	var sContent = ''
-		,oPages = json.query.pages
-	for (var s in oPages) {
-		var oPage = oPages[s]
-		if (oPage&&oPage.revisions) {
-			var aRev = oPage.revisions
-				,oRev = aRev[0]
-
-			sContent = oRev['*']
+function getPageContent(result){
+	let content = ''
+	for (let id in result) {
+		const page = result[id]
+		if (page&&page.revisions) {
+			const revisions = page.revisions
+				,revision = revisions[0]
+			content = revision['*']
 			break
 		}
 	}
-	return sContent
+	return content
 }
 
 /**
@@ -277,26 +242,15 @@ function getPageContent(json){
  * @param {Object} obj Subject.
  */
 function serialize(obj) {
-	var str = []
-	for (var p in obj)
+	let str = []
+	for (let p in obj)
 		if (obj.hasOwnProperty(p)) {
 			str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
 		}
 	return str.join('&')
 }
 
-/**
- * Extend an object
- * @param {Object} obj Subject.
- * @param {Object} fns Property object.
- * @returns {Object} Subject.
- */
-function extend(obj,fns){
-	for (var s in fns) if (obj[s]===undefined) obj[s] = fns[s]
-	return obj
-}
-
-//console.log('sEndPointEn+serialize(extend({titles:sSubject},oGetVars))',sEndPointEn+serialize(extend({titles:'asdf'},oGetVars))); // log
+//console.log('sEndPointEn+serialize(Object.assign({titles:sSubject},oGetVars))',sEndPointEn+serialize(Object.assign({titles:'asdf'},oGetVars))); // log
 /*
 
 http://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia#How_to_comply_with_a_file.27s_license_requirements

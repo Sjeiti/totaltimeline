@@ -14,14 +14,13 @@ import {getPercentage} from '../util'
  */
 const periods = collection.add(
     'periods'
-    ,2
+    ,'eras'
     ,handleGetData
     ,populate
   )
 
-const worksheet = 2//'periods'
-getData(model.spreadsheetKey,worksheet,handleGetData)
-
+// getData('eras').then(handleGetData)
+periods.getData()
 
 // todo: document
 function handleGetData(data){

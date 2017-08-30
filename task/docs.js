@@ -8,7 +8,7 @@ sheets.forEach((name,i)=>{
     ,endpoint = `https://spreadsheets.google.com/feeds/list/${spreadsheetKey}/${worksheet}/public/values?alt=json`
   getDocsJson(endpoint)
     .then(rows=>rows.map(parseRow))
-    .then(rows=>save(`./temp/${name}.json`,JSON.stringify(rows)))
+    .then(rows=>save(`./src/data/${name}.json`,JSON.stringify(rows)))
 })
 
 function getDocsJson(url,json=true){

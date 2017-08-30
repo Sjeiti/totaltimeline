@@ -13,13 +13,13 @@ import {getPercentage} from '../util'
  */
 const events = collection.add(
 			'events'
-			,1
+			,'events'
 			,handleGetData
 			,populate
 		)
 
-const worksheet = 1//'events'
-getData(model.spreadsheetKey,worksheet,handleGetData)
+// getData('events').then(handleGetData)
+events.getData()
 
 /**
  * Turns the spreadsheet json data into an event list.

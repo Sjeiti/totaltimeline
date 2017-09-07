@@ -18,7 +18,6 @@
     padding: 2px 5px;
     white-space: nowrap;
     overflow: hidden;
-    ittext-overflow: ellipsis;
   }
   .span {
     position: relative;
@@ -35,6 +34,7 @@
   .range {
     @markW: 4px;
     position: relative;
+    overflow: hidden;
     .lt;
     .size(100%);
     min-width: 1px;
@@ -47,15 +47,15 @@
       box-shadow: 0 0 0 @markW rgba(0,0,0,0.3) inset;
     }
     .before {
-      left: 0; 
+      left: 0;
       transform: translate(-(@markW/2),@markW/2) rotate(-45deg);
     }
     .after {
-      right: 0; 
+      right: 0;
       transform: translate(@markW/2,@markW/2) rotate(45deg);
     }
     > time {
-      &:nth-child(2) {
+      &:nth-of-type(2) {
         display: block;
         text-align: center;
         width: 100%;
@@ -64,9 +64,13 @@
         .lb;
         max-width: 50%;
       }
+      &:first-of-type {
+        text-align: left;
+      }
       &:last-of-type {
         left: auto;
         right: 0;
+        text-align: right;
       }
     }
   }

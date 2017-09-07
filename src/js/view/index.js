@@ -43,8 +43,6 @@ function handleRangeChange(range){
   view.rangeGradient = model.cssPrefix+'linear-gradient(left,'+gradients.map(a=>a.join(' ')).join(',')+')'
   view.colorFirst = hasGradients?gradients[0][0]:0
   view.colorLast = hasGradients?gradients[gradients.length-1][0]:0
-  //console.log(view.rangeGradient)
-  //console.log(view.colorFirst,view.colorLast)
 }
 
 // todo: document

@@ -103,16 +103,21 @@ function updated(path,hash){ // todo:document param
 	}
 }
 
-// todo: document
+/**
+ * Display information by slug
+ * @param {string} slug
+ */
 function showSlugInstance(slug){
-	console.log('showSlugInstance',slug); // log
-	var oSlugInst = collections.getEntryBySlug(slug)
-		,bHasSlugInst = !!oSlugInst
-	if (bHasSlugInst) {
+	const oSlugInst = collections.getEntryBySlug(slug)
+	if (oSlugInst) {
 		collections.dataLoaded.remove(showSlugInstance)
 		entryShown.dispatch(oSlugInst)
+		// zoom the entry with to n-closest entries
+		const range = collections.getEntryRange(oSlugInst,20)
+		range&&oRange.animate(...range)
+		//
 	} else {
-		var oPage = pages.getEntryBySlug(slug)
+		const oPage = pages.getEntryBySlug(slug)
 		oPage&&entryShown.dispatch({info:oPage})
 	}
 }

@@ -21,13 +21,13 @@ create(
         ,searchResult = this._result
         ,searchFragment = document.createDocumentFragment()
 
-      elmSearch.addEventListener('keyup',handleKeyUp)
-      elmSearch.addEventListener('change',handleKeyUp)
-      elmSearch.addEventListener('focus',handleFocusBlur)
-      elmSearch.addEventListener('blur',handleFocusBlur)
+      elmSearch.addEventListener('keyup',onKeyUp)
+      elmSearch.addEventListener('change',onKeyUp)
+      elmSearch.addEventListener('focus',onFocusBlur)
+      elmSearch.addEventListener('blur',onFocusBlur)
 
       // todo: document
-      function handleKeyUp(){
+      function onKeyUp(){
         const sSearch = elmSearch.value.toLowerCase()
           ,aFound = []
          let i,l
@@ -69,11 +69,11 @@ create(
       }
 
       // todo: document
-      function handleFocusBlur(e){
+      function onFocusBlur(e){
         if (e.type==='focus') {
           searchResult.classList.add(classNameVisible)
         } else {
-          setTimeout(function(){
+          setTimeout(()=>{
             searchResult.classList.remove(classNameVisible)
           },400)
         }
@@ -96,3 +96,7 @@ create(
     ,_result: {writable}
   }
 )
+// todo fix bug where first click doesn't fire
+// document.body.addEventListener('mousedown',console.log.bind(console,'body.mousedown'))
+// document.body.addEventListener('mouseup',console.log.bind(console,'body.mouseup'))
+// document.body.addEventListener('click',console.log.bind(console,'body.click'))

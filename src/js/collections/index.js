@@ -1,11 +1,10 @@
-import Signal from 'signals'
-import {assignable} from '../util'
-
 /**
  * A collection of {@link collectionInstance}s
- * @namespace collection
+ * @module collections
  * @property {number} length
  */
+import Signal from 'signals'
+import {assignable} from '../util'
 
 const referenceItem = []
   ,referenceSlug = []
@@ -17,21 +16,21 @@ const referenceItem = []
   ,collections = Object.create(Object.assign({
     /**
      * Adds a new collection type to the timeline.
-     * @name collection.add
+     * @name collections.add
      * @method
      * @param {collectionInstance} collection The collection instance to add
      * @returns {collectionInstance} Collection instance object.
      */
     add(collection){
       this.push(collection)
-      collection.dataLoaded.add(this._handleDataLoaded.bind(this),null,-1); // should be the last to called
+      collection.dataLoaded.add(this._onDataLoaded.bind(this),null,-1); // should be the last to called
       return collection
     }
     /**
      * Handles dataLoaded signal. At this point the collections instance has finished processing the loaded data.
      * @param collectionInstance
      */
-    ,_handleDataLoaded(collectionInstance){
+    ,_onDataLoaded(collectionInstance){
       collectionInstance.forEach(item=>{
         const {name,slug} = item.info
         referenceItem.push(item)
@@ -76,8 +75,9 @@ const referenceItem = []
      */
     ,getEntryRange(entry, numCloseEntries){
       const index = referenceItem.indexOf(entry)
-      let range
-      if (index!==-1) {
+        ,entryRange = entry.range
+      let range = entryRange&&[entryRange.start.ago,entryRange.end.ago]||null
+      if (!range&&index!==-1) {
         const halfCloseEntries = numCloseEntries/2<<0
           ,indexStart = Math.max(index - halfCloseEntries, 0)
           ,indexEnd = Math.min(indexStart + numCloseEntries + 1, referenceItem.length - 1)
@@ -87,6 +87,49 @@ const referenceItem = []
       }
       return range
     }
+    /**
+     * All data is loaded so we now cross-reference text with anchors.
+     * todo: refactor more effeciently
+     * todo: replace strings more accurately (spaces and points)
+     */
+    ,_onCollectionDataLoaded(){
+      for (let i=0,j=referenceItem.length;i<j;i++) {
+        const oItem = referenceItem[i]
+          ,oInfo = oItem.info
+        let sCopy = oInfo.wikimedia
+
+        if (sCopy) {
+          for (let m=0,n=referenceSlug.length;m<n;m++) {
+            if (m!==i) {
+              const sSlug = referenceSlug[m]
+              let sName = referenceName[m]
+                ,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
+                ,aMatch = sCopy.match(rxMatch)
+                ,bMatch = !!aMatch
+
+              if (!bMatch) {
+                const oRefItem = referenceItem[m]
+                  ,oRefInfo = oRefItem.info
+                  ,aTags = oRefInfo.tags
+                  ,iTags = aTags.length
+
+                for (let k=0;k<iTags;k++) {
+                  sName = aTags[k]
+                  rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
+                  aMatch = sCopy.match(rxMatch)
+                  bMatch = !!aMatch
+                  if (bMatch) break
+                }
+              }
+              if (sSlug!==oInfo.slug&&bMatch) {
+                sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>')
+              }
+              oInfo.wikimedia = sCopy
+            }
+          }
+        }
+      }
+    }
   },assignableArrayPrototype)
   // collections properties
   ,{
@@ -95,50 +138,6 @@ const referenceItem = []
     ,dataLoaded: {value:new Signal()}
   })
 
-collections.dataLoaded.add(onCollectionDataLoaded)
-
-/**
- * All data is loaded so we now cross-reference text with anchors.
- * todo: refactor more effeciently
- * todo: replace strings more accurately (spaces and points)
- */
-function onCollectionDataLoaded(){
-  for (let i=0,j=referenceItem.length;i<j;i++) {
-    const oItem = referenceItem[i]
-      ,oInfo = oItem.info
-    let sCopy = oInfo.wikimedia
-
-    if (sCopy) {
-      for (let m=0,n=referenceSlug.length;m<n;m++) {
-        if (m!==i) {
-          const sSlug = referenceSlug[m]
-          let sName = referenceName[m]
-            ,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-            ,aMatch = sCopy.match(rxMatch)
-            ,bMatch = !!aMatch
-
-          if (!bMatch) {
-            const oRefItem = referenceItem[m]
-              ,oRefInfo = oRefItem.info
-              ,aTags = oRefInfo.tags
-              ,iTags = aTags.length
-
-            for (let k=0;k<iTags;k++) {
-              sName = aTags[k]
-              rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-              aMatch = sCopy.match(rxMatch)
-              bMatch = !!aMatch
-              if (bMatch) break
-            }
-          }
-          if (sSlug!==oInfo.slug&&bMatch) {
-            sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>')
-          }
-          oInfo.wikimedia = sCopy
-        }
-      }
-    }
-  }
-}
+collections.dataLoaded.add(collections._onCollectionDataLoaded)
 
 export default collections

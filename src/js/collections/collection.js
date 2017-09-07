@@ -15,6 +15,15 @@ import {assignable,emptyNode} from '../util'
  */
 
 /**
+ * An event or period on the timeline
+ * @typedef {object} collectionEntry
+ * @property {HTMLElement} element
+ * @property {eventInfo} info
+ * @property {moment} [moment]
+ * @property {range} [range]
+ */
+
+/**
  * Callback method for the Ajax spreadsheet request.
  * @callback collectionDataCallback
  * @param {object} sheet The spreadsheet object.

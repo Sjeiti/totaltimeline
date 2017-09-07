@@ -1,5 +1,9 @@
+/**
+ * Factory module to create events
+ * @module event
+ */
 import {random} from '../math/prng'
-import animate from '../animate'
+// import animate from '../animate'
 import model from '../model'
 import {getPercentage,getFragment} from '../util'
 
@@ -26,9 +30,18 @@ const proto = {
 }
 
 /**
+ * An event on the timeline
+ * @typedef {object} event
+ * @property {HTMLElement} element
+ * @property {eventInfo} info
+ * @property {moment} moment
+ */
+
+/**
  * @name event
  * @param {moment} moment
  * @param {eventInfo} info
+ * @returns {event}
  */
 export default function event(moment,info){
   var event = Object.create(proto,{

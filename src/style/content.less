@@ -1,38 +1,48 @@
 
 #content {
-	margin: 0 auto;
-	position: relative;
-	background-color: @colorBackground;
-	overflow-y: auto;
+  margin: 0 auto;
+  position: relative;
+  background-color: @colorBackground;
+  overflow-y: auto;
 }
 .content {
-	background-color: @colorBackground;
-	.lt;
-	.size(100%);
-		pointer-events: auto;
+  background-color: @colorBackground;
+  .lt;
+  .size(100%);
+  pointer-events: auto;
 
-	article {
-		padding: 1rem @screenPadding;
-		header {
-			margin-bottom: 1rem;
-			&:after {
-				content: '';
-				clear: both;
-			}
-		}
-		h3, time {
-			display: inline-block;
-		}
-		p {
-			margin: .5rem 0 1rem;
-			&:first-of-type {
-				margin-top: 0;
-			}
-		}
-		img {
-			float: right;
-			max-width: 50%;
-			margin-left: 1rem;
-		}
-	}
+  opacity: 1;
+  transform: none;
+  transition: opacity 200ms linear, transform 200ms ease-out;
+
+  &.hide {
+    opacity: 0;
+    transform: translateY(-2rem);
+    transition: none;
+  }
+
+  article {
+    padding: 1rem @screenPadding;
+    header {
+      margin-bottom: 1rem;
+      &:after {
+        content: '';
+        clear: both;
+      }
+    }
+    h3, time {
+      display: inline-block;
+    }
+    p {
+      margin: .5rem 0 1rem;
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+    img {
+      float: right;
+      max-width: 50%;
+      margin-left: 1rem;
+    }
+  }
 }

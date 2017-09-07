@@ -17,18 +17,16 @@ create(
       /////////////////////////////////////////////////////
       /////////////////////////////////////////////////////
 
-      var element = this.element
+      const element = this.element
         ,range = model.range
-        //
         ,body = document.body
         ,elmOverlay = getFragment('<div class="overlay"></div>').firstChild
         ,elmTimeFrom = document.createElement('time')
         ,elmTimeTo = document.createElement('time')
         ,elmBefore = document.createElement('div')
         ,elmAfter = document.createElement('div')
-        //
-        ,backgroundPos = 0
-        //
+
+       let backgroundPos = 0
         ,viewW
         ,viewH
         ,viewL
@@ -49,7 +47,6 @@ create(
       // wheel
       mouseWheel.add(onWheel)
       // collections
-      console.log('collections.length',collections.length); // todo: remove log
       collections.forEach(col=>col.dataLoaded.add(onRangeChange))
       // touch
       touch(element,onTouchMove)
@@ -124,19 +121,19 @@ create(
        */
       function onWheel(direction,e){
         if (isOver) {
-          var fScaleMove = 0.02
+          const fScaleMove = 0.02
             ,fScaleZoom = 0.1
-            ,iNewStart
-            ,iNewEnd
             ,bZoomin = direction>0
             ,iZoomin = bZoomin?1:-1
             ,iStart = range.start.ago
+          let iNewStart
+            ,iNewEnd
 
           if (key[16]) {
-            iNewStart = iStart + iZoomin*(fScaleMove*range.duration<<0)
+            iNewStart = iStart + iZoomin*Math.round(fScaleMove*range.duration)
             range.moveStart(iNewStart)
           } else {
-            var fAdd = iZoomin*(fScaleZoom*range.duration<<0)
+            const fAdd = iZoomin*Math.round(fScaleZoom*range.duration)
               // offset calculations
               ,iMouseX = e.clientX
               ,fL = (iMouseX-viewL)/viewW
@@ -149,13 +146,13 @@ create(
               }
             }*/
             // new position
-            iNewStart = range.start.ago - 0.5*fL*fAdd
-            iNewEnd = range.end.ago + 0.5*fR*fAdd
+            iNewStart = Math.round(range.start.ago - 0.5*fL*fAdd)
+            iNewEnd = Math.round(range.end.ago + 0.5*fR*fAdd)
             range.set(iNewStart,iNewEnd)
           }
           // todo: refactor dry
-    //			if (key[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset)
-    //			else rangeZoom(direction>0,e.clientX)
+          // if (key[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset)
+          // else rangeZoom(direction>0,e.clientX)
         }
       }
 

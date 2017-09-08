@@ -46,7 +46,7 @@ const assignableArrayPrototype = assignable(Array.prototype)
      */
     init(slug,jsonName,callback){
       this.wrapper.classList.add(slug)
-      this.wrapper.addEventListener('click', this._handleWrapperClick, false)
+      this.wrapper.addEventListener('click', this._onWrapperClick, false)
       fetchJson(jsonName).then(callback.bind(this))
       return this
     }
@@ -72,7 +72,7 @@ const assignableArrayPrototype = assignable(Array.prototype)
      * Handles the click event on the wrapper.
      * @param {MouseEvent} e
      */
-    ,_handleWrapperClick(e) {
+    ,_onWrapperClick(e) {
       const target = e.target
         ,targetModel = target.model
       targetModel&&targetModel.info&&model.entryShown.dispatch(targetModel)

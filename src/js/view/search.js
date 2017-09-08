@@ -20,74 +20,94 @@ create(
       const elmSearch = this._input
         ,searchResult = this._result
         ,searchFragment = document.createDocumentFragment()
+      let currentQuery = ''
 
       elmSearch.addEventListener('keyup',onKeyUp)
       elmSearch.addEventListener('change',onKeyUp)
       elmSearch.addEventListener('focus',onFocusBlur)
       elmSearch.addEventListener('blur',onFocusBlur)
 
-      // todo: document
-      function onKeyUp(){
-        const sSearch = elmSearch.value.toLowerCase()
-          ,aFound = []
-         let i,l
-          ,sText,iResult
-
-        l = collections.length
-        for (i=0;i<l;i++) {
-          let aInst = collections[i]
-          for (let j=0,m=aInst.length;j<m;j++) {
-            let oItem = aInst[j]
-            sText = oItem.info.name+' '+oItem.info.explanation+' '+oItem.info.wikimedia
-            iResult = searchString(sSearch,sText)
-            if (iResult!==0) {
-              aFound.push([iResult,oItem])
+      /**
+       * Handle keyup event
+       */
+      function onKeyUp() {
+        const query = elmSearch.value.toLowerCase()
+          , found = []
+        if (query!==currentQuery) {
+          collections.forEach(collection => {
+            collection.forEach(entry => {
+              const {name, explanation, wikimedia} = entry.info;
+              const result = 10*searchString(query, name) + 3*searchString(query, explanation) + searchString(query, wikimedia)
+              if (result !== 0) {
+                found.push([result, entry])
+              }
+            })
+          })
+          Array.from(pages).forEach(page => {
+            const {name, copy} = page;
+            const result = 10*searchString(query, name) + searchString(query, copy)
+            if (result !== 0) {
+              found.push([result, page])
             }
-          }
+          })
+          clearChildren(searchFragment)
+          clearChildren(searchResult)
+          found
+            .sort((a, b) => a[0] > b[0] ? -1 : 1)
+            .forEach(found => {
+              let entry = found[1]
+                , info = entry.info || entry
+              searchFragment.appendChild(getFragment(`<li><a href="#${info.slug}">${info.name.replace(query, `<strong>${query}</strong>`)}</a></li>`))
+            })
+
+          searchResult.appendChild(searchFragment)
+          currentQuery = query
         }
-        l = pages.length
-        for (i=0;i<l;i++) {
-          let oPage = pages[i]
-          sText = oPage.name+' '+oPage.copy
-          iResult = searchString(sSearch,sText)
-          if (iResult!==0) {
-            aFound.push([iResult,oPage])
-          }
-        }
-        clearChildren(searchFragment)
-        clearChildren(searchResult)
-        aFound.sort(function(a,b){
-          return a[0]>b[0]?-1:1
-        })
-        l = aFound.length
-        for (i=0;i<l;i++) {
-          let oFind = aFound[i][1]
-            ,oInfo = oFind.info||oFind
-          searchFragment.appendChild(getFragment(`<li><a href="#${oInfo.slug}">${oInfo.name}</a></li>`))
-        }
-        searchResult.appendChild(searchFragment)
       }
 
-      // todo: document
+      /**
+       * Handle focus and blur event for showing and hiding search results
+       * @param {event} e
+       */
       function onFocusBlur(e){
         if (e.type==='focus') {
           searchResult.classList.add(classNameVisible)
         } else {
           setTimeout(()=>{
             searchResult.classList.remove(classNameVisible)
-          },400)
+          },300)
         }
       }
 
-      // todo: document
+      /**
+       * Search for a string
+       * @param {string} needle
+       * @param {string} haystack
+       * @returns {number} returns 2 for whole word occurrences, 1 for occurrences and 0 for no occurrences
+       */
       function searchString(needle,haystack){
-        const aHaystack = haystack.toLocaleLowerCase().split(needle)
-          ,iHaystack = aHaystack.length
-        let iValue = 0
-        if (iHaystack>1) {
-          iValue = iHaystack/(aHaystack[0].length+1)
+        const splitHaystack = haystack.toLocaleLowerCase().split(needle)
+          ,haystackLength = splitHaystack.length
+          ,regex = wholeWordRegex(needle)
+          ,hasWholeWord = regex.test(haystack)
+          ,hasWord = haystackLength>1
+        return hasWholeWord&&2||hasWord&&1||0
+      }
+
+      /**
+       * Regex to find a whole word
+       * @param {string} string
+       * @returns {RegExp}
+       */
+      function wholeWordRegex(string){
+        if (!wholeWordRegex.cache) wholeWordRegex.cache = {}
+        let regex = wholeWordRegex.cache[string]
+        if (!regex) {
+          const escaped = string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1")
+          regex = new RegExp(`(\\b|^)${escaped}(\\b|$)`,'gi')
+          wholeWordRegex.cache[string] = regex
         }
-        return iValue
+        return regex
       }
     }
   }
@@ -96,7 +116,3 @@ create(
     ,_result: {writable}
   }
 )
-// todo fix bug where first click doesn't fire
-// document.body.addEventListener('mousedown',console.log.bind(console,'body.mousedown'))
-// document.body.addEventListener('mouseup',console.log.bind(console,'body.mouseup'))
-// document.body.addEventListener('click',console.log.bind(console,'body.click'))

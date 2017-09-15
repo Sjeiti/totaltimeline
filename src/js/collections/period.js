@@ -28,14 +28,14 @@ export default function period(range,info,offset){
   })
 
   period.element.querySelector('h3').model = period
-  model.entryShown.add(handleEntryShown) // todo: not very efficient
+  model.entryShown.add(onEntryShown) // todo: not very efficient
 
   /**
    * Handles entryShown signal
    * @param {period|event} entry
    */
-  function handleEntryShown(entry){
-    const bIs = entry&&entry.info===info
+  function onEntryShown(entry){
+    const bIs = entry&&entry.info===info||false
     period.element.classList.toggle('selected',bIs)
     bIs&&model.range.animate(range.start.ago,range.end.ago)
   }

@@ -44,7 +44,7 @@ const proto = {
  * @returns {event}
  */
 export default function event(moment,info){
-  var event = Object.create(proto,{
+  const event = Object.create(proto,{
       moment: {value:moment}
       ,info: {value:info}
       ,element: {value:getFragment(`<div class="event-wrap">
@@ -59,8 +59,10 @@ export default function event(moment,info){
     ,mTime = mWrap.querySelector('time')
     //
     ,iName = info.name.split('').map(s=>s.charCodeAt()).reduce((a,b)=>a+b,0)
-    ,iSeed = iName*143E4 + Math.abs(moment.value<2E4?1E4*moment.value:moment.value)
-    ,fTop = 0.5 + 0.6*(random(iSeed)-0.5)
+    //
+    // ,goldenAngle = 137.5
+    ,iSeed = iName*142E4 + Math.abs(moment.value<2E4?1E4*moment.value:moment.value)
+    ,fTop = 0.5 + 0.6*(random(iSeed)-0.5) // todo convert random event top to golden angle
     ,sTop = getPercentage(fTop)
     ,sHeight = getPercentage(1-fTop)
     //
@@ -74,14 +76,14 @@ export default function event(moment,info){
   mTime.style.height = sHeight // todo: less vars @eventIconSize
   mTime.setAttribute('data-after',moment.toString()) // todo: better as textContent
 
-  model.entryShown.add(handleEntryShown)
+  model.entryShown.add(onEntryShown)
 
   /**
    * Handles entryShown signal
    * @param {period|event} entry
    */
-  function handleEntryShown(entry){
-    mWrap.classList.toggle('selected',entry&&entry.info===info)
+  function onEntryShown(entry){
+    mWrap.classList.toggle('selected',entry&&entry.info===info||false)
   }
 
   return event

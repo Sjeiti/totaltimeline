@@ -14,8 +14,9 @@ create(
     <ul id="searchResult"></ul>`)
       this._input = html.querySelector('input')
       this._result = html.querySelector('ul')
-      parent.insertBefore(html,this.element)
-      parent.removeChild(this.element)
+      // parent.insertBefore(html,this.element)
+      // parent.removeChild(this.element)
+      this.element.appendChild(html)
 
       const elmSearch = this._input
         ,searchResult = this._result

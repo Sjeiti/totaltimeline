@@ -4,8 +4,8 @@ create(
   'data-header'
   ,{
     init(){
-      const nav = this.element.querySelector('nav')
-        ,ul = nav.querySelector('ul')
+      // const nav = this.element.querySelector('nav')
+        // ,ul = nav.querySelector('ul')
 		  // pages.loaded.add(handlePagesLoaded);
       // todo: document
       /*function handlePagesLoaded() {

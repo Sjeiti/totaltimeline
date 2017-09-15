@@ -40,6 +40,10 @@ create(
       // Initialise view
       elmContent.appendChild(elmContentWrapper)
 
+      elmContent.addEventListener('click',({target})=>{
+        target.nodeName==='BUTTON'&&model.entryShown.dispatch()
+      })
+
       /**
        * Show the content of the entry
        * @param {collectionEntry} entry

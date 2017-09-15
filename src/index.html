@@ -4,29 +4,35 @@
   <meta charset="utf-8">
   <title>Total Timeline</title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="/style/screen.css">
 </head>
 <body>
-<header data-header id="pageHeader">
-  <div>
+<header data-header>
+  <!--<div>-->
     <h2><a href="#totaltimeline/13.8Ga/2014">Total Timeline</a></h2>
-    <nav><ul></ul></nav>
-      <div data-search>asdf</div>
-  </div>
+    <!--<nav>
+      <ul></ul>
+    </nav>-->
+    <div data-collection-menu></div>
+    <div data-search></div>
+  <!--</div>-->
 </header>
 <main>
   <section data-overview id="overview"></section>
   <section data-timeline id="timeline"></section>
   <section data-content id="content">
+
     <script type="text/html" id="content_tmpl">
       <article>
         <header>
           <h3><%=info.name%></h3>
           <time><%=time%></time>
+          <button>&#215;</button>
         </header>
-        <img src="<%=info.thumb%>" /><%=info.explanation%>
+        <img src="<%=info.thumb%>"/>
+        <%=info.explanation%>
         <p><%=info.wikimedia%></p>
         <%if (info.wikimediakey){%>
           <a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
@@ -44,8 +50,8 @@
 <script src="/js/index.js"></script>
 </body>
 </html>
-<div class="event-wrap">
+<!--<div class="event-wrap">
   <time></time>
   <div class="event"></div>
   <h3><a href="asdf">qwer</a></h3>
-</div>
+</div>-->

@@ -7,6 +7,7 @@ import './view/overview'
 import './view/timeline'
 import './view/content'
 import './view/console'
+import './view/collectionMenu'
 
 import './collections/events'
 import './collections/periods'

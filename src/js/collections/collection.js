@@ -68,6 +68,9 @@ const assignableArrayPrototype = assignable(Array.prototype)
         view.appendChild(this.wrapper)
       }
     }
+    ,show(show){
+      this.wrapper.classList.toggle('hide',!show)
+    }
     /**
      * Handles the click event on the wrapper.
      * @param {MouseEvent} e
@@ -91,9 +94,9 @@ const assignableArrayPrototype = assignable(Array.prototype)
  * @returns {collectionInstance} Collection instance object.
  */
 export default function collection(slug,jsonName,callback,populateInstance,staticView){
-
   return collections.add(Object.create(collectionViewInstancePrototype,{
     length: {value:0,writable:true}
+    ,name: {value:slug}
     ,wrapper: {value:document.createElement('div')}
     ,fragment: {value:document.createDocumentFragment()}
     ,dataLoaded: {value:new Signal()}

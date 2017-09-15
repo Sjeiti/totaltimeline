@@ -25,6 +25,19 @@ function read(file){
 }
 
 /**
+ * Promise to read a directory
+ * @param {string} directory
+ * @returns {Promise}
+ */
+function readdir(path){
+  return new Promise((resolve,reject)=>
+    require('fs').readdir(path,(err,data)=>
+      err?reject(err):resolve(data)
+    )
+  );
+}
+
+/**
  * Promise to save a file
  * @param {string} file
  * @param {string} data
@@ -198,6 +211,7 @@ function promiseRestJSON(host,port,endpoint){
 module.exports = {
   glomise
   ,read
+  ,readdir
   ,save
   ,copy
   ,exec

@@ -4,7 +4,7 @@
   "version": "0.1.62",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
-    "build": "npm run clean && npm run dir && npm run js && npm run less && npm run copy",
+    "build": "npm run clean && npm run dir && npm run js && npm run css && npm run copy",
     "copy": "shx cp src/index.html dist/index.html && shx cp src/.htaccess dist/.htaccess && shx cp -r src/static dist && shx cp src/style/*.png dist/style",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",

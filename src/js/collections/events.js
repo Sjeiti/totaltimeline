@@ -14,7 +14,7 @@ export default collection(
   ,'events'
   ,function(data){
     //ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
-    data.forEach(function(entry){
+    data.forEach(function(entry,index){
       //console.log('event',getProp(entry,'name'),getProp(entry,'ago'),getProp(entry,'ago',true)); // log
       const ago = parseInt(entry.ago,10)
         ,since = parseInt(entry.since,10)
@@ -25,6 +25,7 @@ export default collection(
         this.push(event(
           entryMoment
           ,eventInfo().parse(entry)
+          ,index
         ))
       }
     }.bind(this))

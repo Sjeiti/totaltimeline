@@ -10,36 +10,14 @@
 </head>
 <body>
 <header data-header>
-  <!--<div>-->
     <h2><a href="#totaltimeline/13.8Ga/2014">Total Timeline</a></h2>
-    <!--<nav>
-      <ul></ul>
-    </nav>-->
     <div data-collection-menu></div>
     <div data-search></div>
-  <!--</div>-->
 </header>
 <main>
   <section data-overview></section>
   <section data-timeline></section>
-  <section data-content>
-
-    <script type="text/html" id="content_tmpl">
-      <article>
-        <header>
-          <h3><%=info.name%></h3>
-          <time><%=time%></time>
-          <button>&#215;</button>
-        </header>
-        <img src="<%=info.thumb%>"/>
-        <%=info.explanation%>
-        <p><%=info.wikimedia%></p>
-        <%if (info.wikimediakey){%>
-          <a target="wikipedia" href="http://wikipedia.org/wiki/<%=info.wikimediakey.split(':')[0]%>">wikipedia</a>
-        <%}%>
-      </article>
-    </script>
-  </section>
+  <section data-content></section>
 </main>
 <!--<div data-console></div>
 <script>
@@ -50,8 +28,3 @@
 <script src="/js/index.js"></script>
 </body>
 </html>
-<!--<div class="event-wrap">
-  <time></time>
-  <div class="event"></div>
-  <h3><a href="asdf">qwer</a></h3>
-</div>-->

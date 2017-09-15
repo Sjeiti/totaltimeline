@@ -43,7 +43,7 @@ const proto = {
  * @param {eventInfo} info
  * @returns {event}
  */
-export default function event(moment,info){
+export default function event(moment,info,index){
   const event = Object.create(proto,{
       moment: {value:moment}
       ,info: {value:info}
@@ -58,13 +58,11 @@ export default function event(moment,info){
     ,mTitle = mWrap.querySelector('h3')
     ,mTime = mWrap.querySelector('time')
     //
-    ,iName = info.name.split('').map(s=>s.charCodeAt()).reduce((a,b)=>a+b,0)
-    //
-    // ,goldenAngle = 137.5
-    ,iSeed = iName*142E4 + Math.abs(moment.value<2E4?1E4*moment.value:moment.value)
-    ,fTop = 0.5 + 0.6*(random(iSeed)-0.5) // todo convert random event top to golden angle
-    ,sTop = getPercentage(fTop)
-    ,sHeight = getPercentage(1-fTop)
+    ,twoPi = 2*Math.PI
+    ,goldenAngle = 137.5/360*twoPi
+    ,top = 0.5 + 0.3*Math.sin(index*goldenAngle)
+    ,sTop = getPercentage(top)
+    ,sHeight = getPercentage(1-top)
     //
 
   mEvent.model = event

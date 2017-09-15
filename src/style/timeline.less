@@ -1,178 +1,178 @@
-#timeline {
-	user-select: none;
-	position: relative;
-	margin: 0 @screenPadding;
+[data-timeline] {
+  user-select: none;
+  position: relative;
+  margin: 0 @screenPadding;
   color: white;
-	background-color: #333;//#615d78;
-	background-repeat: repeat-x;
-	>time {
-		.lb;
-		z-index: 3000;
-		font: @fontTime;
-		&:last-of-type { left: auto; right: 0; }
-	}
-	.before, .after {
-		position: absolute;
-		top: 0;
-		display: block;
-		width: @screenPadding;
-		height: 100%;
-		background-color: inherit;
-	}
-	.before { left: -@screenPadding; }
+    background-color: #333;//#615d78;
+    background-repeat: repeat-x;
+    >time {
+        .lb;
+        z-index: 3000;
+        font: @fontTime;
+        &:last-of-type { left: auto; right: 0; }
+    }
+    .before, .after {
+        position: absolute;
+        top: 0;
+        display: block;
+        width: @screenPadding;
+        height: 100%;
+        background-color: inherit;
+    }
+    .before { left: -@screenPadding; }
   .after { right: -@screenPadding; }
-	.overlay {
-		content: '';
-		.size(100%);
-		.lt;
-		background: url(noise.png);
-		background-size: contain;
-		background-position: center center;
-		opacity: .5;
-		pointer-events: none;
-	}
+    .overlay {
+        content: '';
+        .size(100%);
+        .lt;
+        background: url(noise.png);
+        background-size: contain;
+        background-position: center center;
+        opacity: .5;
+        pointer-events: none;
+    }
 }
 
 .events, .periods, .tectonics {
-	.lt;
-	z-index: 1000;
-	.size(100%);
-	pointer-events: none;
+    .lt;
+    z-index: 1000;
+    .size(100%);
+    pointer-events: none;
 }
 
 .events {
 }
-	.event-wrap {
-		.lt;
-		height: 100%;
-		.event {
-			.lt;
-			z-index: 1020;
-			.size(@eventSize/2);
-			border-radius: 50%;
+    .event-wrap {
+        .lt;
+        height: 100%;
+        .event {
+            .lt;
+            z-index: 1020;
+            .size(@eventSize/2);
+            border-radius: 50%;
 
-			pointer-events: auto;
+            pointer-events: auto;
 
-			background-color: white;//eec2c85d;
-			background-size: cover;
-			cursor: pointer;
+            background-color: white;//eec2c85d;
+            background-size: cover;
+            cursor: pointer;
 
-			transition: all 10ms ease-in-out;
-			transition-property: width, height;
-			transform: translate(-50%,-50%);
+            transition: all 10ms ease-in-out;
+            transition-property: width, height;
+            transform: translate(-50%,-50%);
 
-			&[class^="event icon-"] {
-				background-color: transparent;
-				border-radius: 0;
-				.size(@eventIconSize);
-				transform-origin: 50% 50%;
-			}
+            &[class^="event icon-"] {
+                background-color: transparent;
+                border-radius: 0;
+                .size(@eventIconSize);
+                transform-origin: 50% 50%;
+            }
 
-		}
-		h3, time {
-			display: none;
-			// todo: animating visibility and opacity sucks performance wise... maybe js?
-			//visibility: hidden;
-			//opacity: 0;
-			//transition: all 200ms linear';
-			//transition-property: visibility, opacity';
-			pointer-events: none;
-		}
-		h3 {
-			.lt(-2*@eventIconSize,0);
-			margin-top: @eventIconSize;
-			width: 4*@eventIconSize;
-			font: 700 .8rem/1rem @fontNameBody;
-			text-shadow: 0 0 4px black;
-			text-align: center;
-			a {
-				position: relative;
-				display: inline-block;
-				.size(100%);
-				color: inherit;
-			}
-		}
-		time {
-			.lb(-@eventIconSize);
-			width: 2*@eventIconSize;
-			overflow: hidden;
-			&:before {
-				content: '';
-				display: block;
-				.lt(@eventIconSize,2*@eventIconSize);
-				border-right: 1px solid fade(white,50%);
-				height: 100%;
-			}
-			&:after {
-				.lb;
-				display: block;
-				width: 2*@eventIconSize;
-				font: @fontTime;
-				text-align: center;
-			}
-		}
-		&.selected, &:hover {
-			z-index: 3000;
-			.event {
-				transition-duration: 250ms;
-				&[class^="event icon-"] {
-					.size(2*@eventIconSize);
-				}
-			}
-			h3, time {
-				display: block;
-				//visibility: visible;
-				//opacity: 1;
-			}
-		}
-	}
+        }
+        h3, time {
+            display: none;
+            // todo: animating visibility and opacity sucks performance wise... maybe js?
+            //visibility: hidden;
+            //opacity: 0;
+            //transition: all 200ms linear';
+            //transition-property: visibility, opacity';
+            pointer-events: none;
+        }
+        h3 {
+            .lt(-2*@eventIconSize,0);
+            margin-top: @eventIconSize;
+            width: 4*@eventIconSize;
+            font: 700 .8rem/1rem @fontNameBody;
+            text-shadow: 0 0 4px black;
+            text-align: center;
+            a {
+                position: relative;
+                display: inline-block;
+                .size(100%);
+                color: inherit;
+            }
+        }
+        time {
+            .lb(-@eventIconSize);
+            width: 2*@eventIconSize;
+            overflow: hidden;
+            &:before {
+                content: '';
+                display: block;
+                .lt(@eventIconSize,2*@eventIconSize);
+                border-right: 1px solid fade(white,50%);
+                height: 100%;
+            }
+            &:after {
+                .lb;
+                display: block;
+                width: 2*@eventIconSize;
+                font: @fontTime;
+                text-align: center;
+            }
+        }
+        &.selected, &:hover {
+            z-index: 3000;
+            .event {
+                transition-duration: 250ms;
+                &[class^="event icon-"] {
+                    .size(2*@eventIconSize);
+                }
+            }
+            h3, time {
+                display: block;
+                //visibility: visible;
+                //opacity: 1;
+            }
+        }
+    }
 
 
 @periodHeight: 1.5rem;
 .periods {
-	overflow: hidden;
+    overflow: hidden;
 }
-	.period {
-		.lt;
-//		min-height: 1rem;
-//		height: 100%;
-		height: @periodHeight;
-		overflow: hidden;
-//		font-weight: bold;
-		white-space: nowrap;
-		text-indent: .4rem;
-		pointer-events: none;
-		.gradientDirectional(fade(black,10%),fade(black,2%),80deg);
-		&:hover { .gradientDirectional(fade(white,10%),fade(white,2%),80deg); }
-		h3 {
-			position: relative;
-			display: inline;
-			z-index: 1010;
-//			font-weight: bold;
-//			font-family: @fontNameBody;
-//			font-size: .6rem;
-			font: 400 .6rem/ @periodHeight @fontNameBody;
-			color: fade(white,70%);
-			text-rendering: optimizeSpeed;
-			cursor: pointer;
-			pointer-events: auto;
-			&:hover {
-				color: @colorText;
-			}
-			a {
-				pointer-events: none;
-				color: inherit;
-				text-decoration: none;
-			}
-		}
-	}
+    .period {
+        .lt;
+//        min-height: 1rem;
+//        height: 100%;
+        height: @periodHeight;
+        overflow: hidden;
+//        font-weight: bold;
+        white-space: nowrap;
+        text-indent: .4rem;
+        pointer-events: none;
+        .gradientDirectional(fade(black,10%),fade(black,2%),80deg);
+        &:hover { .gradientDirectional(fade(white,10%),fade(white,2%),80deg); }
+        h3 {
+            position: relative;
+            display: inline;
+            z-index: 1010;
+//            font-weight: bold;
+//            font-family: @fontNameBody;
+//            font-size: .6rem;
+            font: 400 .6rem/ @periodHeight @fontNameBody;
+            color: fade(white,70%);
+            text-rendering: optimizeSpeed;
+            cursor: pointer;
+            pointer-events: auto;
+            &:hover {
+                color: @colorText;
+            }
+            a {
+                pointer-events: none;
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+    }
 
 .tectonics {
-	z-index: 999;
-	overflow: hidden;
-	canvas {
-		display: block;
-		margin: 3% auto 0;
-		pointer-events: auto;
-	}
+    z-index: 999;
+    overflow: hidden;
+    canvas {
+        display: block;
+        margin: 3% auto 0;
+        pointer-events: auto;
+    }
 }

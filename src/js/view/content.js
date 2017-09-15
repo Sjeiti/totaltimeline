@@ -20,13 +20,11 @@ create(
         //
         ,visibleRange = model.range
         ,elmContent = this.element
-        ,contentStyle = style.select('#content')
+        ,contentStyle = style.select('[data-content]')
         ,elmContentWrapper = getFragment('<div class="content"></div>').firstChild
         ,fragment = document.createDocumentFragment()
-        ,flexGrowPrefixes = {
-          '-webkit-box-flex': 1
-          ,'-moz-box-flex': 1
-          ,'-webkit-flex-grow': 1
+        ,flexGrowPrefixes = { // todo too many prefixes?
+          '-webkit-flex-grow': 1
           ,'-moz-flex-grow': 1
           ,'-ms-flex-grow': 1
           ,'flex-grow': 1
@@ -52,7 +50,7 @@ create(
         that.currentEntry = entry
         clearChildren(elmContentWrapper)
         clearChildren(fragment)
-        setContentGrow(1)
+        setContentGrow(entry&&1||0)
         elmContent.scrollTop = 0
         if (entry) {
           let time = ''
@@ -102,6 +100,7 @@ create(
        * @param {number} value
        */
       function setContentGrow(value){
+        console.log('setContentGrow',contentStyle,value); // todo: remove log
         for (let s in flexGrowPrefixes) {
           flexGrowPrefixes[s] = value
         }

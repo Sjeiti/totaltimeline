@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run css && npm run copy",
     "copy": "shx cp src/index.html dist/index.html && shx cp src/.htaccess dist/.htaccess && shx cp -r src/static dist && shx cp src/style/*.png dist/style",
+    "copy:l": "cp src/index.html dist/index.html | cp src/.htaccess dist/.htaccess | cp -r src/static dist | cp src/style/*.png dist/style",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",
     "js:watch": "chokidar src/**/*.js -c \"npm run js\"",

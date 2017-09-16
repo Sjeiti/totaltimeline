@@ -39,6 +39,8 @@ create(
         ,mouseXOffset = 0
         ,mouseXOffsetDelta = 0
         ,mouseXOffsetLast = 0
+        ,lastUp = 0
+        ,isTouchZoom = false
 
       // Initialise event listeners (and signals).
       // init and detach keypress so keys exist
@@ -54,6 +56,7 @@ create(
       range.change.add(onRangeChange)
       // touch
       elmRange.addEventListener('touchstart',onTouchStart,false)
+      elmRange.addEventListener('touchend',onTouchEnd,false)
       touch(elmSpan,onTouchMove)
       //mSpan.addEventListener(s.touchmove,onTouchMove,false)
 
@@ -143,7 +146,23 @@ create(
        * @param {Event} e
        */
       function onTouchStart(e) {
+        const t = Date.now()
+        if (e.touches.length===1&&(t-lastUp)<300) {
+          isTouchZoom = true
+        }
         mouseXOffset = (e.offsetX||e.touches[0].pageX)-elmRange.offsetLeft
+      }
+
+      /**
+       * Handles touchend event to scroll or zoom the timeline.
+       * @param {Event} e
+       */
+      function onTouchEnd(e) {
+        if (e.touches.length){
+          lastUp = Date.now()
+        } else {
+          isTouchZoom = false
+        }
       }
 
       /**
@@ -156,12 +175,20 @@ create(
        */
       function onTouchMove(e,numTouches,touches){//},numLastTouches,lastTouches) {
         if (numTouches===1){
-          rangeMove(touches[0])
+          if (isTouchZoom) {
+            rangeZoomTouch(touches[0])
+          } else {
+            rangeMove(touches[0])
+          }
           e.preventDefault()
         } else if (numTouches===2){
           range.set(relativeOffset(touches[0]),relativeOffset(touches[1]))
           e.preventDefault()
         }
+      }
+
+      function rangeZoomTouch(touch){
+        console.log('touch',touch)
       }
 
       /**

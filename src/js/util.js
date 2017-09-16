@@ -57,6 +57,7 @@ export function getPercentage(f){
 
 export function clearChildren(parent){
   while (parent.firstChild) parent.removeChild(parent.firstChild)
+  return parent
 }
 
 // todo:document

@@ -58,9 +58,7 @@ export default function event(moment,info,index){
     ,mTitle = mWrap.querySelector('h3')
     ,mTime = mWrap.querySelector('time')
     //
-    ,twoPi = 2*Math.PI
-    ,goldenAngle = 137.5/360*twoPi
-    ,top = 0.5 + 0.3*Math.sin(index*goldenAngle)
+    ,top = 0.2 + 0.7*((index * (137.5/360))%1)
     ,sTop = getPercentage(top)
     ,sHeight = getPercentage(1-top)
     //

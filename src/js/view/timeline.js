@@ -2,7 +2,7 @@
 import {create} from './component'
 import time from '../time'
 import view from './'
-import {getFragment,clearChildren} from '../util'
+import {getFragment,stringToElement,clearChildren} from '../util'
 import collections from '../collections'
 import model from '../model'
 import touch from '../touch'
@@ -20,11 +20,14 @@ create(
       const element = this.element
         ,range = model.range
         ,body = document.body
-        ,elmOverlay = getFragment('<div class="overlay"></div>').firstChild
-        ,elmTimeFrom = document.createElement('time')
-        ,elmTimeTo = document.createElement('time')
-        ,elmBefore = document.createElement('div')
-        ,elmAfter = document.createElement('div')
+        ,elements = getFragment(`<time></time><time></time>
+<div class="before"></div><div class="after"></div>
+<div class="overlay"></div>`)
+        ,elmOverlay = elements.querySelector('.overlay')
+        ,elmTimeFrom = elements.querySelector('time')//document.createElement('time')
+        ,elmTimeTo = elements.querySelector('time:nth-child(2)')//document.createElement('time')
+        ,elmBefore = elements.querySelector('.before')//.createElement('div')
+        ,elmAfter = elements.querySelector('.after')//document.createElement('div')
 
        let backgroundPos = 0
         ,viewW
@@ -53,17 +56,9 @@ create(
       // range
       range.change.add(onRangeChange)
       range.change.add(moveBackgroundOverlay)
-      //
-      elmBefore.classList.add('before')
-      elmAfter.classList.add('after')
 
       // Initialise view
-      clearChildren(element)
-      element.appendChild(elmTimeFrom)
-      element.appendChild(elmTimeTo)
-      element.appendChild(elmBefore)
-      element.appendChild(elmAfter)
-      element.appendChild(elmOverlay)
+      clearChildren(element).appendChild(elements)
       onResize()
       onRangeChange()
 

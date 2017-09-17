@@ -18,7 +18,7 @@ import {Signal} from 'signals'
  * @property {function} factory Direct link back to the original factory
  */
 const proto = {
-  toString(){return '[object range, '+this.start.toString()+' - '+this.end.toString()+']';}
+  toString(){return '[object range, '+this.start.toString()+' to '+this.end.toString()+']';}
 
   /**
    * Set both start and end time.

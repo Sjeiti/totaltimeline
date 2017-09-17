@@ -2,7 +2,7 @@
 import {create} from './component'
 import time from '../time'
 import view from './'
-import {getPercentage,getFragment,clearChildren} from '../util'
+import {getPercentage,stringToElement,clearChildren} from '../util'
 import model from '../model'
 import touch from '../touch'
 import key from '../signal/key'
@@ -17,7 +17,7 @@ create(
       const span = model.span
         ,range = model.range
         ,body = document.body
-        ,elmSpan = getFragment(`<div class="span">
+        ,elmSpan = stringToElement(`<div class="span">
 	<time>${span.start.toString()}</time>
 	<time>${span.end.toString()}</time>
 	<div class="range">
@@ -27,7 +27,7 @@ create(
 		<time></time>
     <div class="after"></div>
 	</div>
-</div>`).firstElementChild
+</div>`)
         ,elmRange = elmSpan.querySelector('.range')
         ,elmBefore = elmRange.querySelector('.before')
         ,elmAfter = elmRange.querySelector('.after')

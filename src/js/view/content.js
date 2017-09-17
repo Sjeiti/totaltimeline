@@ -4,10 +4,11 @@
  */
 
 import {create} from './component'
-import {getFragment,clearChildren} from '../util'
+import {stringToElement,clearChildren} from '../util'
 import model from '../model'
-import resize from '../signal/resize'
+// import resize from '../signal/resize'
 import style from '../style'
+import {formatAnnum} from '../time'
 
 const writable = true
 
@@ -19,10 +20,11 @@ create(
         //
         ,visibleRange = model.range
         ,elmContent = this.element
+        ,classNameReveal = 'reveal'
         ,contentStyle = style.select('[data-content]')
-        ,elmContentWrapper = getFragment('<div class="content"></div>').firstChild
+        ,elmContentWrapper = stringToElement('<div class="content"></div>')
         ,fragment = document.createDocumentFragment()
-        ,flexGrowPrefixes = { // todo too many prefixes?
+        ,flexGrowPrefixes = {
           '-webkit-flex-grow': 1
           ,'-moz-flex-grow': 1
           ,'-ms-flex-grow': 1
@@ -32,11 +34,12 @@ create(
       // Initialise event listeners (and signals).
       model.entryShown.add(onEntryShown)
       elmContent.addEventListener('scroll',onContentScroll)
-      resize.add(onContentScroll)
+      // resize.add(onContentScroll)
 
       // Initialise view
       elmContent.appendChild(elmContentWrapper)
 
+      // close view
       elmContent.addEventListener('click',({target})=>{
         target.nodeName==='BUTTON'&&model.entryShown.dispatch()
       })
@@ -55,7 +58,7 @@ create(
           const {info} = entry
           let time = ''
           if (entry.moment) {
-            time = entry.moment.toString()
+            time = formatAnnum(entry.moment.ago,2,true,true)
             // scroll if entry is not within view
             if (!visibleRange.coincides(entry.moment)) {
               const iAgo = entry.moment.ago
@@ -66,11 +69,13 @@ create(
               visibleRange.animate(iNewStart,iNewEnd,onEntryShown.bind(null,entry))
             }
           } else if (entry.range) {
-            time = entry.range.start.toString()+' - '+entry.range.end.toString()
+            // time = entry.range.start.toString()+' - '+entry.range.end.toString()
+            time = `${formatAnnum(entry.range.start.ago,2,true,true)} to ${formatAnnum(entry.range.end.ago,2,true,true)}`
           }
-          elmContentWrapper.classList.add('hide')
-          setTimeout(()=>elmContentWrapper.classList.remove('hide'))
-          
+          elmContentWrapper.classList.add(classNameReveal)
+          setTimeout(()=>elmContentWrapper.classList.remove(classNameReveal))
+
+          console.log('time',time,time.ago); // todo: remove log
           clearChildren(elmContentWrapper)
             .appendChild(createContent(
               info.name
@@ -109,26 +114,34 @@ create(
        * @param {number} value
        */
       function setContentGrow(value){
-        console.log('setContentGrow',contentStyle,value); // todo: remove log
         for (let s in flexGrowPrefixes) {
           flexGrowPrefixes[s] = value
         }
         contentStyle.set(flexGrowPrefixes)
       }
 
-      function createContent(name,time,img,text,url){
-        return getFragment(`<article>
-        <header>
-          <h3>${name}</h3>
-          <time>${time}</time>
-          <button>&#215;</button>
-        </header>
-        <img src="${img}"/>
-        ${text}
-        ${url&&`<footer><a target="wikipedia" href="https://wikipedia.org/wiki/{url.split(':')[0]}">wikipedia</a></footer>`||''}
-      </article>`)
+      /**
+       * Create the content for and event
+       * @param {string} name
+       * @param {string} time
+       * @param {string} img
+       * @param {string} text
+       * @param {string} wikimediakey
+       * @returns {HTMLElement}
+       */
+      function createContent(name,time,img,text,wikimediakey){
+        return stringToElement(`<article>
+          <header>
+            <h3>${name}</h3>
+            <time>${time}</time>
+            <button>&#215;</button>
+          </header>
+          <img src="${img}"/>
+          ${text}
+          ${wikimediakey&&`<footer><a target="wikipedia" href="https://wikipedia.org/wiki/{url.split(':')[0]}">wikipedia</a></footer>`||''}
+        </article>`)
       }
-      
+
     }
   }
   ,{

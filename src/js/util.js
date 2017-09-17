@@ -38,12 +38,36 @@ export function isObjectString(str) {
   return /^\s?[\[{]/.test(str)
 }
 
-export function getFragment(str){
-  const fragment = document.createDocumentFragment()
-  const div = document.createElement('div')
-  div.innerHTML = str
-  Array.from(div.childNodes).forEach(elm=>fragment.appendChild(elm))
-  return fragment
+/**
+ * Set the innerHTML of a cached div
+ * Helper method for getFragment and stringToElement
+ * @param {string} str
+ * @returns {HTMLDivElement}
+ */
+function wrapHTMLString(str) {
+    const div = wrapHTMLString.div || (wrapHTMLString.div = document.createElement('div'));
+    div.innerHTML = str;
+    return div;
+}
+
+/**
+ * Get documentFragment from an HTML string
+ * @param {string} str
+ * @returns {DocumentFragment}
+ */
+export function getFragment(str) {
+    const fragment = document.createDocumentFragment();
+    Array.from(wrapHTMLString(str).childNodes).forEach(elm => fragment.appendChild(elm));
+    return fragment;
+}
+
+/**
+ * Turn an HTML string into an element
+ * @param {string} str
+ * @returns {HTMLElement}
+ */
+export function stringToElement(str) {
+    return wrapHTMLString(str).childNodes[0];
 }
 
 //todo:doc/rename
@@ -99,6 +123,7 @@ export default {
   ,isJSONString
   ,isObjectString
   ,getFragment
+  ,stringToElement
   ,slug
   ,getPercentage
   ,clearChildren

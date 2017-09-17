@@ -1,6 +1,6 @@
 import {create} from './component'
 import collections from '../collections'
-import {getFragment} from '../util'
+import {stringToElement,getFragment} from '../util'
 
 create(
   'data-collection-menu'
@@ -14,7 +14,7 @@ create(
       ul.addEventListener('change', this._onChange.bind(this))
 
       collections.forEach(collection=>{
-        const li = getFragment(`<li><label><input type="checkbox" checked /> ${collection.name}</label></li>`).firstElementChild
+        const li = stringToElement(`<li><label><input type="checkbox" checked /> ${collection.name}</label></li>`)
           ,input = li.querySelector('input')
         input.collection = collection
         ul.appendChild(li)

@@ -9,7 +9,7 @@ const YEAR_NOW = (new Date()).getFullYear()
   ,sSpace = ' '
   ,aAnnum = 'a,ka,Ma,Ga'.split(',')
   ,aDuration = ' kMGTP'.split('')
-;
+
 
 /**
  * Textual representation of annum.
@@ -21,26 +21,26 @@ const YEAR_NOW = (new Date()).getFullYear()
  * @param {number} year Number of years ago.
  * @param {number} round Number of digits to round to.
  * @param {boolean} [noSlug=true] Are there spaces between the value and the type.
+ * @param {boolean} [extended=false] Appends 'ago' or 'from now'
  * @returns {string}
  */
-function formatAnnum(year,round,noSlug){
+export function formatAnnum(year,round=0,noSlug=true,extended=false){
   // todo: rounding sometimes off: split at . truncate and join
   // todo: also round absolutes, ie: 4 to 4.00
-  var sReturn
+  let returnValue
     ,isFuture = year<0
-    ,iYear = Math.abs(year)
-    ,space = noSlug===false?'':sSpace
-  ;
-  if (iYear>4000) {
-    if (round===undefined) round = 0;
-    for (var i = 0; iYear>1000 && (aAnnum.length>=(i + 2)); i++) iYear /= 1000;
-    var iMult = Math.pow(10,round);
-    sReturn = (Math.round(iYear * iMult) / iMult) + space + aAnnum[i];
+    ,amount = Math.abs(year)
+    ,isGregorian = amount<4000
+    ,space = noSlug?' ':''
+    ,i
+  if (isGregorian) {
+    amount = Math.round(YEAR_NOW-year)
+    returnValue = Math.abs(amount) + (amount<0?space+'BC':(amount<1500?space+'AD':''))
   } else {
-    iYear = Math.round(YEAR_NOW-iYear);
-    sReturn = Math.abs(iYear) + (iYear<0?space+'BC':(iYear<1500?space+'AD':''));
+    for (i = 0; amount>1000 && (aAnnum.length>=(i + 2)); i++) amount /= 1000
+    returnValue = amount.toFixed(round) + space + aAnnum[i]
   }
-  return sReturn + (isFuture?noSlug?' from now':'-from-now':'');
+  return (noSlug&&extended?'':(isFuture||isGregorian?'':'-')) + returnValue + (noSlug&&extended?(isFuture?' from now':' ago'):'')
 }
 
 /**
@@ -50,30 +50,23 @@ function formatAnnum(year,round,noSlug){
  * @param {string} formatted
  * @returns {number}
  */
-function unformatAnnum(formatted){
-  var aString = formatted.match(/[a-zA-Z]+/)
-    ,sString = aString?aString[0]:''
-    ,aNumber = formatted.match(/[0-9\.]+/)
-    ,fNumber = aNumber&&parseFloat(aNumber[0])||0 // odo: Uncaught TypeError: Cannot read property '0' of null
-    ,iAgo = fNumber
-  ;
-  if (sString==='Ga') {
-    iAgo = fNumber*1E9;
-  } else if (sString==='Ma') {
-    iAgo = fNumber*1E6;
-  } else if (sString==='ka') {
-    iAgo = fNumber*1E3;
-  } else if (sString==='BC') {
-    iAgo = fNumber + YEAR_NOW;
-  } else if (sString==='AD'||sString==='') {
-    iAgo = fNumber - YEAR_NOW;
+export function unformatAnnum(formatted){
+  const isNegated = formatted.substr(0,1)==='-'
+    ,string = (formatted.match(/[a-zA-Z]+/)||[''])[0]
+    ,number = parseFloat((formatted.match(/[0-9.]+/)||[0])[0])
+  let ago = number
+  if (string==='Ga') {
+    ago = number*1E9 * (isNegated?1:-1)
+  } else if (string==='Ma') {
+    ago = number*1E6 * (isNegated?1:-1)
+  } else if (string==='ka') {
+    ago = number*1E3 * (isNegated?1:-1)
+  } else if (string==='BC') {
+    ago = number + YEAR_NOW
+  } else if (string==='AD'||string==='') {
+    ago = YEAR_NOW - number
   }
-//		console.log('sMoment',sMoment); // log
-//		console.log('sString',sString); // log
-//		console.log('fNumber',fNumber); // log
-//		console.log('iAgo',iAgo); // log
-  // todo: not quite working yet for lower vs future: ie 1969 vs 3000 (make future notation similar to Ga)
-  return iAgo;
+  return ago
 }
 
 /**
@@ -86,10 +79,10 @@ function unformatAnnum(formatted){
  */
 function duration(years,round){
   // todo: rounding sometimes off: split at . truncate and join
-  if (round===undefined) round = 0;
-  for (var i = 0; years>1000 && (aDuration.length>=(i + 2)); i++) years /= 1000;
-  var iMult = Math.pow(10,round);
-  return (Math.round(years * iMult) / iMult) +sSpace+ aDuration[i] +sSpace+ 'years';
+  if (round===undefined) round = 0
+  for (var i = 0; years>1000 && (aDuration.length>=(i + 2)); i++) years /= 1000
+  var iMult = Math.pow(10,round)
+  return (Math.round(years * iMult) / iMult) +sSpace+ aDuration[i] +sSpace+ 'years'
 }
 
 export default {

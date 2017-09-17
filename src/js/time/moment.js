@@ -59,7 +59,7 @@ const SINCE = 'since'
       dispatch&&this.change.dispatch(this.ago);
       return this
     }
-    ,toString(){return time.formatAnnum(this.ago,2)}
+    ,toString(){return time.formatAnnum(this.ago)}
     ,clone(){return moment(this.ago)}
   }
 
@@ -68,7 +68,7 @@ const SINCE = 'since'
  * @param {string} [type=moment.AGO] Denotes what type of value is parsed: moment.AGO, moment.SINCE or moment.YEAR.
  */
 function moment(value,type=AGO){
- 
+
   const writable = true
     ,inst = Object.create(proto,{
       value: {writable,value}

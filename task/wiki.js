@@ -1,7 +1,10 @@
 const request = require('request')
+  // ,wikitext = require('parse-wikitext')
   ,{read,save} = require(__dirname+'/utils')
   ,{parseWikitext} = require(__dirname+'/txtwiki')
-  ,file = './src/data/events.json'
+  ,commander = require('commander').parse(process.argv)
+  ,file = commander.args[0]
+  // ,file = './src/data/events.json'
   // ,file = './src/data/eras.json'
   //
   ,sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query&prop=revisions&rvprop=content&titles=
@@ -215,7 +218,17 @@ function getWikiImageInfo(fileName) {
 		},oGetVars))
 	return getWikiJson(sUri)
 		.then(getPageContent)
-		.then(s=>s.replace(/\n/g,'\r'))
+		.then(s=>{
+			// hack and slash the image info wikitext, we only need it for search anyway
+			// console.log('s',s); // todo: remove log
+			return (s.match(/(:en:.*(]]))|(en=.*)|(en\|.*)/g)||[])
+				.map(s=>s.replace(/(:en:|en=|en\||[\[\]{}|])/g,' '))
+				.join(' ').split(/\s+/g)
+				.reduce((a,b)=>(a.includes(b)||a.push(b),a),[])
+				.filter(s=>!['','.','of','the','and','in','<br>','on','is','by','to','the','of','a'].includes(s))
+				.join(' ')
+		})
+		// .then(s=>s.replace(/\n/g,'\r'))
 }
 
 /**

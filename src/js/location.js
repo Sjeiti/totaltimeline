@@ -15,9 +15,8 @@ const history = window.history
   ,visibleRange = model.range
   ,pathname = location.pathname.substr(1)
 let sLocationOriginalPath = location.pathname
-  //,sLocationBase = location.origin+'/'+(sLocationOriginalPath.match(/[^\/]+/g)||['']).shift()
   ,sDocumentTitle = document.title
-  ,bFirstChange = true
+  ,isFirstChange = true
   ,hash = location.hash.substr(1)
   ,search = location.search.substr(1).split(/&/g)
     .map(kv=>kv.split(/=/))
@@ -70,16 +69,14 @@ function onEntryShown(collectionEntry){
  * @param {string} hash
  */
 function updated(path,hash){
-  var bNoHash = hash===undefined||hash===''
+  const bNoHash = hash===undefined||hash===''
     ,sPath = bNoHash?path:hash
-    ,aPath
-    ,iPath
   if (sPath.length>0) {
-    aPath = sPath.split('/')
-    iPath = aPath.length
+    const aPath = sPath.split('/')
+      ,iPath = aPath.length
     // Event
     if  (iPath===1||iPath===3) {
-      var sLocationSlug = aPath[0]
+      const sLocationSlug = aPath[0]
       if (collections.length!==collections.loaded) {
         collections.dataLoaded.add(showSlugEntry.bind(null,sLocationSlug))
       } else {
@@ -88,14 +85,14 @@ function updated(path,hash){
     }
     // Range
     if (iPath>=2) {
-      var bPath2 = iPath===2
+      const bPath2 = iPath===2
         ,iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
         ,iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
 
       // don't animate the very first time
-      if (bFirstChange) {
+      if (isFirstChange) {
         visibleRange.set(iAgoStart,iAgoEnd)
-        bFirstChange = false
+        isFirstChange = false
       } else {
         visibleRange.animate(iAgoStart,iAgoEnd);// callback
       }
@@ -129,33 +126,22 @@ function showSlugEntry(slug){
  * @param {range} [range] The current range.
  */
 function update(event,range){
-  // console.log('update',{event,range}); // todo: remove log
-  //console.log('location.update',!!event,!!range); // log
-  var /*currentState = history.state
-    ,*/sSlugStart = range&&formatAnnum(range.start.ago,2,false)
+  const sSlugStart = range&&formatAnnum(range.start.ago,2,false)
     ,sSlugEnd = range&&formatAnnum(range.end.ago,2,false)
-
-  //console.log('history.state',currentState); // log
-  //log.watch('history.state',currentState)
-  //
-  //console.log('sLocationOriginalPath',sLocationOriginalPath); // log
   if (range&&sLocationOriginalPath.indexOf(sSlugStart)!==-1) { // why?
     sLocationOriginalPath = sLocationOriginalPath.split(sSlugStart).shift()
   }
   if (history.pushState) {//todo:what if no pushstate
-    var aPath = ['']
+    const aPath = ['']
       ,sPath = location.pathname
-      ,sNewPath
 
     if (event) aPath.push(event.info.slug)
     if (range) {
       aPath.push(sSlugStart)
       aPath.push(sSlugEnd)
     }
-    sNewPath = aPath.join('/')
-    //console.log('path\n\told: ',sPath,'\n\tnew: ',sNewPath); // log
+    const sNewPath = aPath.join('/')
     if (sNewPath!==sPath) {
-      //(location.pathname==='/'?history.pushState:history.replaceState)('','foobar',sNewPath)
       if (location.pathname==='/') {
         history.pushState('','foobar',sNewPath)
       } else {

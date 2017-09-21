@@ -35,20 +35,27 @@ const
  * @param {function} componentPrototype
  * @param {function} componentProperties
  */
-export function create(attr,componentPrototype,componentProperties){
-  if (componentFactories[attr]) {
+export function create(componentAttribute,componentPrototype,componentProperties){
+  if (componentFactories[componentAttribute]) {
     throw new Error(`Component with attribute '${componentAttribute}' already initialised`)
   } else {
-    const name = attr.replace(/^data\-/,'').replace(/^(.)/,s=>s.toUpperCase())
+    const instances = Object.assign([],{
+        get: function(){
+          return this.length && this[0] || null
+        }
+      })
+      ,name = componentAttribute.replace(/^data\-/,'').replace(/^(.)/,s=>s.toUpperCase())
       ,proto = Object.assign(componentPrototype||{},basePrototype,{
         toString: ()=>`[object ${name}]`
       })
       ,props = Object.assign(componentProperties||{},baseProperties)
-    componentFactories[attr] = (element,options)=>{
+    componentFactories[componentAttribute] = (element,options)=>{
       const inst = Object.create(proto,props)._init(element,options)
       inst.init&&inst.init()
+      instances.push(inst)
       return inst
     }
+    return instances
   }
 }
 

@@ -2,6 +2,7 @@
  * An object instance created by the factory method {@link totaltimeline.time.eventInfo}
  * @typedef {object} eventInfo
  * @property {string} name
+ * @property {string} slug
  * @property {string} icon
  * @property {string} importance
  * @property {string} accuracy

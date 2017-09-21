@@ -1,6 +1,6 @@
 import {create} from './component'
 
-create(
+export default create(
   'data-header'
   ,{
     init(){

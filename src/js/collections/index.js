@@ -6,9 +6,12 @@
 import Signal from 'signals'
 import {assignable} from '../util'
 
-const referenceItem = []
-  ,referenceSlug = []
-  ,referenceName = []
+function getAgo(item){
+	return item&&item.moment&&item.moment.ago||item&&item.start&&item.start.ago||0
+}
+
+const itemsOrdered = []
+  ,itemSlugMap = new Map()
   //
   ,assignableArrayPrototype = assignable(Array.prototype)
   //
@@ -32,13 +35,16 @@ const referenceItem = []
      */
     ,_onDataLoaded(collectionInstance){
       collectionInstance.forEach(item=>{
-        const {name,slug} = item.info
-        referenceItem.push(item)
-        referenceSlug.push(slug)
-        referenceName.push(name)
+        const {slug} = item.info
+        itemsOrdered.push(item)
+        itemSlugMap.set(slug,item)
       })
       this.loaded++
       this.dataLoaded.dispatch(collectionInstance)
+      // sorted by ago
+      itemsOrdered.sort((a,b)=>{
+          return getAgo(a)>getAgo(b)?-1:1
+      })
     }
     /**
      * Populates all the collections for a range into a view.
@@ -60,30 +66,31 @@ const referenceItem = []
      * @todo: check name: is it entry or item or what
      */
     ,getEntryBySlug(slug){
-      let entry
-      const iIndex = referenceSlug.indexOf(slug)
-      if (iIndex!==-1) {
-        entry = referenceItem[iIndex]
-      }
-      return entry
+      return itemSlugMap.get(slug)
     }
     /**
-     * Get a range of an entry based on closest entries
+     * Get a range of an entry based on the average distance of the closest entries
      * @param {object} entry
      * @param {number} numCloseEntries
+     * @param {number} zoom
      * @returns {number[]}
      */
-    ,getEntryRange(entry, numCloseEntries){
-      const index = referenceItem.indexOf(entry)
+    ,getEntryRange(entry, numCloseEntries, zoom){
+      const index = itemsOrdered.indexOf(entry)
         ,entryRange = entry.range
+        ,ago = getAgo(entry)
       let range = entryRange&&[entryRange.start.ago,entryRange.end.ago]||null
       if (!range&&index!==-1) {
-        const halfCloseEntries = numCloseEntries/2<<0
-          ,indexStart = Math.max(index - halfCloseEntries, 0)
-          ,indexEnd = Math.min(indexStart + numCloseEntries + 1, referenceItem.length - 1)
-          ,entryStart = referenceItem[indexStart]
-          ,entryEnd = referenceItem[indexEnd]
-        range = [entryStart,entryEnd].map(entry=>entry.moment.ago)
+        const indexStart = Math.max(index - numCloseEntries, 0)
+          ,indexEnd = Math.min(index + numCloseEntries, itemsOrdered.length - 1)
+          ,entryStart = itemsOrdered[indexStart]
+          ,entryEnd = itemsOrdered[indexEnd]
+          ,entryStartAgo = getAgo(entryStart)||ago
+          ,entryEndAgo = getAgo(entryEnd)||ago
+          ,entryStartDiff = entryStartAgo - ago
+          ,entryEndDiff = ago - entryEndAgo
+          ,deltaDiff = (entryStartDiff===0||entryEndDiff===0)?2*zoom*(entryStartDiff+entryEndDiff):zoom*(entryStartDiff + entryEndDiff)/2
+        range = [ago + deltaDiff, ago - deltaDiff]
       }
       return range
     }
@@ -93,42 +100,36 @@ const referenceItem = []
      * todo: replace strings more accurately (spaces and points)
      */
     ,_onCollectionDataLoaded(){
-      for (let i=0,j=referenceItem.length;i<j;i++) {
-        const oItem = referenceItem[i]
-          ,oInfo = oItem.info
-        let sCopy = oInfo.wikimedia
-
-        if (sCopy) {
-          for (let m=0,n=referenceSlug.length;m<n;m++) {
-            if (m!==i) {
-              const sSlug = referenceSlug[m]
-              let sName = referenceName[m]
-                ,rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-                ,aMatch = sCopy.match(rxMatch)
-                ,bMatch = !!aMatch
-
-              if (!bMatch) {
-                const oRefItem = referenceItem[m]
-                  ,oRefInfo = oRefItem.info
-                  ,aTags = oRefInfo.tags
-                  ,iTags = aTags.length
-
-                for (let k=0;k<iTags;k++) {
-                  sName = aTags[k]
-                  rxMatch = new RegExp('([\\s]('+sName+')[^a-z])','i')
-                  aMatch = sCopy.match(rxMatch)
-                  bMatch = !!aMatch
-                  if (bMatch) break
-                }
+      itemsOrdered.forEach(item=>{
+        const info = item.info
+        let copy = info.wikimedia
+        if (copy) {
+          itemsOrdered.forEach(checkItem=>{
+            if (item!==checkItem) {
+              const checkInfo = checkItem.info
+                ,checkSlug = checkInfo.slug
+              let checkName = checkInfo.name
+                ,rxMatch = new RegExp('([\\s]('+checkName+')[^a-z])','i')
+                ,matchString = copy.match(rxMatch)
+                ,isMatch = !!matchString
+              // if no exact match try the tags
+              if (!isMatch) {
+                checkInfo.tags.forEach(checkName=>{
+                  if (!isMatch) {
+                    rxMatch = new RegExp('([\\s]('+checkName+')[^a-z])','i')
+                    matchString = copy.match(rxMatch)
+                    isMatch = !!matchString
+                  }
+                })
               }
-              if (sSlug!==oInfo.slug&&bMatch) {
-                sCopy = sCopy.replace(rxMatch,'<a href="#'+sSlug+'">$1</a>')
+              if (isMatch) {
+                copy = copy.replace(rxMatch,'<a href="#'+checkSlug+'">$1</a>')
+                info.wikimedia = copy
               }
-              oInfo.wikimedia = sCopy
             }
-          }
+          })
         }
-      }
+      })
     }
   },assignableArrayPrototype)
   // collections properties

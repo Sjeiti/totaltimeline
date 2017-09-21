@@ -42,21 +42,22 @@ const proto = {
   }
 
   // todo: document // no overload! (see set)
-  // todo: callback to promise
   // todo: override existing animation
-  ,animate(startAgo,endAgo,callback){
+  ,animate(startAgo,endAgo){
     /*if (arguments.length===1) { // assume range
       endAgo = startAgo.end.ago;
       startAgo = startAgo.start.ago;
     }*/
-    const iStartFrom = this.start.ago
-      ,iStartDelta = startAgo - iStartFrom
-      ,iEndFrom = this.end.ago
-      ,iEndDelta = endAgo - iEndFrom
-    animate(1000,f=>{
-      const fInOut = animate.quadratic.inOut(f)
-      this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
-    },callback)
+    return new Promise(resolve=>{
+      const iStartFrom = this.start.ago
+        ,iStartDelta = startAgo - iStartFrom
+        ,iEndFrom = this.end.ago
+        ,iEndDelta = endAgo - iEndFrom
+      animate(1000,f=>{
+        const fInOut = animate.quadratic.inOut(f)
+        this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
+      },resolve)
+    })
   }
 
   /**

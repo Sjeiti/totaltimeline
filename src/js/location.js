@@ -44,7 +44,9 @@ function onRangeChange(){
   if (visibleRange.start.ago===time.UNIVERSE&&visibleRange.end.ago===time.NOW) {
     update()
   } else {
-    update(content.currentEntry,visibleRange);// todo: not null if something is selected
+    const contentInstance = content.get()
+      ,currentEntry = contentInstance&&contentInstance.currentEntry
+    update(currentEntry,visibleRange)
   }
 }
 
@@ -112,8 +114,8 @@ function showSlugEntry(slug){
     collections.dataLoaded.remove(showSlugEntry)
     entryShown.dispatch(oSlugInst)
     // zoom the entry with to n-closest entries
-    const range = collections.getEntryRange(oSlugInst,20)
-    range&&visibleRange.animate(...range)
+    const range = collections.getEntryRange(oSlugInst,2,2)
+    range&&visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown,oSlugInst))
   } else {
     const oPage = pages.getEntryBySlug(slug)
     oPage&&entryShown.dispatch({info:oPage})

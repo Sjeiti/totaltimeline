@@ -12,7 +12,7 @@ import {formatAnnum} from '../time'
 
 const writable = true
 
-create(
+export default create(
   'data-content'
   ,{
     init(){
@@ -66,7 +66,7 @@ create(
                 ,iNewStart = iAgo + iDuration/2
                 ,iNewEnd = iAgo - iDuration/2
               // have to add callback because animation immediately cancels content entry
-              visibleRange.animate(iNewStart,iNewEnd,onEntryShown.bind(null,entry))
+              visibleRange.animate(iNewStart,iNewEnd).then(onEntryShown.bind(null,entry))
             }
           } else if (entry.range) {
             // time = entry.range.start.toString()+' - '+entry.range.end.toString()
@@ -75,7 +75,6 @@ create(
           elmContentWrapper.classList.add(classNameReveal)
           setTimeout(()=>elmContentWrapper.classList.remove(classNameReveal))
 
-          console.log('time',time,time.ago); // todo: remove log
           clearChildren(elmContentWrapper)
             .appendChild(createContent(
               info.name

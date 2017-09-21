@@ -10,7 +10,7 @@ import key from '../signal/key'
 import resize from '../signal/resize'
 import mouseWheel from '../signal/mouseWheel'
 
-create(
+export default create(
   'data-timeline'
   ,{
     init(){

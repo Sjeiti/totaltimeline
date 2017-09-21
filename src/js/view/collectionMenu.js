@@ -2,7 +2,7 @@ import {create} from './component'
 import collections from '../collections'
 import {stringToElement,getFragment} from '../util'
 
-create(
+export default create(
   'data-collection-menu'
   ,{
     init(){

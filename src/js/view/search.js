@@ -5,17 +5,15 @@ import pages from './pages'
 
 const writable = true
   ,classNameVisible = 'visible'
-create(
+
+export default create(
   'data-search'
   ,{
     init(){
-      const parent = this.element.parentNode
-        ,html = getFragment(`<input type="text" id="search" placeholder="Search" autocomplete="off" />
-    <ul id="searchResult"></ul>`)
+      const html = getFragment(`<input type="text" id="search" placeholder="Search" autocomplete="off" />
+<ul id="searchResult"></ul>`)
       this._input = html.querySelector('input')
       this._result = html.querySelector('ul')
-      // parent.insertBefore(html,this.element)
-      // parent.removeChild(this.element)
       this.element.appendChild(html)
 
       const elmSearch = this._input
@@ -46,7 +44,8 @@ create(
           })
           Array.from(pages).forEach(page => {
             const {name, copy} = page;
-            const result = 10*searchString(query, name) + searchString(query, copy)
+            const indexOnName = name.indexOf(query)
+            const result = 10*searchString(query, name) + searchString(query, copy) + (indexOnName!==-1&&Math.min(0,20-indexOnName)||0)
             if (result !== 0) {
               found.push([result, page])
             }
@@ -60,7 +59,6 @@ create(
                 , info = entry.info || entry
               searchFragment.appendChild(getFragment(`<li><a href="#${info.slug}">${info.name.replace(query, `<strong>${query}</strong>`)}</a></li>`))
             })
-
           searchResult.appendChild(searchFragment)
           currentQuery = query
         }

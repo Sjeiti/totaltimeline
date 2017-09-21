@@ -96,7 +96,7 @@ const itemsOrdered = []
     }
     /**
      * All data is loaded so we now cross-reference text with anchors.
-     * todo: refactor more effeciently
+     * todo: refactor more efficiently
      * todo: replace strings more accurately (spaces and points)
      */
     ,_onCollectionDataLoaded(){

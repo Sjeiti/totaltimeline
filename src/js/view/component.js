@@ -51,7 +51,7 @@ export function create(componentAttribute,componentPrototype,componentProperties
       ,props = Object.assign(componentProperties||{},baseProperties)
     componentFactories[componentAttribute] = (element,options)=>{
       const inst = Object.create(proto,props)._init(element,options)
-      inst.init&&inst.init()
+      inst.init&&inst.init(element,options)
       instances.push(inst)
       return inst
     }

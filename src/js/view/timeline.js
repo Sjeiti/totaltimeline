@@ -2,7 +2,7 @@
 import {create} from './component'
 import time from '../time'
 import view from './'
-import {getFragment,stringToElement,clearChildren} from '../util'
+import {getFragment,clearChildren} from '../util'
 import collections from '../collections'
 import model from '../model'
 import touch from '../touch'
@@ -13,12 +13,11 @@ import mouseWheel from '../signal/mouseWheel'
 export default create(
   'data-timeline'
   ,{
-    init(){
+    init(element){
       /////////////////////////////////////////////////////
       /////////////////////////////////////////////////////
 
-      const element = this.element
-        ,range = model.range
+      const range = model.range
         ,body = document.body
         ,elements = getFragment(`<time></time><time></time>
 <div class="before"></div><div class="after"></div>

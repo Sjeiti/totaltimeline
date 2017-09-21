@@ -27,6 +27,9 @@ const proto = {
    * @param {number} endAgo
    */
   ,set(startAgo,endAgo){
+    if (startAgo<endAgo) {
+      [endAgo,startAgo] = [startAgo,endAgo]
+    }
     if (arguments.length===1) { // assume range
       endAgo = startAgo.end.ago
       startAgo = startAgo.start.ago

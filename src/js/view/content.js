@@ -15,11 +15,10 @@ const writable = true
 export default create(
   'data-content'
   ,{
-    init(){
+    init(element){
       const that = this
         //
         ,visibleRange = model.range
-        ,elmContent = this.element
         ,classNameReveal = 'reveal'
         ,contentStyle = style.select('[data-content]')
         ,elmContentWrapper = stringToElement('<div class="content"></div>')
@@ -33,14 +32,14 @@ export default create(
 
       // Initialise event listeners (and signals).
       model.entryShown.add(onEntryShown)
-      elmContent.addEventListener('scroll',onContentScroll)
+      element.addEventListener('scroll',onContentScroll)
       // resize.add(onContentScroll)
 
       // Initialise view
-      elmContent.appendChild(elmContentWrapper)
+      element.appendChild(elmContentWrapper)
 
       // close view
-      elmContent.addEventListener('click',({target})=>{
+      element.addEventListener('click',({target})=>{
         target.nodeName==='BUTTON'&&model.entryShown.dispatch()
       })
 
@@ -48,28 +47,24 @@ export default create(
        * Show the content of the entry
        * @param {collectionEntry} entry
        */
-      function onEntryShown(entry) {
+      function onEntryShown(entry, animateIfNeeded) {
         that.currentEntry = entry
         clearChildren(elmContentWrapper)
         clearChildren(fragment)
         setContentGrow(entry&&1||0)
-        elmContent.scrollTop = 0
+        element.scrollTop = 0
         if (entry) {
           const {info} = entry
           let time = ''
           if (entry.moment) {
             time = formatAnnum(entry.moment.ago,2,true,true)
             // scroll if entry is not within view
-            if (!visibleRange.coincides(entry.moment)) {
-              const iAgo = entry.moment.ago
-                ,iDuration = visibleRange.duration
-                ,iNewStart = iAgo + iDuration/2
-                ,iNewEnd = iAgo - iDuration/2
-              // have to add callback because animation immediately cancels content entry
-              visibleRange.animate(iNewStart,iNewEnd).then(onEntryShown.bind(null,entry))
+            if (!visibleRange.coincides(entry.moment)&&animateIfNeeded) {
+              // zoom the entry with to n-closest entries
+              const range = collections.getEntryRange(entry, 2, 2)
+              range && visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
             }
           } else if (entry.range) {
-            // time = entry.range.start.toString()+' - '+entry.range.end.toString()
             time = `${formatAnnum(entry.range.start.ago,2,true,true)} to ${formatAnnum(entry.range.end.ago,2,true,true)}`
           }
           elmContentWrapper.classList.add(classNameReveal)
@@ -80,12 +75,9 @@ export default create(
               info.name
               ,time
               ,info.thumb
-              ,info.wikimedia
+              ,info.explanation||info.wikimedia
               ,info.wikimediakey
             ))
-          //elmContentWrapper.innerHTML = tmpl(templateId,Object.assign(entry,{
-          //  time: time
-          //}))
         }
       }
 
@@ -93,9 +85,9 @@ export default create(
        * Change the vertical proportions when scrolling
        */
       function onContentScroll(){
-        const scrollTop = elmContent.scrollTop
-          ,scrollHeight = elmContent.scrollHeight
-          ,height = elmContent.offsetHeight
+        const scrollTop = element.scrollTop
+          ,scrollHeight = element.scrollHeight
+          ,height = element.offsetHeight
           ,isSameHeight = height===scrollHeight
         let fPart
         if (isSameHeight&&flexGrowPrefixes['flex-grow']!==1) {

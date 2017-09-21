@@ -12,7 +12,7 @@ import mouseWheel from '../signal/mouseWheel'
 export default create(
   'data-overview'
   ,{
-    init(){
+    init(element){
 
       const span = model.span
         ,range = model.range
@@ -48,7 +48,7 @@ export default create(
       // resize
       resize.add(onResize)
       // is over
-      ;['mouseover','mouseout','mousemove'].forEach(e=>this.element.addEventListener(e,onOverViewMouse,false))
+      ;['mouseover','mouseout','mousemove'].forEach(e=>element.addEventListener(e,onOverViewMouse,false))
       // drag
       elmRange.addEventListener('mousedown',onRangeMouseDownUp,false)
       // wheel
@@ -61,8 +61,7 @@ export default create(
       //mSpan.addEventListener(s.touchmove,onTouchMove,false)
 
       // Initialise view
-      clearChildren(this.element)
-      this.element.appendChild(elmSpan)
+      clearChildren(element).appendChild(elmSpan)
       onResize()
       onRangeChange()
 

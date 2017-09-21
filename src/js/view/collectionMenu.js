@@ -5,7 +5,7 @@ import {stringToElement,getFragment} from '../util'
 export default create(
   'data-collection-menu'
   ,{
-    init(){
+    init(element){
       const html = getFragment(`<label for="collections-checkbox">collections</label>
 <input type="checkbox" id="collections-checkbox" class="visuallyhidden" />
 <ul></ul>`)
@@ -20,7 +20,7 @@ export default create(
         ul.appendChild(li)
       })
 
-      this.element.appendChild(html)
+      element.appendChild(html)
     }
     ,_onChange({target}){
       target.collection.show(target.checked)

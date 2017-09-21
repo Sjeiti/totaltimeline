@@ -38,7 +38,7 @@ export function formatAnnum(year,round=0,noSlug=true,extended=false){
     returnValue = Math.abs(amount) + (amount<0?space+'BC':(amount<1500?space+'AD':''))
   } else {
     for (i = 0; amount>1000 && (aAnnum.length>=(i + 2)); i++) amount /= 1000
-    returnValue = amount.toFixed(round) + space + aAnnum[i]
+    returnValue = amount.toFixed(round).replace(/\.?0+$/g,'') + space + aAnnum[i]
   }
   return (noSlug&&extended?'':(isFuture||isGregorian?'':'-')) + returnValue + (noSlug&&extended?(isFuture?' from now':' ago'):'')
 }

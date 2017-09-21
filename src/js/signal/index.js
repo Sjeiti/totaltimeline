@@ -27,7 +27,7 @@ import Signal from 'signals'
  * @todo add window.addEventListener('popstate',handleCloseOverlay);
  */
 export default function createSignal(init,createNow){
-	var oSignal = new Signal()
+	const oSignal = new Signal()
 		,fnTmpAdd = oSignal.add
 		,fnTmpAddOnce = oSignal.addOnce
 		,fnInited = function(){

@@ -7,12 +7,11 @@ let oldLog
 export default create(
   'data-console'
   ,{
-    init(){
-      console.log('init',this,this.element)
-      this.element.appendChild(
+    init(element){
+      element.appendChild(
         getFragment('<h3>foo<h3><pre><pre>')
       )
-      this._pre = this.element.querySelector('pre')
+      this._pre = element.querySelector('pre')
       this.output('console')
       oldLog = console.log
       console.log = this.output.bind(this)

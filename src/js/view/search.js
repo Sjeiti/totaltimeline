@@ -1,7 +1,6 @@
 import {create} from './component'
 import {getFragment,clearChildren} from '../util'
 import collections from '../collections'
-import pages from './pages'
 
 const writable = true
   ,classNameVisible = 'visible'
@@ -9,12 +8,12 @@ const writable = true
 export default create(
   'data-search'
   ,{
-    init(){
+    init(element){
       const html = getFragment(`<input type="text" id="search" placeholder="Search" autocomplete="off" />
 <ul id="searchResult"></ul>`)
       this._input = html.querySelector('input')
       this._result = html.querySelector('ul')
-      this.element.appendChild(html)
+      element.appendChild(html)
 
       const elmSearch = this._input
         ,searchResult = this._result
@@ -42,14 +41,14 @@ export default create(
               }
             })
           })
-          Array.from(pages).forEach(page => {
+          /*Array.from(pages).forEach(page => {
             const {name, copy} = page;
             const indexOnName = name.indexOf(query)
             const result = 10*searchString(query, name) + searchString(query, copy) + (indexOnName!==-1&&Math.min(0,20-indexOnName)||0)
             if (result !== 0) {
               found.push([result, page])
             }
-          })
+          })*/
           clearChildren(searchFragment)
           clearChildren(searchResult)
           found

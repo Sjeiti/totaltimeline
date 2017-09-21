@@ -5,9 +5,9 @@
 
 import time from './time'
 import collections from './collections'
+import about from './collections/about'
 import model from './model'
 import content from './view/content'
-import pages from './view/pages'
 
 const history = window.history
   ,formatAnnum = time.formatAnnum
@@ -110,15 +110,16 @@ function updated(path,hash){
  */
 function showSlugEntry(slug){
   const oSlugInst = collections.getEntryBySlug(slug)
+  //////////////////////////////////
+  if (!oSlugInst&&slug==='totaltimeline') {
+    // todo: check distance before animating
+    visibleRange.animate(time.UNIVERSE,time.YEAR_NOW)
+      .then(entryShown.dispatch.bind(entryShown,about))
+  }
+  //////////////////////////////////
   if (oSlugInst) {
     collections.dataLoaded.remove(showSlugEntry)
     entryShown.dispatch(oSlugInst)
-    // zoom the entry with to n-closest entries
-    const range = collections.getEntryRange(oSlugInst,2,2)
-    range&&visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown,oSlugInst))
-  } else {
-    const oPage = pages.getEntryBySlug(slug)
-    oPage&&entryShown.dispatch({info:oPage})
   }
 }
 

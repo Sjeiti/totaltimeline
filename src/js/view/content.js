@@ -6,9 +6,9 @@
 import {create} from './component'
 import {stringToElement,clearChildren} from '../util'
 import model from '../model'
-// import resize from '../signal/resize'
 import style from '../style'
 import {formatAnnum} from '../time'
+import collections from '../collections'
 
 const writable = true
 
@@ -46,8 +46,9 @@ export default create(
       /**
        * Show the content of the entry
        * @param {collectionEntry} entry
+       * @param {boolean} [animateIfNeeded=true]
        */
-      function onEntryShown(entry, animateIfNeeded) {
+      function onEntryShown(entry, animateIfNeeded=true) {
         that.currentEntry = entry
         clearChildren(elmContentWrapper)
         clearChildren(fragment)
@@ -62,6 +63,7 @@ export default create(
             if (!visibleRange.coincides(entry.moment)&&animateIfNeeded) {
               // zoom the entry with to n-closest entries
               const range = collections.getEntryRange(entry, 2, 2)
+                ,{entryShown} = model
               range && visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
             }
           } else if (entry.range) {

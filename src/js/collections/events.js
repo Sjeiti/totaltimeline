@@ -26,6 +26,7 @@ export default collection(
           entryMoment
           ,eventInfo().parse(entry)
           ,index
+          ,entry
         ))
       }
     }.bind(this))

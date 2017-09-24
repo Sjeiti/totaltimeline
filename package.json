@@ -44,7 +44,8 @@
     "rimraf": "^2.6.1",
     "serve-static": "^1.12.3",
     "shx": "^0.2.2",
-    "webpack": "^3.4.1"
+    "webpack": "^3.4.1",
+    "wiky.js": "0.0.1"
   },
   "_devDependencies": {
     "glob": "~3.2.7",

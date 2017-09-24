@@ -24,6 +24,13 @@
 
   article {
     padding: 1rem @screenPadding;
+    @media only screen and (min-width: 768px) {
+      font-size: 16px;
+      line-height: 150%;
+    }
+    &.article-totaltimeline {
+      time { display: none; }
+    }
     header {
       margin-bottom: 1rem;
       &:after {

@@ -1,7 +1,7 @@
 import collections from './'
 import Signal from 'signals'
 import model from '../model'
-import {fetchJson} from '../fetchJson'
+import {fetchJson} from '../fetchProxy'
 import {assignable,emptyNode} from '../util'
 
 /**

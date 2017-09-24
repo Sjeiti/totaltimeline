@@ -8,6 +8,7 @@ import './view/timeline'
 import './view/content'
 import './view/console'
 import './view/collectionMenu'
+import './api'
 
 import './collections/events'
 import './collections/periods'

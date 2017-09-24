@@ -40,7 +40,10 @@ export default create(
 
       // close view
       element.addEventListener('click',({target})=>{
-        target.nodeName==='BUTTON'&&model.entryShown.dispatch()
+        if (target.nodeName==='BUTTON') {
+          target.hasAttribute('data-close')&&model.entryShown.dispatch()
+          target.hasAttribute('data-edit')&&model.editEvent.dispatch(this.currentEntry)
+        }
       })
 
       /**
@@ -75,6 +78,7 @@ export default create(
           clearChildren(elmContentWrapper)
             .appendChild(createContent(
               info.name
+              ,info.slug
               ,time
               ,info.thumb
               ,info.explanation||info.wikimedia
@@ -116,22 +120,24 @@ export default create(
       /**
        * Create the content for and event
        * @param {string} name
+       * @param {string} slug
        * @param {string} time
        * @param {string} img
        * @param {string} text
        * @param {string} wikimediakey
        * @returns {HTMLElement}
        */
-      function createContent(name,time,img,text,wikimediakey){
-        return stringToElement(`<article>
+      function createContent(name,slug,time,img,text,wikimediakey){
+        return stringToElement(`<article class="article-${slug}">
           <header>
             <h3>${name}</h3>
             <time>${time}</time>
-            <button>&#215;</button>
+            <button data-close>&#215;</button>
+            ${model.api?'<button data-edit>edit</button>':''}
           </header>
           <img src="${img}"/>
           ${text}
-          ${wikimediakey&&`<footer><a target="wikipedia" href="https://wikipedia.org/wiki/{url.split(':')[0]}">wikipedia</a></footer>`||''}
+          ${wikimediakey&&`<footer><a target="wikipedia" href="https://wikipedia.org/wiki/${wikimediakey.split(':')[0]}">wikipedia</a></footer>`||''}
         </article>`)
       }
 

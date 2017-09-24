@@ -11,8 +11,10 @@ export default {
   span: range(moment(time.UNIVERSE),moment(time.NOW))
   ,range: range(moment(time.UNIVERSE),moment(time.NOW),moment(time.UNIVERSE))
   ,entryShown: new Signal()
+  ,editEvent: new Signal()
   ,cssPrefix: util.getCssValuePrefix()
   ,userAgent: {
     isPhantom: navigator.userAgent.match(/PhantomJS/)
   }
+  ,api: false
 }

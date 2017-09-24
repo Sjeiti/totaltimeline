@@ -41,9 +41,11 @@ const proto = {
  * @name event
  * @param {moment} moment
  * @param {eventInfo} info
+ * @param {number} index
+ * @param {object} data
  * @returns {event}
  */
-export default function event(moment,info,index){
+export default function event(moment,info,index,entry){
   const event = Object.create(proto,{
       moment: {value:moment}
       ,info: {value:info}
@@ -52,6 +54,8 @@ export default function event(moment,info,index){
   <div class="event"></div>
   <h3><a href="${info.slug}">${info.name}</a></h3>
 </div>`).firstChild}
+      ,index: {value:index}
+      ,entry: {value:entry}
     })
     ,mWrap = event.element
     ,mEvent = mWrap.querySelector('.event')

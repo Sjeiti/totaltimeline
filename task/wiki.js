@@ -43,11 +43,11 @@ read(file)
       if (txt) event.wikimedia = txt
       else if (txt==='') console.log('-',event.name)
 			// images
-			if (img&&img.sThumbnailSource) {
-      	event.thumb = img.sThumbnailSource
-				event.imagename = img.sPageImage
-				event.imageinfo = img.sImageInfo
-			} else if (img&&!img.sThumbnailSource) {
+			if (img&&img.thumbSrc) {
+      	event.thumb = img.thumbSrc
+				event.imagename = img.imageName
+				event.imageinfo = img.imageInfo
+			} else if (img&&!img.thumbSrc) {
       	console.warn(`no image for event '${event.name}'`);
 			}
       return event

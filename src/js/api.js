@@ -46,14 +46,15 @@ function onEditEvent(event){
   const keys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
     ,inputs = [];
   keys.forEach(prop=>{
-    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${event.entry[prop]||''}" /></label>`)
+    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${(event.entry[prop]||'').replace(/(["<>\n])/g,'\\$1')||''}" /></label>`)
   })
   const element = stringToElement(`<div class="modal"><div class="modal-content">
-  <h4>Edit event</h4><button data-close>&#215;</button>
+  <button class="btn-icon icn-cross float-right" data-close></button>
+  <h4>Edit event</h4>
   <form method="post" action="/api/events">
     ${inputs.join('')}
     <input type="hidden" name="index" value="${event.index}" />
-    <button data-save>save</button>
+    <p><br/><button class="btn float-right" data-save>save</button></p>
   </form>
 </div></div>`)
 	document.body.appendChild(element)

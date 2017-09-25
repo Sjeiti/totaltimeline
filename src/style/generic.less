@@ -48,6 +48,33 @@ ul.list {
   padding-left: 20px;
 }
 
+input {
+  &[type=text] {
+    padding: 0 .8rem;
+    border: 0;
+    box-shadow: 0 0 0 1px #EEE inset, 2px 4px 8px fade(black, 5%) inset;
+    line-height: @headerHeight;
+    transition: box-shadow;
+    &:focus {
+      box-shadow: 0 0 0 1px #EEE inset, 2px 4px 8px fade(black, 20%) inset;
+    }
+  }
+}
+
+.btn {
+  padding: 0 .8rem;
+  border: 0;
+  background-color: #EEE;
+  line-height: @headerHeight;
+}
+
+.btn-icon {
+  border: 0;
+  background-color: transparent;
+}
+
+.float-right { float: right; }
+
 
 [data-before]:before {
   content: attr(data-before);

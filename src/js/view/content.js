@@ -132,8 +132,8 @@ export default create(
           <header>
             <h3>${name}</h3>
             <time>${time}</time>
-            <button data-close>&#215;</button>
-            ${model.api?'<button data-edit>edit</button>':''}
+            <button class="icn-cross" data-close></button>
+            ${model.api?'<button class="icn-pencil" data-edit></button>':''}
           </header>
           <img src="${img}"/>
           ${text}

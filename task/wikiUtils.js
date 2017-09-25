@@ -107,9 +107,9 @@ function splitSubject(subject){
  * http://en.wikipedia.org/w/api.php?titles=ESO-VLT-Laser-phot-33a-07.jpg&prop=pageimages&pithumbsize=320&format=json&action=query
  */
 function getImageThumb(fileName){
-	let sThumbnailSource = ''
-		,sPageImage = ''
-		,sImageInfo = ''
+	let thumbSrc = ''
+		,imageName = ''
+		,imageInfo = ''
     ,promise
 	if (fileName!=='') {
 		const sUri = sEndPointEn+serialize({
@@ -121,21 +121,22 @@ function getImageThumb(fileName){
 			})
     promise = getWikiJson(sUri)
       .then(result=>{
+      	console.log('result',result); // todo: remove log
         for (let id in result) {
           if (id!==-1) {
             const page = result[id]
-            sThumbnailSource = page.thumbnail&&page.thumbnail.source
-            sPageImage = page.pageimage
+            thumbSrc = page.thumbnail&&page.thumbnail.source
+            imageName = page.pageimage
             break
           }
         }
-        return getWikiImageInfo(sPageImage)
+        return getWikiImageInfo(imageName)
           .then(result=>{
-            sImageInfo = result
+            imageInfo = result
             return {
-              sThumbnailSource
-              ,sPageImage
-              ,sImageInfo
+              thumbSrc
+              ,imageName
+              ,imageInfo
             }
           })
       })

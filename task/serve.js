@@ -8,14 +8,14 @@ const fs = require('fs')
   ,serveStatic = require('serve-static')
   ,openBrowser = require('open')
   ,utils = require('./utils')
-  ,{read,save} = utils
+  ,{read,save,warn} = utils
   ,root = process.argv[2]||'src'
   ,port = process.argv[3]||8183
   ,router = express.Router()
   ,path = require('path')
   //
   ,eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
-  ,{getWikiMedia} = require(__dirname+'/wikiUtils')
+  ,{getWikiMedia,getImageThumb} = require(__dirname+'/wikiUtils')
   ,jsonSrc = './src/static/events.json'
   ,jsonDist = './dist/static/events.json'
 
@@ -54,31 +54,28 @@ function onPostEvent(request, response){
     const resultEvent = eventKeys.reduce((obj,prop)=>{
       obj[prop] = body[prop]||''
       return obj
-    },{});
-    //
-    /*const resultEvent = {};
-    eventKeys.forEach(prop=>{
-      resultEvent[prop] = body[prop]||''
-    })*/
-    //
-    getWikiMedia(body.wikimediakey)
-      .then(res=>{
-        console.log('res',res); // todo: remove log
-        resultEvent.wikimedia = res
-        const index = parseInt(body.index,10)
-        // load local data
-        read(jsonSrc)
-          .then(JSON.parse)
-          .then(data=>{
-            data[index] = resultEvent
-            return Promise.all([
-              save(jsonDist,JSON.stringify(data))
-              ,save(jsonSrc,JSON.stringify(data))
-            ])
-          })
-          .then(()=>response.status(200).json(resultEvent))
+    },{})
 
-      },console.warn.bind(console,'err'))
+      ,index = parseInt(body.index,10)
+      ,hasWikiMedia = !!body.wikimedia
+      ,hasThumb = !!body.thumb
+    console.log('hasWikiMedia',hasWikiMedia); // todo: remove log
+    console.log('hasThumb',hasThumb); // todo: remove log
+    //
+    Promise.all([
+        hasWikiMedia||getWikiMedia(body.wikimediakey)
+          .then(wikimedia=>{
+            resultEvent.wikimedia = wikimedia
+          },warn)
+        ,hasThumb||body.image&&getImageThumb(body.image)
+            .then(image=>{
+              resultEvent.thumb = image.thumbSrc
+              resultEvent.imagename = image.imageName
+              resultEvent.imageinfo = image.imageInfo
+            })
+      ])
+      .then(()=>saveJsonEntry(resultEvent,index))
+      .then(()=>response.status(200).json(resultEvent),warn)
 
   } else {
     const errors = []
@@ -88,6 +85,19 @@ function onPostEvent(request, response){
     hasImage||errors.push('Event has no image.')
     response.status(400).json({error:errors.join(' ')})
   }
+}
+
+function saveJsonEntry(entry,index){
+	read(jsonSrc)
+    .then(JSON.parse)
+    .then(data=>{
+      data[index] = entry
+      return Promise.all([
+        save(jsonDist,JSON.stringify(data))
+        ,save(jsonSrc,JSON.stringify(data))
+      ])
+    })
+
 }
 
 /**

@@ -5,8 +5,8 @@
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run css && npm run copy",
-    "copy": "shx cp src/index.html dist/index.html && shx cp src/.htaccess dist/.htaccess && shx cp -r src/static dist && shx cp src/style/*.png dist/style",
-    "copy:l": "cp src/index.html dist/index.html | cp src/.htaccess dist/.htaccess | cp -r src/static dist | cp src/style/*.png dist/style",
+    "copy": "shx cp src/index.html dist/index.html && shx cp src/.htaccess dist/.htaccess && shx cp -r src/static dist && shx cp src/style/*.png dist/style && shx cp -r src/fonts dist",
+    "copy:l": "cp src/index.html dist/index.html | cp src/.htaccess dist/.htaccess | cp -r src/static dist | cp src/style/*.png dist/style | cp -r src/fonts dist",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",
     "js:watch": "chokidar src/**/*.js -c \"npm run js\"",
@@ -22,6 +22,7 @@
     "clean": "rimraf dist"
   },
   "devDependencies": {
+    "adm-zip": "^0.4.7",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
@@ -45,7 +46,8 @@
     "serve-static": "^1.12.3",
     "shx": "^0.2.2",
     "webpack": "^3.4.1",
-    "wiky.js": "0.0.1"
+    "wiky.js": "0.0.1",
+    "xml2js": "^0.4.19"
   },
   "_devDependencies": {
     "glob": "~3.2.7",

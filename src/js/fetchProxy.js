@@ -23,7 +23,19 @@ export function postForm(form){
     .then(response=>response.json(),console.warn.bind(console,'error:'))
 }
 
+export function del(url,body){
+  const params = Object.keys(body).reduce((a,key)=>(a.push(`${key}=${body[key]}`),a),[]).join('&')
+  const headers = new Headers()
+  headers.append('Content-Type', 'application/json');
+  return fetch(url+'?'+params,{
+    method: 'DELETE'
+    ,headers
+  })
+    .then(response=>response.json(),console.warn.bind(console,'error:'))
+}
+
 export default {
   fetchJson
   ,postForm
+  ,del
 }

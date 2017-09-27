@@ -38,8 +38,6 @@ function initApi(){
   })
 }
 
-
-
 function onEditEvent(event){
   const inputs = [];
   eventKeys.forEach(prop=>{
@@ -64,26 +62,29 @@ function onEditEvent(event){
   </form>
 </div></div>`)
 	document.body.appendChild(element)
-  //
-  // form submission
-  const form = element.querySelector('form')
-  form.addEventListener('submit',e=>{
-    e.preventDefault()
-    postForm(e.target)
-      .then(response=>{
-        console.log('response',response)
-        response.error||window.location.reload(false)
-      })
-  })
-  //
-  // close view
-  element.addEventListener('click',({target})=>{
-    if (target.nodeName==='BUTTON') {
-      target.hasAttribute('data-close')&&document.body.removeChild(element)
-      ||target.hasAttribute('data-new')&&newEvent()
-      ||target.hasAttribute('data-delete')&&deleteEvent(event)
-    }
-  })
+  element.querySelector('form').addEventListener('submit',onSubmit)
+  element.addEventListener('click',onClick.bind(null,event))
+}
+
+function onSubmit(e){
+  e.preventDefault()
+  postForm(e.target)
+    .then(response=>{
+      console.log('response',response)
+      response.error||reload()
+    })
+}
+
+function onClick(event,{target}){
+  if (target.nodeName==='BUTTON') {
+    target.hasAttribute('data-close')&&document.body.removeChild(element)
+    ||target.hasAttribute('data-new')&&newEvent()
+    ||target.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
+  }
+}
+
+function reload(){
+	window.location.reload(false)
 }
 
 function newEvent(){
@@ -95,7 +96,9 @@ function newEvent(){
   ))
 }
 
-function deleteEvent({index}){
-  console.log('deleteEvent',index); // todo: remove log
-  del({index})
+function deleteEvent(url,{index}){
+  confirm(`Delete this event?`)&&del(url,{index})
+    .then(response=>{
+      response.success&&reload()
+    },console.warn.bind(console))
 }

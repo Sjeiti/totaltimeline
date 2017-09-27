@@ -26,6 +26,7 @@ express()
     .get('/api', (req, res)=>res.json({success:true}))
     .get('/api/events', (req, res)=>read(jsonSrc).then(res.json))
     .post('/api/events', onPostEvent)
+    .delete('/api/events', onDeleteEvent)
     .get('/*', (req, res)=>res.sendFile(path.join(__dirname + '/../dist/index.html')))
     .use(bodyParser.json())
     .use('/api', router)
@@ -36,14 +37,47 @@ express()
  * @param request
  * @param response
  */
+function onDeleteEvent(request, response){
+  const query = request.query
+    ,index = parseInt(query.index,10)
+  /*console.log('request'
+    ,JSON.stringify(request.params)
+    ,JSON.stringify(request.body)
+    ,JSON.stringify(request.query)
+  );*/ // todo: remove log
+	read(jsonSrc)
+    .then(JSON.parse)
+    .then(data=>{
+      if (index>=0&&index<data.length) {
+        data.splice(index,1)
+      } else {
+        throw new Error(`Index ${index} out of bounds`)
+      }
+      return Promise.all([
+        save(jsonDist,JSON.stringify(data))
+        ,save(jsonSrc,JSON.stringify(data))
+      ])
+    })
+    .then(
+      ()=>response.status(200).json({success:true})
+      ,err=>response.status(400).json({error:err})
+    )
+}
+
+/**
+ * Post event to save in json
+ * @param request
+ * @param response
+ */
 function onPostEvent(request, response){
   const body = request.body
+      ,index = parseInt(body.index,10)
   //
   /*console.log('request'
     ,JSON.stringify(request.params)
     ,JSON.stringify(request.body)
     ,JSON.stringify(request.query)
-  ); // todo: remove log*/
+  );*/ // todo: remove log
   //
   const hasTime = isValidNumber(body.ago)||isValidNumber(body.since)||isValidNumber(body.year)
     ,hasName = isValidString(body.name)
@@ -52,11 +86,9 @@ function onPostEvent(request, response){
   if (hasTime&&hasName&&hasWiki&&hasImage) {
     //
     const resultEvent = eventKeys.reduce((obj,prop)=>{
-      obj[prop] = body[prop]||''
-      return obj
-    },{})
-
-      ,index = parseInt(body.index,10)
+        obj[prop] = body[prop]||''
+        return obj
+      },{})
       ,hasWikiMedia = !!body.wikimedia
       ,hasThumb = !!body.thumb
     console.log('hasWikiMedia',hasWikiMedia); // todo: remove log
@@ -91,13 +123,18 @@ function saveJsonEntry(entry,index){
 	read(jsonSrc)
     .then(JSON.parse)
     .then(data=>{
-      data[index] = entry
+      if (index>=0&&index<data.length) {
+        data[index] = entry
+      } else if (index===-1) {
+        data.push(entry)
+      } else {
+        throw new Error(`Index ${index} out of bounds`)
+      }
       return Promise.all([
         save(jsonDist,JSON.stringify(data))
         ,save(jsonSrc,JSON.stringify(data))
       ])
     })
-
 }
 
 /**

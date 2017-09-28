@@ -1,15 +1,15 @@
 import collections from './'
 import Signal from 'signals'
 import model from '../model'
-import {fetchJson} from '../fetchProxy'
-import {assignable,emptyNode} from '../util'
+import {fetchFile} from '../fetchProxy'
+import {assignable} from '../util'
 
 /**
  * An object instance created by the factory method {@link collection.add}
  * @typedef {Array} collectionInstance
  * @property {Element} wrapper The wrapper element (has the event listeners for the collections instances).
  * @property {DocumentFragment} fragment A document fragment re-used for populating the wrapper element.
- * @property {function} populate Populates the view for a specific {@link time.range|range}.
+ * @property {function} render Populates the view for a specific {@link time.range|range}.
  * @property {function} getData Initialises the Ajax call to load the spreadsheet data.
  * @property {Signal} dataLoaded Signal that fires when the spreadsheet data is loaded.
  */
@@ -25,7 +25,7 @@ import {assignable,emptyNode} from '../util'
 
 /**
  * Callback method for the Ajax spreadsheet request.
- * @callback collectionDataCallback
+ * @callback collectionDataLoaded
  * @param {object} sheet The spreadsheet object.
  * @see https://developers.google.com/gdata/samples/spreadsheet_sample
  * @see https://developers.google.com/google-apps/spreadsheets/
@@ -33,40 +33,41 @@ import {assignable,emptyNode} from '../util'
 
 /**
  * The callback method that populates the collections.
- * @callback collectionPopulateCallback
- * @param {DocumentFragment} fragment The fragment to populate. Fragment itself is added in {@link collectionInstance.populate | the collections instance object}.
+ * @callback collectionRender
  * @param {time.range} range The {@link time.range|time range} to apply.
  */
 
 const assignableArrayPrototype = assignable(Array.prototype)
   ,collectionViewInstancePrototype = Object.assign({
+
     /**
      * Initialise
-     * @returns {totaltimeline.collection}
+     * @param {string} slug The name of the collections (will serve as classname in the view).
+     * @param {string} dataFileName Filename for the collection data
+     * @param {collectionDataLoaded} callback The callback uri to process the collections data.
+     * @returns {collectionInstance}
      */
-    init(slug,jsonName,callback){
+    init(slug,dataFileName,callback){
       this.wrapper.classList.add(slug)
       this.wrapper.addEventListener('click', this._onWrapperClick, false)
-      fetchJson(jsonName).then(callback.bind(this))
+      this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
+      fetchFile(dataFileName).then(callback.bind(this))
       return this
     }
     /**
      * Populates the collections wrapper for a specific {@link totaltimeline.time.range|time range}.
      * @memberof collectionInstance
      */
-    ,populate(view,range){
-      // todo: refactor more efficiently: only add/remove what is needed
-      if (!!this._staticView) {
-        this._populateInstance.call(this,null,range) // todo bind earlier
-      } else {
-        emptyNode(this.wrapper)
-        emptyNode(this.fragment)
-        this._populateInstance.call(this,this.fragment,range) // todo bind earlier
-        this.wrapper.appendChild(this.fragment);//.cloneNode(true)
-      }
-      if (this.wrapper.parentNode!==view) {
-        view.appendChild(this.wrapper)
-      }
+    ,render(range){
+      this._isDataLoaded&&this._render.call(this,range)
+    }
+    ,_onDataLoaded(){
+      this._isDataLoaded = true
+    }
+    ,_populateElements(elements){
+      Array.from(this.wrapper.children).forEach(elm=>elements.includes(elm)||this.wrapper.removeChild(elm))
+      elements.forEach(elm=>elm.parentNode!==this.wrapper&&this.fragment.appendChild(elm))
+      this.wrapper.appendChild(this.fragment)
     }
     ,show(show){
       this.wrapper.classList.toggle('hide',!show)
@@ -84,23 +85,21 @@ const assignableArrayPrototype = assignable(Array.prototype)
 
 /**
  * Collection factory
- * todo: explain click event listener
  * @method
  * @param {string} slug The name of the collections (will serve as classname in the view).
- * @param {string} jsonName The Google spreadsheet uri containing the collections data.
- * @param {collectionDataCallback} callback The callback uri to process the collections data.
- * @param {collectionPopulateCallback} populateInstance The method that populates the collections.
- * @param {object} staticView ?????????????? todo what is staticView?
+ * @param {string} dataFileName Filename for the collection data
+ * @param {collectionDataLoaded} callback The callback uri to process the collections data.
+ * @param {collectionRender} render The method that populates the collections.
  * @returns {collectionInstance} Collection instance object.
  */
-export default function collection(slug,jsonName,callback,populateInstance,staticView){
+export default function collection(slug,dataFileName,callback,render){
   return collections.add(Object.create(collectionViewInstancePrototype,{
     length: {value:0,writable:true}
     ,name: {value:slug}
     ,wrapper: {value:document.createElement('div')}
     ,fragment: {value:document.createDocumentFragment()}
     ,dataLoaded: {value:new Signal()}
-    ,_populateInstance: {value:populateInstance}
-    ,_staticView: {value:staticView}
-  }).init(slug,jsonName,callback))
+    ,_isDataLoaded: {value:false,writable:true}
+    ,_render: {value:render}
+  }).init(slug,dataFileName,callback))
 }

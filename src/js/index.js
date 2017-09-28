@@ -12,6 +12,7 @@ import './api'
 
 import './collections/events'
 import './collections/periods'
+import './collections/tempCO2'
 
 import './model'
 import './location'

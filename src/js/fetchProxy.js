@@ -1,6 +1,8 @@
-export function fetchJson(name){
-  return fetch(`/static/${name}.json`)
-    .then(response=>response.json())
+export function fetchFile(file){
+  let fetchPromise = fetch(`/static/${file}`)
+  if (/\.json$/.test(file)) fetchPromise = fetchPromise.then(response=>response.json())
+  else if (/\.csv$/.test(file)) fetchPromise = fetchPromise.then(response=>response.text())
+  return fetchPromise
 }
 
 export function postForm(form){
@@ -35,7 +37,7 @@ export function del(url,body){
 }
 
 export default {
-  fetchJson
+  fetchFile
   ,postForm
   ,del
 }

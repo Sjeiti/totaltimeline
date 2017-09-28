@@ -12,7 +12,7 @@ import {getPercentage} from '../util'
  */
 export default collection(
   'periods'
-  ,'eras'
+  ,'eras.json'
   ,function(data){
     const aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
       ,iTimes = aTimes.length
@@ -41,10 +41,10 @@ export default collection(
     }.bind(this))
     this.dataLoaded.dispatch(this)
   }
-  ,function(fragment,range){
+  ,function(range){
     const iRangeEnd = range.end.ago
       ,iDuration = range.duration
-
+      ,show = []
     this.forEach(function(period){
       if (period.coincides(range)) {
         const mPeriod = period.element
@@ -61,8 +61,9 @@ export default collection(
         }
         mPeriod.style.left = getPercentage(fRelLeft)
         mPeriod.style.width = getPercentage(fRelWidth)
-        fragment.appendChild(mPeriod)
+        show.push(mPeriod)
       }
     })
+    this._populateElements(show)
   }
 )

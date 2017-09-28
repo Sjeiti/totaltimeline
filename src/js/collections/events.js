@@ -11,7 +11,7 @@ import {getPercentage} from '../util'
  */
 export default collection(
   'events'
-  ,'events'
+  ,'events.json'
   ,function(data){
     //ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
     data.forEach(function(entry,index){
@@ -36,10 +36,11 @@ export default collection(
     })
     this.dataLoaded.dispatch(this)
   }
-  ,function(fragment,range){
+  ,function(range){
     const rangeStart = range.start.ago
       ,rangeEnd = range.end.ago
       ,duration = range.duration
+      ,show = []
     this.forEach(event=>{
       const ago = event.moment.ago
         ,isInside = ago<=rangeStart&&ago>=rangeEnd
@@ -47,9 +48,10 @@ export default collection(
         const element = event.element
           ,fRel = 1-((ago-rangeEnd)/duration)
         element.style.left = getPercentage(fRel)
-        fragment.appendChild(element)
+        show.push(element)
       }
       event.inside(isInside)
     })
+    this._populateElements(show)
   }
 )

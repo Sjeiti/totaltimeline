@@ -49,7 +49,10 @@ export default create(
       // wheel
       mouseWheel.add(onWheel)
       // collections
-      collections.forEach(col=>col.dataLoaded.add(onRangeChange))
+      collections.forEach(col=>{
+        element.appendChild(col.wrapper)
+        col.dataLoaded.add(onRangeChange)
+      })
       // touch
       touch(element,onTouchMove)
       // range
@@ -57,7 +60,7 @@ export default create(
       range.change.add(moveBackgroundOverlay)
 
       // Initialise view
-      clearChildren(element).appendChild(elements)
+      element.appendChild(elements)
       onResize()
       onRangeChange()
 
@@ -161,9 +164,8 @@ export default create(
         elmBefore.style.backgroundColor = view.colorFirst
         elmAfter.style.backgroundColor = view.colorLast
         //
-        collections.populate(element,range)
+        collections.render(range)
       }
-
 
       /**
        * Handles touchmove event to scroll or zoom the timeline.

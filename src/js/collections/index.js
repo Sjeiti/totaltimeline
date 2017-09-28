@@ -47,16 +47,11 @@ const itemsOrdered = []
       })
     }
     /**
-     * Populates all the collections for a range into a view.
-     * @name collection.populate
-     * @method
-     * @param {HTMLElement} view
+     * Renders the collections
      * @param {range} range
      */
-    ,populate(view,range) {
-      this.forEach(function(collectionInstance){
-        collectionInstance.populate(view,range)
-      })
+    ,render(range) {
+      this.forEach(collectionInstance=>collectionInstance.render(range))
     }
     /**
      * Get an entry by slug

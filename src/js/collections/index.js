@@ -51,7 +51,21 @@ const itemsOrdered = []
      * @param {range} range
      */
     ,render(range) {
-      this.forEach(collectionInstance=>collectionInstance.render(range))
+      this.forEach(inst=>inst.render(range))
+    }
+    /**
+     * Resize called from timeline
+     * @param {number} w
+     * @param {number} h
+     * @param {range} range
+     * @todo first resize should fire after dataLoaded (not inside this method)
+     */
+    ,resize(w,h,range){
+      this.forEach(inst=>{
+        inst.isDataLoaded
+        &&inst.resize&&inst.resize(w,h,range)
+        ||inst.dataLoaded.addOnce(()=>inst.resize&&inst.resize(w,h,range))
+      })
     }
     /**
      * Get an entry by slug

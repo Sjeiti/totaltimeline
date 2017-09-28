@@ -28,7 +28,7 @@ export default create(
         ,elmBefore = elements.querySelector('.before')//.createElement('div')
         ,elmAfter = elements.querySelector('.after')//document.createElement('div')
 
-       let backgroundPos = 0
+      let backgroundPos = 0
         ,viewW
         ,viewH
         ,viewL
@@ -36,6 +36,7 @@ export default create(
         //
         ,mouseXOffsetDelta = 0
         ,mouseXOffsetLast = 0
+        ,resizeTimeout
 
       // Initialise event listeners (and signals).
       // init and detach keypress so keys exist
@@ -68,10 +69,12 @@ export default create(
        * Handle resize Signal
        * Cache view element size on resize
        */
-      function onResize(){//ow,oh,w,h
+      function onResize(){
         viewW = element.offsetWidth
         viewH = element.offsetHeight
         viewL = element.offsetLeft
+        clearTimeout(resizeTimeout)
+        resizeTimeout = setTimeout(collections.resize.bind(collections,viewW,viewH,range),200)
       }
 
       /**

@@ -59,10 +59,10 @@ const assignableArrayPrototype = assignable(Array.prototype)
      * @memberof collectionInstance
      */
     ,render(range){
-      this._isDataLoaded&&this._render.call(this,range)
+      this.isDataLoaded&&this._render.call(this,range)
     }
     ,_onDataLoaded(){
-      this._isDataLoaded = true
+      this.isDataLoaded = true
     }
     ,_populateElements(elements){
       Array.from(this.wrapper.children).forEach(elm=>elements.includes(elm)||this.wrapper.removeChild(elm))
@@ -99,7 +99,7 @@ export default function collection(slug,dataFileName,callback,render){
     ,wrapper: {value:document.createElement('div')}
     ,fragment: {value:document.createDocumentFragment()}
     ,dataLoaded: {value:new Signal()}
-    ,_isDataLoaded: {value:false,writable:true}
+    ,isDataLoaded: {value:false,writable:true}
     ,_render: {value:render}
   }).init(slug,dataFileName,callback))
 }

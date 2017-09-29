@@ -46,30 +46,7 @@
     "serve-static": "^1.12.3",
     "shx": "^0.2.2",
     "webpack": "^3.4.1",
-    "wiky.js": "0.0.1",
     "xml2js": "^0.4.19"
-  },
-  "_devDependencies": {
-    "glob": "~3.2.7",
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-less": "~0.8.3",
-    "grunt-contrib-qunit": "~0.5.2",
-    "grunt-contrib-rename": "0.0.3",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-include-file": "~0.1.1",
-    "grunt-svgmin": "~0.4.0",
-    "grunt-usemin": "~2.1.1",
-    "grunt-version-git": "~0.1.5",
-    "load-grunt-tasks": "~0.4.0",
-    "mkdirp": "~0.5.0",
-    "node-zip": "~1.1.0",
-    "time-grunt": "~0.3.1",
-    "xmlbuilder": "~2.3.0"
   },
   "dependencies": {
     "signals": "^1.0.0"

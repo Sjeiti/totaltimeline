@@ -1,6 +1,5 @@
 const request = require('request')
   ,{parseWikitext} = require(__dirname+'/wikiText')
-	,wiky = require('wiky.js')
   ,sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query&prop=revisions&rvprop=content&titles=
 	,sEndPointCommons = 'http://commons.wikimedia.org/w/api.php?'//action=query&prop=revisions&rvprop=content&format=json&titles=File%3AESO-VLT-Laser-phot-33a-07.jpg%7CFile%3AESO-VLT-Laser-phot-33a-07_rsz.jpg%22'
 	,oGetVars = {
@@ -54,7 +53,6 @@ function parseWikiMedia(content,heading,paragraphs){
 			for (let j=0,l=paragraphs.length;j<l;j++) {
 				const iPar = paragraphs[j]
 					,sParagraph = parseWikitext(aContent[i+(isHeading?1:0)+iPar])
-					// ,sParagraph = wiky.process(aContent[i+(isHeading?1:0)+iPar])
 				newContent.push(sParagraph)
 			}
 			break

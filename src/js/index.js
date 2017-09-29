@@ -13,6 +13,7 @@ import './api'
 import './collections/events'
 import './collections/periods'
 import './collections/tempCO2'
+import './collections/population'
 
 import './model'
 import './location'

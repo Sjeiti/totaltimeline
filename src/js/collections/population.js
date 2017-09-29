@@ -9,8 +9,8 @@ import {stringToElement} from '../util'
  * @name temperature
  */
 export default collection(
-  'Epica'
-  ,'Epica-tpt-co2.csv'
+  'population'
+  ,'Hyde-3.1-population.csv'
   ,function(data){
 
     const cnv = document.createElement('canvas')
@@ -26,11 +26,17 @@ export default collection(
     this.wrapper.appendChild(cnv)
 
     const lines = data.split(/\n/g)
-    const headers = lines[4].split(/,/g)
-    const cols = lines.slice(5).map(line=>line.split(/,/g).map(parseFloat))
+    const headers = lines[0].split(/,/g)
+    const cols = lines.slice(1).map(line=>line.split(/,/g).map(parseFloat))
 
-    const colTime = cols.map(col=>col[0])
+    const colTime = cols.map(col=>col[0]).map(year=>year-2017)
     const colRest = headers.slice(1).map((s,i)=>cols.map(col=>col[i+1]))
+    // only second data column
+    headers.splice(2,1)
+    headers.splice(0,1)
+    colRest.splice(2,1)
+    colRest.splice(0,1)
+    //
     const colors = [
       '#ee513f'
       ,'#8b478c'

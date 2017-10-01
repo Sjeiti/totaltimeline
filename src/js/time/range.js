@@ -1,5 +1,6 @@
 import moment from './moment'
 import animate from '../animate'
+import time from './time'
 import {Signal} from 'signals'
 
 /**
@@ -16,132 +17,161 @@ import {Signal} from 'signals'
  * @property {function} coincides
  * @property {function} clone
  * @property {function} factory Direct link back to the original factory
+ * @property {number} lock
  */
-const proto = {
-  toString(){return '[object range, '+this.start.toString()+' to '+this.end.toString()+']';}
+const lock = {
+    NONE: 0
+    ,START: 1
+    ,END: 2
+  }
+  ,proto = {
+    toString(){return '[object range, '+this.start.toString()+' to '+this.end.toString()+']';}
 
-  /**
-   * Set both start and end time.
-   * Method can be overloaded by either using only a range as the first parameter, or a number for both parameters.
-   * @param {number|range} startAgo
-   * @param {number} endAgo
-   */
-  ,set(startAgo,endAgo){
-    if (startAgo<endAgo) {
-      [endAgo,startAgo] = [startAgo,endAgo]
+    /**
+     * Set both start and end time.
+     * Method can be overloaded by either using only a range as the first parameter, or a number for both parameters.
+     * @param {number|range} startAgo
+     * @param {number} endAgo
+     */
+    ,set(startAgo,endAgo){
+      if (arguments.length===1) { // assume range
+        endAgo = startAgo.end.ago
+        startAgo = startAgo.start.ago
+      }
+      if (startAgo<endAgo) {
+        [endAgo,startAgo] = [startAgo,endAgo]
+      }
+      if (this.min&&startAgo>this.min.ago) {
+        startAgo = this.min.ago
+      }
+      this.setStartEnd(startAgo,endAgo,true)
+      // todo: implement max
+      // todo: return this
     }
-    if (arguments.length===1) { // assume range
-      endAgo = startAgo.end.ago
-      startAgo = startAgo.start.ago
+
+    ,setStartEnd(start,end,dispatch=false) {
+      const isLockStart = this._lock===lock.START
+        ,isLockEnd = this._lock===lock.END
+      isLockStart||this.start.set(start,dispatch)
+      isLockEnd||this.end.set(end,dispatch&&isLockStart)
     }
-    this.start.set(startAgo,false)
-    this.end.set(endAgo)
-    if (this.min&&this.start.ago>this.min.ago) {
-      // todo: implement without moveStart and only calling start.set and end.set once
-      this.moveStart(this.min.ago)
+
+    // todo: document // no overload! (see set)
+    // todo: override existing animation
+    ,animate(startAgo,endAgo){
+      /*if (arguments.length===1) { // assume range
+        endAgo = startAgo.end.ago;
+        startAgo = startAgo.start.ago;
+      }*/
+      return new Promise(resolve=>{
+        const iStartFrom = this.start.ago
+          ,iStartDelta = startAgo - iStartFrom
+          ,iEndFrom = this.end.ago
+          ,iEndDelta = endAgo - iEndFrom
+        animate(1000,f=>{
+          const fInOut = animate.quadratic.inOut(f)
+          this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
+        },resolve)
+      })
     }
-    // todo: implement max
-    // todo: return this
-  }
 
-  // todo: document // no overload! (see set)
-  // todo: override existing animation
-  ,animate(startAgo,endAgo){
-    /*if (arguments.length===1) { // assume range
-      endAgo = startAgo.end.ago;
-      startAgo = startAgo.start.ago;
-    }*/
-    return new Promise(resolve=>{
-      const iStartFrom = this.start.ago
-        ,iStartDelta = startAgo - iStartFrom
-        ,iEndFrom = this.end.ago
-        ,iEndDelta = endAgo - iEndFrom
-      animate(1000,f=>{
-        const fInOut = animate.quadratic.inOut(f)
-        this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
-      },resolve)
-    })
-  }
-
-  /**
-   * Moves the range by setting the start moment. End moment is recalculated.
-   * Duration stays the same so end and start are set without dispatching moment.change.
-   * @param {number} ago
-   * @fires Change signal.
-   */
-  ,moveStart(ago) {
-    if (this.min&&ago>this.min.ago) {
-      this.end.ago += ago-this.min.ago
-      ago = this.min.ago
+    /**
+     * Moves the range by setting the start moment. End moment is recalculated.
+     * Duration stays the same so end and start are set without dispatching moment.change.
+     * @param {number} ago
+     * @fires Change signal.
+     */
+    ,moveStart(ago) {
+      if (this._lock===lock.NONE) {
+        if (this.min&&ago>this.min.ago) {
+          this.end.ago += ago-this.min.ago
+          ago = this.min.ago
+        }
+        // todo: implement max
+        this.setStartEnd(ago,ago-this.duration,false)
+        this._dispatchChange()
+      }
     }
-    // todo: implement max
-    this.start.set(ago,false)
-    this.end.set(ago-this.duration,false)
-    this._dispatchChange()
-  }
 
-  /**
-   * todo:document
-   * @param {moment|range} time
-   * @returns {boolean}
-   */
-  ,coincides(t){
-    let bCoincides = false
-    if (t.factory===moment) {
-      bCoincides = this._momentInside(t);
-    } else {
-      var iStart = this.start.ago
-        ,iEnd = this.end.ago
-        ,iRStart = t.start.ago
-        ,iREnd = t.end.ago;
-      bCoincides = this._momentInside(t.start)
-        ||this._momentInside(t.end)
-        ||iStart<=iRStart&&iEnd>=iREnd
-        ||iStart>=iRStart&&iEnd<=iREnd
+    /**
+     * todo:document
+     * @param {moment|range} time
+     * @returns {boolean}
+     */
+    ,coincides(time){
+      let isCoinciding = false
+      if (time.factory===moment) {
+        isCoinciding = this._momentInside(time)
+      } else {
+        const thisStart = this.start.ago
+          ,thisEnd = this.end.ago
+          ,timeStart = time.start.ago
+          ,timeEnd = time.end.ago
+        isCoinciding = this._momentInside(time.start)
+          ||this._momentInside(time.end)
+          ||thisStart<=timeStart&&thisEnd>=timeEnd
+          ||thisStart>=timeStart&&thisEnd<=timeEnd
+      }
+      return isCoinciding
     }
-    return bCoincides;
-  }
 
-  // todo: document... maybe remove
-  ,clone(){
-    return range(this.start.clone(),this.end.clone())
-  }
-
-  //todo:document
-  ,_dispatchChange() {
-    if (this.oldRange===undefined) { // only create oOldRange on dispatchChange to prevent recursion
-      this.oldRange = range(moment(this.oldStartAgo),moment(this.oldEndAgo))
+    // todo: document... maybe remove
+    ,clone(){
+      return range(this.start.clone(),this.end.clone())
     }
-    this.change.dispatch(this,this.oldRange)
-    //
-    this.oldRange.start.set(this.start.ago,false)
-    this.oldRange.end.set(this.end.ago,false)
-    //this.oldRange.duration = this.start.ago-this.end.ago
-    this._setDuration(this.oldRange)
-  }
 
-  /**
-   * Handles change in either start- or end moment by recalculating duration.
-   * @fires Change signal.
-   */
-  ,_onChange(){
-    this._setDuration()
-    this._dispatchChange()
-  }
+    ,set lock(type){
+      if (type===lock.START) {
+        this.animate(time.UNIVERSE,this.end.ago)
+          .then(()=>(this._lock = type))
+      } else if (type===lock.END) {
+        this.animate(this.start.ago,time.NOW)
+          .then(()=>(this._lock = type))
+      } else {
+        this._lock = lock.NONE
+      }
+      this._setDuration()
+    }
 
-  // todo: document
-  ,_momentInside(mmt){
-    return mmt.ago<=this.start.ago&&mmt.ago>=this.end.ago
-  }
+    ,get lock() {
+      return this._lock
+    }
 
-  // todo: document
-  ,_setDuration(range,start,end){
-    (range||this).duration = (start||this.start).ago-(end||this.end).ago
-    if ((range||this).duration===-1) {
-      console.log('_setDuration',start||this.start,end||this.end); // todo: remove log
+    //todo:document
+    ,_dispatchChange() {
+      if (this.oldRange===undefined) { // only create oOldRange on dispatchChange to prevent recursion
+        this.oldRange = range(moment(this.oldStartAgo),moment(this.oldEndAgo))
+      }
+      this.change.dispatch(this,this.oldRange)
+      //
+      this.oldRange.start.set(this.start.ago,false)
+      this.oldRange.end.set(this.end.ago,false)
+      //this.oldRange.duration = this.start.ago-this.end.ago
+      this._setDuration(this.oldRange)
+    }
+
+    /**
+     * Handles change in either start- or end moment by recalculating duration.
+     * @fires Change signal.
+     */
+    ,_onChange(){
+      this._setDuration()
+      this._dispatchChange()
+    }
+
+    // todo: document
+    ,_momentInside(mmt){
+      return mmt.ago<=this.start.ago&&mmt.ago>=this.end.ago
+    }
+
+    // todo: document
+    ,_setDuration(range,start,end){
+      (range||this).duration = (start||this.start).ago-(end||this.end).ago
+      if ((range||this).duration===-1) {
+        console.log('_setDuration',start||this.start,end||this.end); // todo: remove log
+      }
     }
   }
-}
 
 /**
  * Factory method to create a range.
@@ -167,14 +197,16 @@ function range(start,end,min,max){
       ,oldRange: {writable}
       ,change: {value:new Signal()}
       ,duration: {writable}
-      ,factory: {value:range} // todo: remove
+      ,factory: {value:range}
+      ,_lock: {value:lock.NONE,writable}
     })
   // todo: check if start > end
   inst._setDuration()
   inst.start.change.add(inst._onChange.bind(inst))
   inst.end.change.add(inst._onChange.bind(inst))
-
   return inst
 }
 
-export default range
+export default Object.assign(range,{
+  lock
+})

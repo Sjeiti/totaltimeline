@@ -16,7 +16,7 @@ var fs = require('fs')
 	,AdmZip = require('adm-zip')
 	//
 	,sFontDest = './src/fonts/'
-	,sFontSrc = './src/style/icomoon.zip'
+	,sFontSrc = './src/style/totaltimeline.zip'
 	,sDest = './src/style/icomoon.less'
 	,isLess = sDest.split('.').pop()==='less' // or sass
 	//

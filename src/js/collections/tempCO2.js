@@ -2,6 +2,7 @@ import collection from './collection'
 import moment from '../time/moment'
 import range from '../time/range'
 import {stringToElement} from '../util'
+import color from '../math/color'
 
 /**
  * Temperature collections
@@ -31,6 +32,10 @@ export default collection(
 
     const colTime = cols.map(col=>col[0])
     const colRest = headers.slice(1).map((s,i)=>cols.map(col=>col[i+1]))
+    // only second data column
+    headers.splice(2,1)
+    colRest.splice(2,1)
+    //
     const colors = [
       '#ee513f'
       ,'#8b478c'
@@ -68,28 +73,42 @@ export default collection(
       cnv.width = w
       if (currentRange.coincides(colTime.range)) {
         //
-        const agoStart = currentRange.start.ago
-        const agoEnd = currentRange.end.ago
+        const durationPart = colTime.range.duration/currentRange.duration
+        const globalAlpha = Math.min(Math.max(durationPart*2-0.2,0),1)
         //
-        const lines = colRest.map(()=>[])
-        colTime.forEach((t,timeIndex)=>{
-          const ago = -t
-          const agoRange = agoStart - agoEnd
-          const inRange = ago<agoStart && ago>agoEnd
-          if (inRange) {
-            const time = (ago - agoEnd)/agoRange
-            colRest.forEach((col,colIndex)=>{
-              const val = col[timeIndex]
-              lines[colIndex].push([w-w*time,h-0.25*h-0.5*h*mapRest[colIndex](val)])
-            })
-          }
-        })
-        lines.forEach((line,lineIndex)=>{
-          ctx.strokeStyle = colors[lineIndex]
-          ctx.beginPath()
-          line.forEach((xy,i)=>(i===0&&ctx.moveTo||ctx.lineTo).bind(ctx)(...xy))
-          ctx.stroke()
-        })
+        if (globalAlpha>0) {
+          //
+          const agoStart = currentRange.start.ago
+          const agoEnd = currentRange.end.ago
+          //
+          const lines = colRest.map(()=>[])
+          colTime.forEach((t,timeIndex)=>{
+            const ago = -t
+            const agoRange = agoStart - agoEnd
+            const inRange = ago<agoStart && ago>agoEnd
+            if (inRange) {
+              const time = (ago - agoEnd)/agoRange
+              colRest.forEach((col,colIndex)=>{
+                const val = col[timeIndex]
+                lines[colIndex].push([w-w*time,h-0.25*h-0.5*h*mapRest[colIndex](val)])
+              })
+            }
+          })
+          lines.forEach((line,lineIndex)=>{
+            ctx.globalAlpha = globalAlpha*0.3
+            ctx.lineWidth = 3
+            ctx.strokeStyle = color(colors[lineIndex]).multiply(0.4).toString()
+            ctx.beginPath()
+            line.forEach((xy,i)=>(i===0&&ctx.moveTo||ctx.lineTo).bind(ctx)(...xy))
+            ctx.stroke()
+            ctx.globalAlpha = globalAlpha*1
+            ctx.lineWidth = 1
+            ctx.strokeStyle = colors[lineIndex]
+            ctx.beginPath()
+            line.forEach((xy,i)=>(i===0&&ctx.moveTo||ctx.lineTo).bind(ctx)(...xy))
+            ctx.stroke()
+          })
+        }
       }
     }
 

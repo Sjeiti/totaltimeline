@@ -20,6 +20,9 @@ export default create(
         ,elmSpan = stringToElement(`<div class="span">
 	<time>${span.start.toString()}</time>
 	<time>${span.end.toString()}</time>
+	<input type="radio" name="lock" class="visuallyhidden" id="lockStart" /><label class="icn-unlocked" for="lockStart"></label>
+	<input type="radio" name="lock" class="visuallyhidden" id="lockEnd" /><label class="icn-unlocked" for="lockEnd"></label>
+	<input type="radio" name="lock" class="visuallyhidden" id="lockNone" />
 	<div class="range">
     <div class="before"></div>
 		<time></time>
@@ -59,6 +62,10 @@ export default create(
       elmRange.addEventListener('touchend',onTouchEnd,false)
       touch(elmSpan,onTouchMove)
       //mSpan.addEventListener(s.touchmove,onTouchMove,false)
+      //
+      const lockNone = elmSpan.querySelector('#lockNone')
+      element.addEventListener('click',onElementClick)
+      element.addEventListener('change',onElementChange)
 
       // Initialise view
       clearChildren(element).appendChild(elmSpan)
@@ -103,8 +110,7 @@ export default create(
        * @param {Event} e
        */
       function onDocumentMouseMove(e){
-        // todo: rangeMove? ... This is relative... rangeMove is ~absolute
-        var iOffsetX = e.clientX;//offsetX
+        const iOffsetX = e.clientX;
         mouseXOffsetDelta = iOffsetX-mouseXOffsetLast
         mouseXOffsetLast = iOffsetX
         range.moveStart(range.start.ago - Math.round(mouseXOffsetDelta/spanWidth*span.duration))
@@ -184,6 +190,35 @@ export default create(
           range.set(relativeOffset(touches[0]),relativeOffset(touches[1]))
           e.preventDefault()
         }
+      }
+
+      /**
+       * CLicking the labels lock the range
+       * @param {MouseEvent} e
+       */
+      function onElementClick(e){
+        const {target} = e
+        if (target.nodeName==='LABEL') {
+          const input = document.getElementById(target.getAttribute('for'))
+          if (input.checked) {
+            e.preventDefault()
+            lockNone.checked = true
+            lockNone.dispatchEvent(new Event('change', {
+              'bubbles': true,
+              'cancelable': true
+            }))
+          }
+        }
+      }
+
+      /**
+       * CLicking the labels lock the range
+       * @param {Event} e
+       */
+      function onElementChange(e){
+        const {target} = e
+          ,{id} = target
+        range.lock = ['lockNone','lockStart','lockEnd'].indexOf(id)
       }
 
       function rangeZoomTouch(touch){

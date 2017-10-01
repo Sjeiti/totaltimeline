@@ -19,7 +19,8 @@
     "css:prefix": "postcss dist/style/screen.css --use autoprefixer -d dist/style/",
     "css:minify": "postcss dist/style/screen.css --use cssnano -d dist/style/",
     "dir": "mkdirp dist/js",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "icomoon": "node task/icomoon"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",

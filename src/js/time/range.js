@@ -33,7 +33,7 @@ const lock = {
      * @param {number|range} startAgo
      * @param {number} endAgo
      */
-    ,set(startAgo,endAgo){
+    ,set(startAgo,endAgo,dispatch=true){
       if (arguments.length===1) { // assume range
         endAgo = startAgo.end.ago
         startAgo = startAgo.start.ago
@@ -44,16 +44,12 @@ const lock = {
       if (this.min&&startAgo>this.min.ago) {
         startAgo = this.min.ago
       }
-      this.setStartEnd(startAgo,endAgo,true)
-      // todo: implement max
-      // todo: return this
-    }
-
-    ,setStartEnd(start,end,dispatch=false) {
       const isLockStart = this._lock===lock.START
         ,isLockEnd = this._lock===lock.END
-      isLockStart||this.start.set(start,dispatch)
-      isLockEnd||this.end.set(end,dispatch&&isLockStart)
+      isLockStart||this.start.set(startAgo,dispatch)
+      isLockEnd||this.end.set(endAgo,dispatch&&isLockStart)
+      // todo: implement max
+      // todo: return this
     }
 
     // todo: document // no overload! (see set)
@@ -87,8 +83,7 @@ const lock = {
           this.end.ago += ago-this.min.ago
           ago = this.min.ago
         }
-        // todo: implement max
-        this.setStartEnd(ago,ago-this.duration,false)
+        this.set(ago,ago-this.duration,false)
         this._dispatchChange()
       }
     }

@@ -118,6 +118,21 @@ export function emptyNode(element){
   while (element.firstChild) element.removeChild(element.firstChild)
 }
 
+
+export function getMap(min,max) {
+  const range = max - min
+  return val=>(val-min)/range
+}
+
+export function getMinMax(array){
+  return array.reduce((minmax,val)=>{
+    if (isNaN(val)) val
+    else if (val<minmax.min) minmax.min = val
+    else if  (val>minmax.max) minmax.max = val
+    return minmax
+  },{min:Number.POSITIVE_INFINITY,max:Number.NEGATIVE_INFINITY})
+}
+
 export default {
   parseOptions
   ,isJSONString
@@ -130,4 +145,6 @@ export default {
   ,getCssValuePrefix
   ,assignable
   ,emptyNode
+  ,getMap
+  ,getMinMax
 }

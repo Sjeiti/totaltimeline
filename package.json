@@ -5,8 +5,8 @@
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run css && npm run copy",
-    "copy": "shx cp src/index.html dist/index.html && shx cp src/.htaccess dist/.htaccess && shx cp -r src/static dist && shx cp src/style/*.png dist/style && shx cp -r src/fonts dist",
-    "copy:l": "cp src/index.html dist/index.html | cp src/.htaccess dist/.htaccess | cp -r src/static dist | cp src/style/*.png dist/style | cp -r src/fonts dist",
+    "copy": "shx cp src/*.* dist && shx cp -r src/static dist && shx cp src/style/*.png dist/style && shx cp -r src/fonts dist",
+    "copy:l": "cp src/*.* dist | cp -r src/static dist | cp src/style/*.png dist/style | cp -r src/fonts dist",
     "lint": "eslint src/js/index.js",
     "js": "webpack --config webpack.config.js",
     "js:watch": "chokidar src/**/*.js -c \"npm run js\"",
@@ -21,6 +21,7 @@
     "dir": "mkdirp dist/js",
     "clean": "rimraf dist",
     "icomoon": "node task/icomoon"
+    "sitemap": "node task/sitemap"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",
@@ -47,7 +48,8 @@
     "serve-static": "^1.12.3",
     "shx": "^0.2.2",
     "webpack": "^3.4.1",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.19",
+    "xmlbuilder": "^9.0.4"
   },
   "dependencies": {
     "signals": "^1.0.0"

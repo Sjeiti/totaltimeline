@@ -20,7 +20,7 @@
     "css:minify": "postcss dist/style/screen.css --use cssnano -d dist/style/",
     "dir": "mkdirp dist/js",
     "clean": "rimraf dist",
-    "icomoon": "node task/icomoon"
+    "icomoon": "node task/icomoon",
     "sitemap": "node task/sitemap"
   },
   "devDependencies": {

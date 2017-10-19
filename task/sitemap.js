@@ -1,7 +1,7 @@
 /**
  * Create a sitemap from json
  */
-c
+
 const builder = require('xmlbuilder')
 	,{read,save} = require(__dirname+'/utils')
 	,baseUri = 'http://totaltimeline.org/'

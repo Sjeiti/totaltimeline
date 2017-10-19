@@ -62,7 +62,7 @@ export default function event(moment,info,index,entry){
     ,mTitle = mWrap.querySelector('h3')
     ,mTime = mWrap.querySelector('time')
     //
-    ,top = 0.2 + 0.7*((index * (137.5/360))%1)
+    ,top = 0.15 + 0.7*((index * (137.5/360))%1)
     ,sTop = getPercentage(top)
     ,sHeight = getPercentage(1-top)
     //

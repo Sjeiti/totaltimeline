@@ -51,7 +51,7 @@ const assignableArrayPrototype = assignable(Array.prototype)
       this.wrapper.classList.add(slug)
       this.wrapper.addEventListener('click', this._onWrapperClick, false)
       this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
-      fetchFile(dataFileName).then(callback.bind(this))
+      dataFileName&&fetchFile(dataFileName).then(callback.bind(this))||callback.call(this)
       return this
     }
     /**

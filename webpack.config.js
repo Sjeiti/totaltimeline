@@ -1,11 +1,23 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/js/index.js',
+
+  entry: {
+    index: './src/js/index.js',
+    serviceWorker: './src/js/serviceWorker.js'
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist/js'),
+    filename: "[name].js"
+  },
+
+
+  /*entry: './src/js/index.js',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist/js')
-  },
+  },*/
+
   devtool: 'source-map',
   module: {
     loaders: [

@@ -21,6 +21,16 @@ import './view'
 
 initialise()
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/js/serviceWorker.js').then(registration=>{
+      console.log('ServiceWorker registered with scope: ', registration.scope);
+    }, err=>{
+      console.log('ServiceWorker failed: ', err);
+    });
+  });
+}
+
 // const c1 = color(33,234,22)
 //   ,c2 = color(123,214,122)
 // console.log(c1,c2,c1.clone().average(c2))

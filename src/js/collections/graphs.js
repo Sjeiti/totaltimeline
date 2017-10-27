@@ -1,9 +1,11 @@
 import collection from './collection'
 import moment from '../time/moment'
+import model from '../model'
 import range from '../time/range'
 import {stringToElement} from '../util'
 import {fetchFile} from '../fetchProxy'
 import color from '../math/color'
+import view from '../view'
 
 /**
  * Temperature collections
@@ -87,6 +89,10 @@ export const graphs = collection(
       ,draw
     })
 
+    const currentRange = model.range
+    const boundRangeChange = onRangeChange.bind(this)
+    currentRange.change.add(onRangeChange.bind(this))
+
     function add(name,times,values,map,color){
       const timeStart = -times[0]
       const timeEnd = -times[times.length-1]
@@ -99,6 +105,7 @@ export const graphs = collection(
       legend.appendChild(element)
       axis.appendChild(axeLeft)
       axis.appendChild(axeRight)
+      boundRangeChange()
     }
 
     function resize(_w,_h,range){
@@ -116,14 +123,14 @@ export const graphs = collection(
           ,clr = graphInst.color
           ,isGraphInRange = currentRange.coincides(timesRange)
         //
-        graphInst.element.classList.toggle('hide',!isGraphInRange)
-        graphInst.axeLeft.classList.toggle('hide',!isGraphInRange)
-        graphInst.axeRight.classList.toggle('hide',!isGraphInRange)
+        const durationPart = timesRange.duration/currentRange.duration
+        const globalAlpha = Math.min(Math.max(durationPart*2-0.2,0),1)
+        const hideElements = !isGraphInRange||globalAlpha===0
         //
-        if (isGraphInRange) {
-          //
-          const durationPart = timesRange.duration/currentRange.duration
-          const globalAlpha = Math.min(Math.max(durationPart*2-0.2,0),1)
+        const {element,axeLeft,axeRight} = graphInst;
+        [element,axeLeft,axeRight].forEach(elm=>elm.classList.toggle('hide',hideElements))
+        //
+        if (!hideElements) {
           //
           if (globalAlpha>0) {
             //
@@ -173,30 +180,28 @@ export const graphs = collection(
               isBeforeStartLast = isBeforeStart
             })
             //
-            const interpolateAxis = (elm,line8,line9,w=0)=>{
-              const x1 = line8[0] - w
-              const x2 = line9[0] - w
-              // const isXlt = x1<0&&x2>0
-              // const isXgt = x1>0&&x2>0
+            const interpolateAxis = (elm,vertex1,vertex2,offset=0)=>{
+              const isEnd = !!offset
+              const x1 = vertex1[0] - offset
+              const x2 = vertex2[0] - offset
+              const isXlt = x1<0&&x2>0
+              const isXgt = x1>0&&x2>0
+              const isOverEnd = isEnd&&!isXlt
+              const isUnderStart = !isEnd&&isXgt
+              //
               const dist = x2-x1
               const dist1 = Math.abs(x1)
               const distDelta = dist1/dist
-              const y1 = line8[1]
-              const y2 = line9[1]
-              const y0 = y1 + distDelta*(y2-y1)
-              const val1 = line8[2]
-              const val2 = line9[2]
-              const val0 = val1 + distDelta*(val2-val1)
+              const y1 = vertex1[1]
+              const y2 = vertex2[1]
+              const y0 = isOverEnd ? y2 : isUnderStart ? y1 : y1 + distDelta*(y2-y1)
+              const val1 = vertex1[2]
+              const val2 = vertex2[2]
+              const val0 = isOverEnd ? val2 : isUnderStart ? val1 : val1 + distDelta*(val2-val1)
+
               elm.textContent = val0.toFixed(2)
               elm.style.top = 100*(y0/h)+'%'
-              /*if (!isXlt) {
-                elm.textContent = val2.toFixed(2)
-                elm.style.top = 100*(y2/h)+'%'
-              } else if (!isXgt) {
-                elm.textContent = val1.toFixed(2)
-                elm.style.top = 100*(y1/h)+'%'
-              }*/
-              // console.log('isXlt,isXgt',isXlt,isXgt); // todo: remove log
+              // elm.style.backgroundColor = isEnd?view.colorLast:view.colorFirst
             }
             const lineLength = line.length
             if (lineLength>1) {
@@ -231,6 +236,17 @@ export const graphs = collection(
             // ctx.stroke()
           }
         }
+      })
+    }
+
+    /**
+     * When the range changes the labels of the colors should to
+     */
+    function onRangeChange(){ // todo: possibly refactor since also called by collections -> col.dataLoaded
+      // console.log('onRangeChange',this); // todo: remove log
+      this.forEach(({axeLeft,axeRight})=>{
+        axeLeft.style.backgroundColor = view.colorFirst
+        axeRight.style.backgroundColor = view.colorLast
       })
     }
 

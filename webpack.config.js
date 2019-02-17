@@ -3,14 +3,13 @@ const path = require('path');
 module.exports = {
 
   entry: {
-    index: './src/js/index.js',
-    serviceWorker: './src/js/serviceWorker.js'
+    "js/index": './src/js/index.js',
+    serviceWorker: './src/serviceWorker.js'
   },
   output: {
-    path: path.resolve(__dirname, 'dist/js'),
+    path: path.resolve(__dirname, 'dist/'),
     filename: "[name].js"
   },
-
 
   /*entry: './src/js/index.js',
   output: {

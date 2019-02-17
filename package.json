@@ -1,7 +1,7 @@
 {
   "name": "totaltimeline",
   "description": "Total Timeline",
-  "version": "0.1.62",
+  "version": "0.1.66",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "build": "npm run clean && npm run dir && npm run js && npm run css && npm run copy",
@@ -21,7 +21,10 @@
     "dir": "mkdirp dist/js",
     "clean": "rimraf dist",
     "icomoon": "node task/icomoon",
-    "sitemap": "node task/sitemap"
+    "sitemap": "node task/sitemap",
+    "version": "next-version package.json src/serviceWorker.js",
+    "version:minor": "npm run version -- --minor",
+    "version:major": "npm run version -- --major"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",
@@ -42,6 +45,7 @@
     "express": "^4.15.3",
     "less": "^2.7.2",
     "mkdirp": "^0.5.1",
+    "next-version": "^0.11.7",
     "open": "0.0.5",
     "postcss-cli": "^4.1.0",
     "rimraf": "^2.6.1",

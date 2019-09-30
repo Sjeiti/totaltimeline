@@ -1,4 +1,3 @@
-
 import {create} from './component'
 import time from '../time'
 import view from './'

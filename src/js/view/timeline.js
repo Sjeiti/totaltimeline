@@ -1,8 +1,7 @@
-
 import {create} from './component'
 import time from '../time'
 import view from './'
-import {getFragment,clearChildren} from '../util'
+import {getFragment} from '../util'
 import collections from '../collections'
 import model from '../model'
 import touch from '../touch'

@@ -2,7 +2,7 @@
   "name": "totaltimeline",
   "description": "Total Timeline",
   "author": "Ron Valstar",
-  "version": "0.1.71",
+  "version": "0.1.73",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "start": "run-p build serve",
@@ -79,8 +79,7 @@
   "dependencies": {
     "signals": "^1.0.0"
   },
-  "optionalDependencies": {
-  },
+  "optionalDependencies": {},
   "postcss": {
     "plugins": {
       "autoprefixer": {}

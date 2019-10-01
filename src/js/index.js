@@ -1,3 +1,4 @@
+import '../style/screen.less'
 
 import {initialise} from './view/component'
 

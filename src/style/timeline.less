@@ -3,34 +3,36 @@
   position: relative;
   margin: 0 @screenPadding;
   color: white;
-    background-color: #333;//#615d78;
-    background-repeat: repeat-x;
-    >time {
-        .lb;
-        z-index: 3000;
-        font: @fontTime;
-        &:last-of-type { left: auto; right: 0; }
-    }
-    .before, .after {
-        position: absolute;
-        top: 0;
-        display: block;
-        width: @screenPadding;
-        height: 100%;
-        background-color: inherit;
-    }
-    .before { left: -@screenPadding; }
+  background-color: #333;//#615d78;
+  background-repeat: repeat-x;
+  >time {
+      .lb;
+      z-index: 3000;
+      font: @fontTime;
+      &:last-of-type { left: auto; right: 0; }
+  }
+  .before, .after {
+      position: absolute;
+      top: 0;
+      display: block;
+      width: @screenPadding;
+      height: 100%;
+      background-color: inherit;
+  }
+  .before { left: -@screenPadding; }
   .after { right: -@screenPadding; }
-    .overlay {
-        content: '';
-        .size(100%);
-        .lt;
-        background: url(noise.png);
-        background-size: contain;
-        background-position: center center;
-        opacity: .5;
-        pointer-events: none;
-    }
+  .overlay {
+      content: '';
+      .size(100%);
+      .lt;
+      background: url(noise.png);
+      background-size: contain;
+      //background: url("stars.png"), url("noise.png");
+      //background-size: auto, contain;
+      background-position: center center;
+      opacity: .5;
+      pointer-events: none;
+  }
 }
 
 .events, .periods, .tectonics {

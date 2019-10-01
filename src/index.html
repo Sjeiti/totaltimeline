@@ -1,15 +1,11 @@
 <!doctype html>
-<html class="no-js">
+<html>
 <head>
   <meta charset="utf-8">
   <title>Total Timeline</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <link rel="shortcut icon" href="/favicon.ico">
-
-
-
-  <link rel="stylesheet" href="/style/screen.css">
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="theme-color" content="#FFF">
@@ -19,7 +15,7 @@
   <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/icon.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/icon.png" />
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/icon.png" />
-
+  <style type="text/css"><!-- we need one --></style>
 </head>
 <body>
 <header data-header></header>
@@ -29,24 +25,6 @@
   <section data-content></section>
 </main>
 
-<!--<div data-console></div>-->
-<!--<script>
-  window.addEventListener('error',({message,lineno,filename,error})=>{
-    document.write([message,lineno,filename,error].join(' '))
-  })
-</script>-->
-
-<!--<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('/serviceWorker.js').then(registration=>{
-      console.log('ServiceWorker registered with scope: ', registration.scope);
-    }, err=>{
-      console.log('ServiceWorker failed: ', err);
-    });
-  });
-}
-</script>-->
 <script src="/js/index.js"></script>
 </body>
 </html>

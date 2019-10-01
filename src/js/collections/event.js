@@ -2,7 +2,7 @@
  * Factory module to create events
  * @module event
  */
-import {random} from '../math/prng'
+// import {random} from '../math/prng'
 // import animate from '../animate'
 import model from '../model'
 import {getPercentage,getFragment} from '../util'

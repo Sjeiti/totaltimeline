@@ -15,9 +15,8 @@
     "json": "node ./task/wiki ./src/static/events.json",
     "clean": "rimraf dist",
     "icomoon": "node task/icomoon",
-    "version": "next-version package.json src/serviceWorker.js",
-    "version:minor": "npm run version -- --minor",
-    "version:major": "npm run version -- --major"
+    "icons": "node task/img2css --source ./src/icon --target ./temp/foo.less",
+    "version": "next-version package.json src/serviceWorker.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

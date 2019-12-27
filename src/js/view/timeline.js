@@ -1,5 +1,6 @@
 import {create} from './component'
 import time from '../time'
+import {lock} from '../time/range'
 import view from './'
 import {getFragment} from '../util'
 import collections from '../collections'
@@ -179,22 +180,30 @@ export default create(
        */
       function onTouchMove(e,numTouches,touches,numLastTouches,lastTouches) {
         if (numTouches===numLastTouches) {
-          if (numTouches===1) {
+          //
+          const locked = range.lock
+          const isLocked = locked>lock.NONE
+          const isLockedStart = locked===lock.START
+          const isZoom = numTouches===2||(numTouches===1&&isLocked)
+          //
+          if (numTouches===1&&!isZoom) {
             range.moveStart(range.start.ago+(touches[0]-lastTouches[0])*(range.duration/element.offsetWidth))
             e.preventDefault()
-          } else if (numTouches===2) {
+          } else if (isZoom) {
             // reverse interpolation to find new start and end points
             var iRangeDuration = range.duration
               //
+              ,lockPos = isLockedStart?0:viewW
+              //
               ,iTouch1Last = lastTouches[0]
-              ,iTouch2Last = lastTouches[1]
+              ,iTouch2Last = isLocked?lockPos:lastTouches[1]
               ,fTouch1LastTime = range.start.ago - (iTouch1Last/viewW)*iRangeDuration
               ,fTouch2LastTime = range.end.ago + (1-iTouch2Last/viewW)*iRangeDuration
               ,iTouchWLast = iTouch2Last-iTouch1Last
               ,iTouchLastDuration = (iTouchWLast/viewW)*iRangeDuration
               //
               ,iTouch1 = touches[0]
-              ,iTouch2 = touches[1]
+              ,iTouch2 = isLocked?lockPos:touches[1]
               ,iTouchW = iTouch2-iTouch1
               //
               ,fPart1 = iTouch1/viewW

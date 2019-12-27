@@ -3,6 +3,12 @@ import animate from '../animate'
 import time from './time'
 import {Signal} from 'signals'
 
+export const lock = {
+  NONE: 0
+  ,START: 1
+  ,END: 2
+}
+
 /**
  * An object instance created by the factory method {@link range}
  * @typedef {object} timeRange
@@ -19,12 +25,7 @@ import {Signal} from 'signals'
  * @property {function} factory Direct link back to the original factory
  * @property {number} lock
  */
-const lock = {
-    NONE: 0
-    ,START: 1
-    ,END: 2
-  }
-  ,proto = {
+const proto = {
     toString(){return '[object range, '+this.start.toString()+' to '+this.end.toString()+']';}
 
     /**

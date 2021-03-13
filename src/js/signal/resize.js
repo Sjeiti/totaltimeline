@@ -6,14 +6,14 @@ import createSignal from './'
  * @name resize
  * @type Signal
  */
-export default createSignal(function(signal){
+export default createSignal((signal)=> {
   const win = window
   const doc = document
 		 const docElm = doc.documentElement
 		 const body = doc.body
   let w = win.innerWidth || docElm.clientWidth || body.clientWidth
 		 let h = win.innerHeight|| docElm.clientHeight|| body.clientHeight
-  win.addEventListener('resize', function(docElm){
+  win.addEventListener('resize', (docElm)=> {
     const oldW = w
 			 const oldH = h
     w = win.innerWidth || docElm.clientWidth || body.clientWidth

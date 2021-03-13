@@ -8,7 +8,7 @@ import createSignal from './'
  * @requires iddqd.requestAnimationFrame
  * @todo: possibly stop when last signal listener is removed
  */
-export default createSignal(function(signal){
+export default createSignal((signal)=> {
   let deltaT = 0
 		 let millisCurrent
 		 let millisLast = Date.now()

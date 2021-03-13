@@ -42,7 +42,7 @@ export default function eventInfo(objectToParse){
           if (s==='name') {
             this.slug = slug(o[s])
           } else if (s==='tags') {
-            this.tags = o[s].split(',').map(function(s){return s.replace(/^\s*|\s*$/g,'')}).filter(function(s){return !s.match(/^[\s\n\t]*$/)})
+            this.tags = o[s].split(',').map((s)=> {return s.replace(/^\s*|\s*$/g,'')}).filter((s)=> {return !s.match(/^[\s\n\t]*$/)})
           }
         }
       }

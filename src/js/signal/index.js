@@ -21,10 +21,12 @@ import Signal from 'signals'
  * @method
  * @memberOf iddqd.signal
  * @param {Function} init The initialisation method, called after the first signal.add or signal.addOnce.
+ * @param {boolean} createNow Create the signal immediately
  * @returns {Signal} The signal
  * @todo implement requirements
  * @todo what if the signal already exists
  * @todo add window.addEventListener('popstate',handleCloseOverlay);
+ * @todo is !createNow premature optimization?
  */
 export default function createSignal(init,createNow){
   const signal = new Signal()

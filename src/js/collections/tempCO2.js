@@ -8,7 +8,7 @@ import {getMinMax, getMap} from '../util'
  */
 export default graphCollection(
   'Epica-tpt-co2.csv'
-  ,function(data){
+  ,(data)=> {
 
     const lines = data.split(/\n/g)
     const headers = lines[4].split(/,/g)

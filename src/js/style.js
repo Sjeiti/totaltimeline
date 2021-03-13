@@ -120,7 +120,7 @@ function rule(selector) {
     }
   }
   function set(key,prop) {
-    styles.forEach(function (rule) {
+    styles.forEach((rule) => {
       const style = rule.style
       style.removeProperty(key)
       style[key] = prop

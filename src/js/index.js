@@ -1,5 +1,4 @@
 import '../style/screen.less'
-console.log('ja') // todo: remove log
 
 import {initialise} from './view/component'
 

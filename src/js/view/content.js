@@ -135,7 +135,7 @@ export default create(
             <button class="icn-cross" data-close></button>
             ${model.api?'<button class="icn-pencil" data-edit></button>':''}
           </header>
-          <img src="${img}"/>
+          <img alt="${name}" src="${img}"/>
           ${text}
           ${wikimediakey&&`<footer><a target="wikipedia" href="https://wikipedia.org/wiki/${wikimediakey.split(':')[0]}">wikipedia</a></footer>`||''}
         </article>`)

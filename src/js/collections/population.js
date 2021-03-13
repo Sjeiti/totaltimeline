@@ -8,7 +8,7 @@ import {getMinMax, getMap} from '../util'
  */
 export default graphCollection(
   'Hyde-3.1-population.csv'
-  ,function(data){
+  ,(data)=> {
 
     const lines = data.split(/\n/g)
     const headers = lines[0].split(/,/g)

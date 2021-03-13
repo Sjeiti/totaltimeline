@@ -16,7 +16,8 @@ module.exports = {
     'one-var': ['error', 'never'],
     'semi': ['error', 'never'],
     'indent': ['error', 2],
-		'no-var': 'error',
-    'prefer-const': 'error'
+    'no-var': 'error',
+    'prefer-const': 'error',
+    'prefer-arrow-callback': 'error'
   }
 }

@@ -48,7 +48,7 @@ function init(){
 }
 function initDown(signal){
   init()
-  document.addEventListener('keydown',function(e){
+  document.addEventListener('keydown',(e)=> {
     const keyCode = e.keyCode
     key[keyCode] = true
     lastKeyDownEvent = e
@@ -58,7 +58,7 @@ function initDown(signal){
 }
 function initUp(signal){
   init()
-  document.addEventListener('keyup',function(e){
+  document.addEventListener('keyup',(e)=> {
     const iKeyCode = e.keyCode
     key[iKeyCode] = false
     animate.remove(keypress)

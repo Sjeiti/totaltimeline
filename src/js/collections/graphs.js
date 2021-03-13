@@ -215,7 +215,7 @@ export const graphs = collection(
             // ctx.beginPath()
             // line.forEach((xy,i)=>(i===0&&ctx.moveTo||ctx.lineTo).bind(ctx)(...xy))
             // ctx.stroke()
-            ctx.globalAlpha = globalAlpha*1
+            ctx.globalAlpha = globalAlpha//*1
             ctx.lineWidth = 2
             ctx.strokeStyle = clr
             ctx.beginPath()

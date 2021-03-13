@@ -3,12 +3,12 @@
  */
 
 const YEAR_NOW = (new Date()).getFullYear()
-  ,UNIVERSE = 13798000000
-  ,NOW = 0
-  //
-  ,sSpace = ' '
-  ,aAnnum = 'a,ka,Ma,Ga'.split(',')
-  ,aDuration = ' kMGTP'.split('')
+const UNIVERSE = 13798000000
+const NOW = 0
+//
+const sSpace = ' '
+const aAnnum = 'a,ka,Ma,Ga'.split(',')
+const aDuration = ' kMGTP'.split('')
 
 
 /**
@@ -28,11 +28,11 @@ export function formatAnnum(year,round=0,noSlug=true,extended=false){
   // todo: rounding sometimes off: split at . truncate and join
   // todo: also round absolutes, ie: 4 to 4.00
   let returnValue
-    ,isFuture = year<0
-    ,amount = Math.abs(year)
-    ,isGregorian = amount<4000
-    ,space = noSlug?' ':''
-    ,i
+  let isFuture = year<0
+  let amount = Math.abs(year)
+  let isGregorian = amount<4000
+  let space = noSlug?' ':''
+  let i
   if (isGregorian) {
     amount = Math.round(YEAR_NOW-year)
     returnValue = Math.abs(amount) + (amount<0?space+'BC':(amount<1500?space+'AD':''))
@@ -52,8 +52,8 @@ export function formatAnnum(year,round=0,noSlug=true,extended=false){
  */
 export function unformatAnnum(formatted){
   const isNegated = formatted.substr(0,1)==='-'
-    ,string = (formatted.match(/[a-zA-Z]+/)||[''])[0]
-    ,number = parseFloat((formatted.match(/[0-9.]+/)||[0])[0])
+  const string = (formatted.match(/[a-zA-Z]+/)||[''])[0]
+  const number = parseFloat((formatted.match(/[0-9.]+/)||[0])[0])
   let ago = number
   if (string==='Ga') {
     ago = number*1E9 * (isNegated?1:-1)

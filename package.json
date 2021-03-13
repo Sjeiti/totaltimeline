@@ -2,7 +2,7 @@
   "name": "totaltimeline",
   "description": "Total Timeline",
   "author": "Ron Valstar",
-  "version": "0.1.74",
+  "version": "1.0.0",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "start": "run-p build serve",
@@ -10,7 +10,8 @@
     "build:prod": "run-s clean icomoon \"webpack -- --env production\" build:sitemap",
     "build:sitemap": "node task/sitemap",
     "webpack": "npx webpack --config webpack.config.js",
-    "lint": "eslint src/js/index.js",
+    "lint": "eslint src/js/**/*.js",
+    "lint:fix": "eslint src/js/**/*.js --fix",
     "serve": "node ./task/serve dist 8385",
     "json": "node ./task/wiki ./src/static/events.json",
     "clean": "rimraf dist",

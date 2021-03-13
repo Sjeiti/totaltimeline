@@ -14,9 +14,9 @@ export default create(
     init(element){
 
       const span = model.span
-        ,range = model.range
-        ,body = document.body
-        ,elmSpan = stringToElement(`<div class="span">
+      const range = model.range
+      const body = document.body
+      const elmSpan = stringToElement(`<div class="span">
 	<time>${span.start.toString()}</time>
 	<time>${span.end.toString()}</time>
 	<input type="radio" name="lock" class="visuallyhidden" id="lockStart" /><label class="icn-unlocked" for="lockStart"></label>
@@ -30,19 +30,19 @@ export default create(
     <div class="after"></div>
 	</div>
 </div>`)
-        ,elmRange = elmSpan.querySelector('.range')
-        ,elmBefore = elmRange.querySelector('.before')
-        ,elmAfter = elmRange.querySelector('.after')
-        ,rangeStyle = elmRange.style
-        ,[elmTimeFrom,elmTime,elmTimeTo] = elmRange.querySelectorAll('time')
+      const elmRange = elmSpan.querySelector('.range')
+      const elmBefore = elmRange.querySelector('.before')
+      const elmAfter = elmRange.querySelector('.after')
+      const rangeStyle = elmRange.style
+      const [elmTimeFrom,elmTime,elmTimeTo] = elmRange.querySelectorAll('time')
 
       let spanWidth = 800
-        ,isOver = false
-        ,mouseXOffset = 0
-        ,mouseXOffsetDelta = 0
-        ,mouseXOffsetLast = 0
-        ,lastUp = 0
-        ,isTouchZoom = false
+      let isOver = false
+      let mouseXOffset = 0
+      let mouseXOffsetDelta = 0
+      let mouseXOffsetLast = 0
+      let lastUp = 0
+      let isTouchZoom = false
 
       // Initialise event listeners (and signals).
       // init and detach keypress so keys exist
@@ -109,7 +109,7 @@ export default create(
        * @param {Event} e
        */
       function onDocumentMouseMove(e){
-        const iOffsetX = e.clientX;
+        const iOffsetX = e.clientX
         mouseXOffsetDelta = iOffsetX-mouseXOffsetLast
         mouseXOffsetLast = iOffsetX
         range.moveStart(range.start.ago - Math.round(mouseXOffsetDelta/spanWidth*span.duration))
@@ -216,7 +216,7 @@ export default create(
        */
       function onElementChange(e){
         const {target} = e
-          ,{id} = target
+        const {id} = target
         range.lock = ['lockNone','lockStart','lockEnd'].indexOf(id)
       }
 
@@ -231,19 +231,19 @@ export default create(
        */
       function rangeZoom(zoomin,mouseX){
         let fRangeGrowRate = 0.01111*span.duration<<0
-          ,iStart = range.start.ago
-          ,iEnd = range.end.ago
-          // offset calculations
-          ,iRangeL = elmRange.offsetLeft
-          ,iRangeR = iRangeL+elmRange.offsetWidth
-          ,iDeltaL = iRangeL-mouseX
-          ,iDeltaR = mouseX-iRangeR
-          ,iDeltaTotal = Math.abs(iDeltaL) + Math.abs(iDeltaR)
-          ,fDeltaL = iDeltaL/iDeltaTotal
-          ,fDeltaR = iDeltaR/iDeltaTotal
-          // new positions
-          ,iNewStart
-          ,iNewEnd
+        let iStart = range.start.ago
+        let iEnd = range.end.ago
+        // offset calculations
+        let iRangeL = elmRange.offsetLeft
+        let iRangeR = iRangeL+elmRange.offsetWidth
+        let iDeltaL = iRangeL-mouseX
+        let iDeltaR = mouseX-iRangeR
+        let iDeltaTotal = Math.abs(iDeltaL) + Math.abs(iDeltaR)
+        let fDeltaL = iDeltaL/iDeltaTotal
+        let fDeltaR = iDeltaR/iDeltaTotal
+        // new positions
+        let iNewStart
+        let iNewEnd
         //
         if (!zoomin) {
           if (iStart===time.UNIVERSE) {

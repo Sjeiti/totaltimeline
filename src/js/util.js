@@ -23,8 +23,8 @@ export function parseOptions(options) {
 export function isJSONString(str='') {
   if ( /^\s*$/.test(str) ) return false
   str = str.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
-           .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
-           .replace(/(?:^|:|,)(?:\s*\[)+/g, '')
+    .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+    .replace(/(?:^|:|,)(?:\s*\[)+/g, '')
   return (/^[\],:{}\s]*$/).test(str)
 }
 
@@ -45,9 +45,9 @@ export function isObjectString(str) {
  * @returns {HTMLDivElement}
  */
 function wrapHTMLString(str) {
-    const div = wrapHTMLString.div || (wrapHTMLString.div = document.createElement('div'));
-    div.innerHTML = str;
-    return div;
+  const div = wrapHTMLString.div || (wrapHTMLString.div = document.createElement('div'))
+  div.innerHTML = str
+  return div
 }
 
 /**
@@ -56,9 +56,9 @@ function wrapHTMLString(str) {
  * @returns {DocumentFragment}
  */
 export function getFragment(str) {
-    const fragment = document.createDocumentFragment();
-    Array.from(wrapHTMLString(str).childNodes).forEach(elm => fragment.appendChild(elm));
-    return fragment;
+  const fragment = document.createDocumentFragment()
+  Array.from(wrapHTMLString(str).childNodes).forEach(elm => fragment.appendChild(elm))
+  return fragment
 }
 
 /**
@@ -67,12 +67,12 @@ export function getFragment(str) {
  * @returns {HTMLElement}
  */
 export function stringToElement(str) {
-    return wrapHTMLString(str).childNodes[0];
+  return wrapHTMLString(str).childNodes[0]
 }
 
 //todo:doc/rename
 export function slug(s) {
-  return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+  return s.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'')
 }
 
 export function getPercentage(f){
@@ -87,20 +87,20 @@ export function clearChildren(parent){
 // todo:document
 export function getCssValuePrefix() {
   const aPrefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
-    ,mTmp = document.createElement('div')
-    ,sValue = 'linear-gradient(left, #fff, #fff)';
+  const mTmp = document.createElement('div')
+  const sValue = 'linear-gradient(left, #fff, #fff)'
   for (let i = 0; i < aPrefixes.length; i++) {
-    mTmp.style.backgroundImage = aPrefixes[i] + sValue;
+    mTmp.style.backgroundImage = aPrefixes[i] + sValue
     if (mTmp.style.backgroundImage) {
-      return aPrefixes[i];
+      return aPrefixes[i]
     }
-    mTmp.style.backgroundImage = '';
+    mTmp.style.backgroundImage = ''
   }
 }
 
 export function assignable(arrayProto){
   const keys = Object.getOwnPropertyNames(arrayProto)
-    ,obj = {}
+  const obj = {}
   keys.forEach(key=>{
     const value = arrayProto[key]
     if (typeof value === 'function') {

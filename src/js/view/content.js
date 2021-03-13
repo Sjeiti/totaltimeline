@@ -17,18 +17,18 @@ export default create(
   ,{
     init(element){
       const that = this
-        //
-        ,visibleRange = model.range
-        ,classNameReveal = 'reveal'
-        ,contentStyle = style.select('[data-content]')
-        ,elmContentWrapper = stringToElement('<div class="content"></div>')
-        ,fragment = document.createDocumentFragment()
-        ,flexGrowPrefixes = {
-          '-webkit-flex-grow': 1
-          ,'-moz-flex-grow': 1
-          ,'-ms-flex-grow': 1
-          ,'flex-grow': 1
-        }
+      //
+      const visibleRange = model.range
+      const classNameReveal = 'reveal'
+      const contentStyle = style.select('[data-content]')
+      const elmContentWrapper = stringToElement('<div class="content"></div>')
+      const fragment = document.createDocumentFragment()
+      const flexGrowPrefixes = {
+        '-webkit-flex-grow': 1
+        ,'-moz-flex-grow': 1
+        ,'-ms-flex-grow': 1
+        ,'flex-grow': 1
+      }
 
       // Initialise event listeners (and signals).
       model.entryShown.add(onEntryShown)
@@ -66,7 +66,7 @@ export default create(
             if (!visibleRange.coincides(entry.moment)&&animateIfNeeded) {
               // zoom the entry with to n-closest entries
               const range = collections.getEntryRange(entry, 2, 2)
-                ,{entryShown} = model
+              const {entryShown} = model
               range && visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
             }
           } else if (entry.range) {
@@ -92,9 +92,9 @@ export default create(
        */
       function onContentScroll(){
         const scrollTop = element.scrollTop
-          ,scrollHeight = element.scrollHeight
-          ,height = element.offsetHeight
-          ,isSameHeight = height===scrollHeight
+        const scrollHeight = element.scrollHeight
+        const height = element.offsetHeight
+        const isSameHeight = height===scrollHeight
         let fPart
         if (isSameHeight&&flexGrowPrefixes['flex-grow']!==1) {
           fPart = 1
@@ -103,7 +103,7 @@ export default create(
         } else {
           fPart = scrollTop/(scrollHeight-height)
         }
-        setContentGrow(1+fPart*2); // todo: get that 1 from less
+        setContentGrow(1+fPart*2) // todo: get that 1 from less
       }
 
       /**

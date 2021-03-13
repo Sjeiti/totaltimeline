@@ -17,25 +17,25 @@ export default create(
       /////////////////////////////////////////////////////
 
       const range = model.range
-        ,body = document.body
-        ,elements = getFragment(`<time></time><time></time>
+      const body = document.body
+      const elements = getFragment(`<time></time><time></time>
 <div class="before"></div><div class="after"></div>
 <div class="overlay"></div>`)
-        ,elmOverlay = elements.querySelector('.overlay')
-        ,elmTimeFrom = elements.querySelector('time')//document.createElement('time')
-        ,elmTimeTo = elements.querySelector('time:nth-child(2)')//document.createElement('time')
-        ,elmBefore = elements.querySelector('.before')//.createElement('div')
-        ,elmAfter = elements.querySelector('.after')//document.createElement('div')
+      const elmOverlay = elements.querySelector('.overlay')
+      const elmTimeFrom = elements.querySelector('time')//document.createElement('time')
+      const elmTimeTo = elements.querySelector('time:nth-child(2)')//document.createElement('time')
+      const elmBefore = elements.querySelector('.before')//.createElement('div')
+      const elmAfter = elements.querySelector('.after')//document.createElement('div')
 
       let backgroundPos = 0
-        ,viewW
-        ,viewH
-        ,viewL
-        ,isOver = false
-        //
-        ,mouseXOffsetDelta = 0
-        ,mouseXOffsetLast = 0
-        ,resizeTimeout
+      let viewW
+      let viewH
+      let viewL
+      let isOver = false
+      //
+      let mouseXOffsetDelta = 0
+      let mouseXOffsetLast = 0
+      let resizeTimeout
 
       // Initialise event listeners (and signals).
       // init and detach keypress so keys exist
@@ -91,7 +91,7 @@ export default create(
       function onViewMouseDownUp(e){
         if (e.type==='mousedown') {
           mouseXOffsetDelta = 0
-          mouseXOffsetLast = e.clientX;//.offsetX
+          mouseXOffsetLast = e.clientX//.offsetX
           document.addEventListener('mousemove',handleDocumentMouseMove,false)
           body.addEventListener('mouseup',onViewMouseDownUp,false)
         } else {
@@ -121,22 +121,22 @@ export default create(
       function onWheel(direction,e){
         if (isOver) {
           const fScaleMove = 0.02
-            ,fScaleZoom = 0.1
-            ,bZoomin = direction>0
-            ,iZoomin = bZoomin?1:-1
-            ,iStart = range.start.ago
+          const fScaleZoom = 0.1
+          const bZoomin = direction>0
+          const iZoomin = bZoomin?1:-1
+          const iStart = range.start.ago
           let iNewStart
-            ,iNewEnd
+          let iNewEnd
 
           if (key[16]) {
             iNewStart = iStart + iZoomin*Math.round(fScaleMove*range.duration)
             range.moveStart(iNewStart)
           } else {
             const fAdd = iZoomin*Math.round(fScaleZoom*range.duration)
-              // offset calculations
-              ,iMouseX = e.clientX
-              ,fL = (iMouseX-viewL)/viewW
-              ,fR = 1-fL
+            // offset calculations
+            const iMouseX = e.clientX
+            const fL = (iMouseX-viewL)/viewW
+            const fR = 1-fL
 
             /*if (!bZoomin) {
               if (iStart<=time.UNIVERSE) {
@@ -185,29 +185,29 @@ export default create(
           } else if (numTouches===2) {
             // reverse interpolation to find new start and end points
             var iRangeDuration = range.duration
-              //
-              ,iTouch1Last = lastTouches[0]
-              ,iTouch2Last = lastTouches[1]
-              ,fTouch1LastTime = range.start.ago - (iTouch1Last/viewW)*iRangeDuration
-              ,fTouch2LastTime = range.end.ago + (1-iTouch2Last/viewW)*iRangeDuration
-              ,iTouchWLast = iTouch2Last-iTouch1Last
-              ,iTouchLastDuration = (iTouchWLast/viewW)*iRangeDuration
-              //
-              ,iTouch1 = touches[0]
-              ,iTouch2 = touches[1]
-              ,iTouchW = iTouch2-iTouch1
-              //
-              ,fPart1 = iTouch1/viewW
-              ,fPart2 = 1-iTouch2/viewW
-              ,fPartW = iTouchW/viewW
-              //
-              ,fPart1W = fPart1/fPartW
-              ,fPart2W = fPart2/fPartW
-              ,fPart1WDuration = fPart1W*iTouchLastDuration
-              ,fPart2WDuration = fPart2W*iTouchLastDuration
-              //
-              ,iNewStart =	Math.floor(fTouch1LastTime + fPart1WDuration)
-              ,iNewEnd =		Math.floor(fTouch2LastTime - fPart2WDuration)
+            //
+            var iTouch1Last = lastTouches[0]
+            var iTouch2Last = lastTouches[1]
+            var fTouch1LastTime = range.start.ago - (iTouch1Last/viewW)*iRangeDuration
+            var fTouch2LastTime = range.end.ago + (1-iTouch2Last/viewW)*iRangeDuration
+            var iTouchWLast = iTouch2Last-iTouch1Last
+            var iTouchLastDuration = (iTouchWLast/viewW)*iRangeDuration
+            //
+            var iTouch1 = touches[0]
+            var iTouch2 = touches[1]
+            var iTouchW = iTouch2-iTouch1
+            //
+            var fPart1 = iTouch1/viewW
+            var fPart2 = 1-iTouch2/viewW
+            var fPartW = iTouchW/viewW
+            //
+            var fPart1W = fPart1/fPartW
+            var fPart2W = fPart2/fPartW
+            var fPart1WDuration = fPart1W*iTouchLastDuration
+            var fPart2WDuration = fPart2W*iTouchLastDuration
+            //
+            var iNewStart =	Math.floor(fTouch1LastTime + fPart1WDuration)
+            var iNewEnd =		Math.floor(fTouch2LastTime - fPart2WDuration)
 
             range.set(
               iNewStart
@@ -225,10 +225,10 @@ export default create(
       // todo: document
       function moveBackgroundOverlay(range,oldrange){
         var iCurrentDuration = range.duration
-          ,iRangeCenter = range.end.ago + iCurrentDuration/2
-          ,iOldRangeCenter = oldrange.end.ago + oldrange.duration/2
-          ,iDeltaCenter = iRangeCenter - iOldRangeCenter
-          ,iOffset = iDeltaCenter/iCurrentDuration*viewW
+        var iRangeCenter = range.end.ago + iCurrentDuration/2
+        var iOldRangeCenter = oldrange.end.ago + oldrange.duration/2
+        var iDeltaCenter = iRangeCenter - iOldRangeCenter
+        var iOffset = iDeltaCenter/iCurrentDuration*viewW
 
         // background-size is contain so mod by viewH to prevent errors
         backgroundPos = (backgroundPos + Math.round(iOffset))%viewH

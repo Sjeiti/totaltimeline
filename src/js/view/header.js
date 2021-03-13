@@ -1,6 +1,6 @@
 import {create} from './component'
 import {getFragment} from '../util'
-import {VERSION} from "../config";
+import {VERSION} from "../config"
 
 export default create(
   'data-header'

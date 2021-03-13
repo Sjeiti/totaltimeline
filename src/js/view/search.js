@@ -3,7 +3,7 @@ import {getFragment,clearChildren} from '../util'
 import collections from '../collections'
 
 const writable = true
-  ,classNameVisible = 'visible'
+const classNameVisible = 'visible'
 
 export default create(
   'data-search'
@@ -16,8 +16,8 @@ export default create(
       element.appendChild(html)
 
       const elmSearch = this._input
-        ,searchResult = this._result
-        ,searchFragment = document.createDocumentFragment()
+      const searchResult = this._result
+      const searchFragment = document.createDocumentFragment()
       let currentQuery = ''
 
       elmSearch.addEventListener('keyup',onKeyUp)
@@ -30,11 +30,11 @@ export default create(
        */
       function onKeyUp() {
         const query = elmSearch.value.toLowerCase()
-          , found = []
+        const found = []
         if (query!==currentQuery) {
           collections.forEach(collection => {
             collection.forEach(entry => {
-              const {name, explanation, wikimedia} = entry.info;
+              const {name, explanation, wikimedia} = entry.info
               const result = 10*searchString(query, name) + 3*searchString(query, explanation) + searchString(query, wikimedia)
               if (result !== 0) {
                 found.push([result, entry])
@@ -55,7 +55,7 @@ export default create(
             .sort((a, b) => a[0] > b[0] ? -1 : 1)
             .forEach(found => {
               let entry = found[1]
-                , info = entry.info || entry
+              let info = entry.info || entry
               searchFragment.appendChild(getFragment(`<li><a href="#${info.slug}">${info.name.replace(query, `<strong>${query}</strong>`)}</a></li>`))
             })
           searchResult.appendChild(searchFragment)
@@ -85,10 +85,10 @@ export default create(
        */
       function searchString(needle,haystack){
         const splitHaystack = haystack.toLocaleLowerCase().split(needle)
-          ,haystackLength = splitHaystack.length
-          ,regex = wholeWordRegex(needle)
-          ,hasWholeWord = regex.test(haystack)
-          ,hasWord = haystackLength>1
+        const haystackLength = splitHaystack.length
+        const regex = wholeWordRegex(needle)
+        const hasWholeWord = regex.test(haystack)
+        const hasWord = haystackLength>1
         return hasWholeWord&&2||hasWord&&1||0
       }
 

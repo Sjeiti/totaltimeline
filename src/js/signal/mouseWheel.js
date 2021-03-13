@@ -7,10 +7,10 @@ import createSignal from './'
  * @type Signal
  */
 export default createSignal(function(signal){
-	window.addEventListener('DOMMouseScroll',function(e){
-		signal.dispatch(10*e.detail,e);
-	},false);
-	window.addEventListener('mousewheel',function(e){
-		signal.dispatch(e.wheelDelta,e);
-	},false);
+  window.addEventListener('DOMMouseScroll',function(e){
+    signal.dispatch(10*e.detail,e)
+  },false)
+  window.addEventListener('mousewheel',function(e){
+    signal.dispatch(e.wheelDelta,e)
+  },false)
 })

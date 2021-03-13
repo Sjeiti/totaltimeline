@@ -39,7 +39,7 @@ function initApi(){
 }
 
 function onEditEvent(event){
-  const inputs = [];
+  const inputs = []
   eventKeys.forEach(prop=>{
     let list
     if (eventLists.hasOwnProperty(prop)) {
@@ -61,7 +61,7 @@ function onEditEvent(event){
     </p>
   </form>
 </div></div>`)
-	document.body.appendChild(element)
+  document.body.appendChild(element)
   element.querySelector('form').addEventListener('submit',onSubmit)
   element.addEventListener('click',onClick.bind(null,element))
 }
@@ -84,8 +84,8 @@ function onClick(element,{target}){
 }
 
 function reload(){
-	// window.location.reload(false)
-	window.location.reload()
+  // window.location.reload(false)
+  window.location.reload()
 }
 
 function newEvent(){

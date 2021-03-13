@@ -12,6 +12,9 @@ module.exports = {
   'rules': {
     // allow debugger during development
     'no-new': 0,
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'one-var': ['error', 'never'],
+    'semi': ['error', 'never'],
+    'indent': ['error', 2]
   }
 }

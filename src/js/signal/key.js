@@ -8,36 +8,36 @@ import animate from './animate'
  * @summary Wrapper namespace for keyboard signals.
  */
 var fn = ()=>{}
-  ,eLastKeyDown
-  ,bInit = false
-  /**
+var eLastKeyDown
+var bInit = false
+/**
    * Signal for keyPress.<br/>
    * The callback for this signal is Function(keys,event)
    * @name keypress
    * @type Signal
    */
-  ,press = createSignal(init)
-  /**
+var press = createSignal(init)
+/**
    * Signal for keyDown.<br/>
    * The callback for this signal is Function(keyCode,keys,event)
    * @name keydown
    * @type Signal
    */
-  ,down = createSignal(initDown)
-  /**
+var down = createSignal(initDown)
+/**
    * Signal for keyUp.<br/>
    * The callback for this signal is Function(keyCode,keys,event)
    * @name keyup
    * @type Signal
    */
-  ,up = createSignal(initUp)
-  //
-  ,key = Object.assign([],{
-    press: press
-    ,down: down
-    ,up: up
-  })
-;
+var up = createSignal(initUp)
+//
+var key = Object.assign([],{
+  press: press
+  ,down: down
+  ,up: up
+})
+
 function init(){
   if (!bInit) {
     bInit = true
@@ -47,26 +47,26 @@ function init(){
   }
 }
 function initDown(signal){
-  init();
+  init()
   document.addEventListener('keydown',function(e){
     const iKeyCode = e.keyCode
     key[iKeyCode] = true
     eLastKeyDown = e
     signal.dispatch(iKeyCode,key,e)
     animate.add(keypress)
-  });
+  })
 }
 function initUp(signal){
-  init();
+  init()
   document.addEventListener('keyup',function(e){
     const iKeyCode = e.keyCode
     key[iKeyCode] = false
     animate.remove(keypress)
     signal.dispatch(iKeyCode,key,e)
-  });
+  })
 }
 function keypress(){
-  press.dispatch(key,eLastKeyDown);
+  press.dispatch(key,eLastKeyDown)
 }
 
 export default key

@@ -16,7 +16,7 @@ const proto = {
   }
   ///////////////////////////////////////
   ,animate(startAgo,endAgo,callback){
-    console.log('event.animate',arguments); // todo: remove log
+    console.log('event.animate',arguments) // todo: remove log
     // const iStartFrom = this.start.ago
     //   ,iStartDelta = startAgo - iStartFrom
     //   ,iEndFrom = this.end.ago
@@ -42,30 +42,30 @@ const proto = {
  * @param {moment} moment
  * @param {eventInfo} info
  * @param {number} index
- * @param {object} data
+ * @param {object} entry
  * @returns {event}
  */
 export default function event(moment,info,index,entry){
   const event = Object.create(proto,{
-      moment: {value:moment}
-      ,info: {value:info}
-      ,element: {value:getFragment(`<div class="event-wrap">
+    moment: {value:moment}
+    ,info: {value:info}
+    ,element: {value:getFragment(`<div class="event-wrap">
   <time></time>
   <div class="event"></div>
   <h3><a href="${info.slug}">${info.name}</a></h3>
 </div>`).firstChild}
-      ,index: {value:index}
-      ,entry: {value:entry}
-    })
-    ,mWrap = event.element
-    ,mEvent = mWrap.querySelector('.event')
-    ,mTitle = mWrap.querySelector('h3')
-    ,mTime = mWrap.querySelector('time')
-    //
-    ,top = 0.15 + 0.7*((index * (137.5/360))%1)
-    ,sTop = getPercentage(top)
-    ,sHeight = getPercentage(1-top)
-    //
+    ,index: {value:index}
+    ,entry: {value:entry}
+  })
+  const mWrap = event.element
+  const mEvent = mWrap.querySelector('.event')
+  const mTitle = mWrap.querySelector('h3')
+  const mTime = mWrap.querySelector('time')
+  //
+  const top = 0.15 + 0.7*((index * (137.5/360))%1)
+  const sTop = getPercentage(top)
+  const sHeight = getPercentage(1-top)
+  //
 
   mEvent.model = event
   mEvent.style.top = sTop

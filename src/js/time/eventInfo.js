@@ -33,42 +33,42 @@ import {slug} from '../util'
 
 export default function eventInfo(objectToParse){
   const writable = true
-    ,inst = Object.seal(Object.create({
-      parse(o) {
-        // todo: markdown.toHTML(explanation)
-        for (var s in o) {
-          if (this.hasOwnProperty(s)) {
-            this[s] = o[s]
-            if (s==='name') {
-              this.slug = slug(o[s])
-            } else if (s==='tags') {
-              this.tags = o[s].split(',').map(function(s){return s.replace(/^\s*|\s*$/g,'')}).filter(function(s){return !s.match(/^[\s\n\t]*$/)})
-            }
+  const inst = Object.seal(Object.create({
+    parse(o) {
+      // todo: markdown.toHTML(explanation)
+      for (var s in o) {
+        if (this.hasOwnProperty(s)) {
+          this[s] = o[s]
+          if (s==='name') {
+            this.slug = slug(o[s])
+          } else if (s==='tags') {
+            this.tags = o[s].split(',').map(function(s){return s.replace(/^\s*|\s*$/g,'')}).filter(function(s){return !s.match(/^[\s\n\t]*$/)})
           }
         }
-        return this
       }
-      ,toString(){return `[object EventInfo '${this.name}']`}
-    },{
-      name: {writable}
-      ,slug: {writable}
-      ,icon: {writable}
-      ,importance: {writable}
-      ,accuracy: {writable}
-      ,tags: {writable,value:[]}
+      return this
+    }
+    ,toString(){return `[object EventInfo '${this.name}']`}
+  },{
+    name: {writable}
+    ,slug: {writable}
+    ,icon: {writable}
+    ,importance: {writable}
+    ,accuracy: {writable}
+    ,tags: {writable,value:[]}
 
-      ,explanation: {writable}
-      ,wikimediakey: {writable}
-      ,wikimedia: {writable}
+    ,explanation: {writable}
+    ,wikimediakey: {writable}
+    ,wikimedia: {writable}
 
-      ,image: {writable}
-      ,thumb: {writable}
-      ,imagename: {writable}
-      ,imageinfo: {writable}
+    ,image: {writable}
+    ,thumb: {writable}
+    ,imagename: {writable}
+    ,imageinfo: {writable}
 
-      ,example: {writable}
-      ,links: {writable}
-      ,remark: {writable}
-    }))
-	return objectToParse?inst.parse(objectToParse):inst
+    ,example: {writable}
+    ,links: {writable}
+    ,remark: {writable}
+  }))
+  return objectToParse?inst.parse(objectToParse):inst
 }

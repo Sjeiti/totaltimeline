@@ -17,10 +17,10 @@ export default collection(
     data.forEach(function(entry,index){
       //console.log('event',getProp(entry,'name'),getProp(entry,'ago'),getProp(entry,'ago',true)); // log
       const ago = parseInt(entry.ago,10)
-        ,since = parseInt(entry.since,10)
-        ,year = parseInt(entry.year,10)
-        ,entryMoment = ago?moment(ago):(since?moment(since,moment.SINCE):year&&moment(year,moment.YEAR))
-        ,isExcluded = entry.exclude==='1'
+      const since = parseInt(entry.since,10)
+      const year = parseInt(entry.year,10)
+      const entryMoment = ago?moment(ago):(since?moment(since,moment.SINCE):year&&moment(year,moment.YEAR))
+      const isExcluded = entry.exclude==='1'
       if (entryMoment&&!isExcluded) {
         this.push(event(
           entryMoment
@@ -38,15 +38,15 @@ export default collection(
   }
   ,function(range){
     const rangeStart = range.start.ago
-      ,rangeEnd = range.end.ago
-      ,duration = range.duration
-      ,show = []
+    const rangeEnd = range.end.ago
+    const duration = range.duration
+    const show = []
     this.forEach(event=>{
       const ago = event.moment.ago
-        ,isInside = ago<=rangeStart&&ago>=rangeEnd
+      const isInside = ago<=rangeStart&&ago>=rangeEnd
       if (isInside) {
         const element = event.element
-          ,fRel = 1-((ago-rangeEnd)/duration)
+        const fRel = 1-((ago-rangeEnd)/duration)
         element.style.left = getPercentage(fRel)
         show.push(element)
       }

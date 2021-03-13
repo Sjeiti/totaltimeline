@@ -31,7 +31,7 @@ export default create(
     }
     ,output(...s){
       const text = this._pre.textContent + '\n' + s.join(' ') //Array.prototype.slice.call(arguments).join(' ')
-        ,split = text.split(/\n/g);
+      const split = text.split(/\n/g)
       this._pre.textContent = split.slice(Math.max(split.length-6,0)).join('\n')
 
       oldLog&&oldLog(...s)

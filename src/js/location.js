@@ -19,8 +19,8 @@ let sDocumentTitle = document.title
 let isFirstChange = true
 let hash = location.hash.substr(1)
 let search = location.search.substr(1).split(/&/g)
-    .map(kv=>kv.split(/=/))
-    .reduce((p,c)=>(p[c[0]] = c[1],p), {})
+  .map(kv=>kv.split(/=/))
+  .reduce((p,c)=>(p[c[0]] = c[1],p), {})
 let searchQuery = search.q||''
 
 // fist set hash according to incoming uri
@@ -45,7 +45,7 @@ function onRangeChange(){
     update()
   } else {
     const contentInstance = content.get()
-      ,currentEntry = contentInstance&&contentInstance.currentEntry
+    const currentEntry = contentInstance&&contentInstance.currentEntry
     update(currentEntry,visibleRange)
   }
 }
@@ -72,10 +72,10 @@ function onEntryShown(collectionEntry){
  */
 function updated(path,hash){
   const bNoHash = hash===undefined||hash===''
-    ,sPath = bNoHash?path:hash
+  const sPath = bNoHash?path:hash
   if (sPath.length>0) {
     const aPath = sPath.split('/')
-      ,iPath = aPath.length
+    const iPath = aPath.length
     // Event
     if  (iPath===1||iPath===3) {
       const sLocationSlug = aPath[0]
@@ -88,15 +88,15 @@ function updated(path,hash){
     // Range
     if (iPath>=2) {
       const bPath2 = iPath===2
-        ,iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
-        ,iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
+      const iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
+      const iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
 
       // don't animate the very first time
       if (isFirstChange) {
         visibleRange.set(iAgoStart,iAgoEnd)
         isFirstChange = false
       } else {
-        visibleRange.animate(iAgoStart,iAgoEnd);// callback
+        visibleRange.animate(iAgoStart,iAgoEnd)// callback
       }
     }
   } else {
@@ -134,29 +134,29 @@ let stateTitle = 'title'
  * @param {range} [range] The current range.
  */
 function update(event,range){
-	const {pathname} = location
+  const {pathname} = location
   const slugStart = range&&formatAnnum(range.start.ago,2,false)
   const slugEnd = range&&formatAnnum(range.end.ago,2,false)
   if (range&&sLocationOriginalPath.indexOf(slugStart)!==-1) { // why?
     sLocationOriginalPath = sLocationOriginalPath.split(slugStart).shift()
   }
-	const pathList = ['']
+  const pathList = ['']
 
-	if (event) pathList.push(event.info.slug)
-	if (range) {
-		pathList.push(slugStart)
-		pathList.push(slugEnd)
-	}
-	const pathnameNew = pathList.join(stringSlash)
-	if (pathnameNew!==pathname) {
-		clearTimeout(timeoutID)
-		const setState = pathname===stringSlash?history.pushState:history.replaceState
-		const setSateAndTitle = combine(
-			setState.bind(history, stringEmpty,stateTitle,pathnameNew)
-			, setDocumentTitle.bind(null, event, range)
-		)
-		timeoutID = setTimeout(setSateAndTitle, 300)
-	}
+  if (event) pathList.push(event.info.slug)
+  if (range) {
+    pathList.push(slugStart)
+    pathList.push(slugEnd)
+  }
+  const pathnameNew = pathList.join(stringSlash)
+  if (pathnameNew!==pathname) {
+    clearTimeout(timeoutID)
+    const setState = pathname===stringSlash?history.pushState:history.replaceState
+    const setSateAndTitle = combine(
+      setState.bind(history, stringEmpty,stateTitle,pathnameNew)
+      , setDocumentTitle.bind(null, event, range)
+    )
+    timeoutID = setTimeout(setSateAndTitle, 300)
+  }
   // setDocumentTitle(event,range)
 }
 
@@ -171,5 +171,5 @@ function setDocumentTitle(event,range){
 }
 
 function combine(...functions){
-	return ()=>functions.forEach(fnc=>fnc())
+  return ()=>functions.forEach(fnc=>fnc())
 }

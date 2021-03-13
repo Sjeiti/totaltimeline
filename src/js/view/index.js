@@ -7,31 +7,31 @@ import model from '../model'
  * @name view
  */
 const iLight1 = 150E6
-  ,iLight2 = 1E9
-  ,iLight0 = iLight1 + (iLight2-iLight1)/2
-  ,iLightA = 0.25*(iLight2-iLight1)
+const iLight2 = 1E9
+const iLight0 = iLight1 + (iLight2-iLight1)/2
+const iLightA = 0.25*(iLight2-iLight1)
 
-  ,aBackgroundColors = [
-     {time:time.UNIVERSE,					        color:'#171B30'}//171B30
-    ,{time:time.UNIVERSE-iLight0+iLightA,	color:'#585873'}//585873
-    ,{time:time.UNIVERSE-iLight0-iLightA,	color:'#799193'}//CCE7E7
-    ,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
-    ,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
-    ,{time:time.NOW,					            color:'#D8945A'}
-    ,{time:time.NOW-1,				            color:'#F7C367'}
-    ,{time:-1E9,							            color:'#8A5246'}
-    ,{time:-9E9,							            color:'#460505'}
-  ]
+const aBackgroundColors = [
+  {time:time.UNIVERSE,					        color:'#171B30'}//171B30
+  ,{time:time.UNIVERSE-iLight0+iLightA,	color:'#585873'}//585873
+  ,{time:time.UNIVERSE-iLight0-iLightA,	color:'#799193'}//CCE7E7
+  ,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
+  ,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
+  ,{time:time.NOW,					            color:'#D8945A'}
+  ,{time:time.NOW-1,				            color:'#F7C367'}
+  ,{time:-1E9,							            color:'#8A5246'}
+  ,{time:-9E9,							            color:'#460505'}
+]
 
-  ,viewProto = {
-    toString(){return '[object View]'}
-  }
-  ,writable = true
-  ,view = Object.create(viewProto,{
-    rangeGradient: {writable},
-    colorFirst: {writable},
-    colorLast: {writable}
-  })
+const viewProto = {
+  toString(){return '[object View]'}
+}
+const writable = true
+const view = Object.create(viewProto,{
+  rangeGradient: {writable},
+  colorFirst: {writable},
+  colorLast: {writable}
+})
 
 model.range.change.add(handleRangeChange,-1)
 handleRangeChange(model.range)
@@ -48,20 +48,20 @@ function handleRangeChange(range){
 // todo: document
 function getGradient(range){
   const iAgoFrom = range.start.ago
-    ,iAgoTo = range.end.ago
-    ,iDeltaRange = range.duration
-    ,aGradient = []
-    //
+  const iAgoTo = range.end.ago
+  const iDeltaRange = range.duration
+  const aGradient = []
+  //
   let oLastColor = color()
-    ,bZeroSet = false
+  let bZeroSet = false
 
   for (let i=0,l=aBackgroundColors.length;i<l;i++) {
     const oColor = aBackgroundColors[i]
-      ,iTime = oColor.time
-      ,bTimeLow = iTime>iAgoFrom
-      ,bTimeHigh = iTime<iAgoTo
-      ,bTimeMiddle = !bTimeLow&&!bTimeHigh
-      ,fPos = 1-(iTime-iAgoTo)/iDeltaRange
+    const iTime = oColor.time
+    const bTimeLow = iTime>iAgoFrom
+    const bTimeHigh = iTime<iAgoTo
+    const bTimeMiddle = !bTimeLow&&!bTimeHigh
+    const fPos = 1-(iTime-iAgoTo)/iDeltaRange
 
     // calculate average color when one or both colors are outside the range
     if (
@@ -87,8 +87,8 @@ function getGradient(range){
 
 function getAverageColor(last,current,pos,low){
   const fPosStart = last.pos
-    ,fPart = (pos-(low?0:1))/(pos-fPosStart)
-    ,oColorAvrg = color(current.color).average(color(last.color),fPart)
+  const fPart = (pos-(low?0:1))/(pos-fPosStart)
+  const oColorAvrg = color(current.color).average(color(last.color),fPart)
 
   return [oColorAvrg.toString(),(low?'0%':'100%')]
 }

@@ -27,26 +27,26 @@ import Signal from 'signals'
  * @todo add window.addEventListener('popstate',handleCloseOverlay);
  */
 export default function createSignal(init,createNow){
-	const oSignal = new Signal()
-		,fnTmpAdd = oSignal.add
-		,fnTmpAddOnce = oSignal.addOnce
-		,fnInited = function(){
-			oSignal.add = fnTmpAdd;
-			oSignal.addOnce = fnTmpAddOnce;
-			init(oSignal);
-		}
-	;
-	if (createNow) {
-		fnInited();
-	} else {
-		oSignal.add = function(){
-			fnInited();
-			return oSignal.add.apply(this,arguments);
-		};
-		oSignal.addOnce = function(){
-			fnInited();
-			return oSignal.addOnce.apply(this,arguments);
-		};
-	}
-	return oSignal;
+  const oSignal = new Signal()
+		 const fnTmpAdd = oSignal.add
+		 const fnTmpAddOnce = oSignal.addOnce
+		 const fnInited = function(){
+    oSignal.add = fnTmpAdd
+    oSignal.addOnce = fnTmpAddOnce
+    init(oSignal)
+  }
+	
+  if (createNow) {
+    fnInited()
+  } else {
+    oSignal.add = function(){
+      fnInited()
+      return oSignal.add.apply(this,arguments)
+    }
+    oSignal.addOnce = function(){
+      fnInited()
+      return oSignal.addOnce.apply(this,arguments)
+    }
+  }
+  return oSignal
 }

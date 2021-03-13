@@ -19,7 +19,7 @@ export const graphs = collection(
 
     const cnv = stringToElement('<canvas class="graph-canvas"></canvas>')
     const ctx = cnv.getContext('2d')
-    let w = 1, h = cnv.width = cnv.height = 1
+    let w = 1; let h = cnv.width = cnv.height = 1
     this.wrapper.appendChild(cnv)
 
     const legend = stringToElement('<div class="graph-legend"></div>')
@@ -28,7 +28,7 @@ export const graphs = collection(
     const axis = stringToElement('<div class="graph-axis"></div>')
     this.wrapper.appendChild(axis)
 
-    const axisOffset = 5;
+    const axisOffset = 5
     this.wrapper.appendChild(stringToElement(`<style>
 .graph-canvas {
   position: absolute;
@@ -120,8 +120,8 @@ export const graphs = collection(
       cnv.width = w
       this.forEach(graphInst=>{
         const {times,timesRange,values,map} = graphInst
-          ,clr = graphInst.color
-          ,isGraphInRange = currentRange.coincides(timesRange)
+        const clr = graphInst.color
+        const isGraphInRange = currentRange.coincides(timesRange)
         //
         const durationPart = timesRange.duration/currentRange.duration
         const globalAlpha = Math.min(Math.max(durationPart*2-0.2,0),1)
@@ -139,10 +139,10 @@ export const graphs = collection(
             const agoRange = agoStart - agoEnd
             //
             const setVertex = index => {
-                  const ago = -times[index]
-                  const time = (ago - agoEnd)/agoRange
-                  const val = values[index]
-                  line.push([w-w*time,h-0.25*h-0.5*h*map(val),val])
+              const ago = -times[index]
+              const time = (ago - agoEnd)/agoRange
+              const val = values[index]
+              line.push([w-w*time,h-0.25*h-0.5*h*map(val),val])
             }
             //
             const line = []
@@ -168,8 +168,8 @@ export const graphs = collection(
                 // current vertex
                 setVertex(indexTimes)
               } else if (inRangeChanged) {
-                 // last vertex
-                 setVertex(indexTimes)
+                // last vertex
+                setVertex(indexTimes)
               } else if (isAfterEndChanged&&isBeforeStartChanged&&!isBeforeStart) {
                 // vertices both outside range
                 setVertex(indexTimes-1)
@@ -205,8 +205,8 @@ export const graphs = collection(
             }
             const lineLength = line.length
             if (lineLength>1) {
-              interpolateAxis(graphInst.axeLeft,line[0],line[1]);
-              interpolateAxis(graphInst.axeRight,line[lineLength-2],line[lineLength-1],w);
+              interpolateAxis(graphInst.axeLeft,line[0],line[1])
+              interpolateAxis(graphInst.axeRight,line[lineLength-2],line[lineLength-1],w)
             }
             //
             // ctx.globalAlpha = globalAlpha*0.3

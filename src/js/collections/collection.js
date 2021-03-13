@@ -38,50 +38,50 @@ import {assignable} from '../util'
  */
 
 const assignableArrayPrototype = assignable(Array.prototype)
-  ,collectionViewInstancePrototype = Object.assign({
+const collectionViewInstancePrototype = Object.assign({
 
-    /**
+  /**
      * Initialise
      * @param {string} slug The name of the collections (will serve as classname in the view).
      * @param {string} dataFileName Filename for the collection data
      * @param {collectionDataLoaded} callback The callback uri to process the collections data.
      * @returns {collectionInstance}
      */
-    init(slug,dataFileName,callback){
-      this.wrapper.classList.add(slug)
-      this.wrapper.addEventListener('click', this._onWrapperClick, false)
-      this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
-      dataFileName&&fetchFile(dataFileName).then(callback.bind(this))||callback.call(this)
-      return this
-    }
-    /**
+  init(slug,dataFileName,callback){
+    this.wrapper.classList.add(slug)
+    this.wrapper.addEventListener('click', this._onWrapperClick, false)
+    this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
+    dataFileName&&fetchFile(dataFileName).then(callback.bind(this))||callback.call(this)
+    return this
+  }
+  /**
      * Populates the collections wrapper for a specific {@link totaltimeline.time.range|time range}.
      * @memberof collectionInstance
      */
-    ,render(range){
-      this.isDataLoaded&&this._render.call(this,range)
-    }
-    ,_onDataLoaded(){
-      this.isDataLoaded = true
-    }
-    ,_populateElements(elements){
-      Array.from(this.wrapper.children).forEach(elm=>elements.includes(elm)||this.wrapper.removeChild(elm))
-      elements.forEach(elm=>elm.parentNode!==this.wrapper&&this.fragment.appendChild(elm))
-      this.wrapper.appendChild(this.fragment)
-    }
-    ,show(show){
-      this.wrapper.classList.toggle('hide',!show)
-    }
-    /**
+  ,render(range){
+    this.isDataLoaded&&this._render.call(this,range)
+  }
+  ,_onDataLoaded(){
+    this.isDataLoaded = true
+  }
+  ,_populateElements(elements){
+    Array.from(this.wrapper.children).forEach(elm=>elements.includes(elm)||this.wrapper.removeChild(elm))
+    elements.forEach(elm=>elm.parentNode!==this.wrapper&&this.fragment.appendChild(elm))
+    this.wrapper.appendChild(this.fragment)
+  }
+  ,show(show){
+    this.wrapper.classList.toggle('hide',!show)
+  }
+  /**
      * Handles the click event on the wrapper.
      * @param {MouseEvent} e
      */
-    ,_onWrapperClick(e) {
-      const target = e.target
-        ,targetModel = target.model
-      targetModel&&targetModel.info&&model.entryShown.dispatch(targetModel)
-    }
-  },assignableArrayPrototype)
+  ,_onWrapperClick(e) {
+    const target = e.target
+		  const targetModel = target.model
+    targetModel&&targetModel.info&&model.entryShown.dispatch(targetModel)
+  }
+},assignableArrayPrototype)
 
 /**
  * Collection factory

@@ -29,39 +29,39 @@ import time from './'
 import {Signal} from 'signals'
 
 const SINCE = 'since'
-  ,AGO = 'ago'
-  ,YEAR = 'year'
-  //
-  ,agoToYear =    value=>time.YEAR_NOW-value
-  ,agoToSince =   value=>time.UNIVERSE-value
-  ,yearToAgo =    value=>time.YEAR_NOW-value
-  ,yearToSince =  value=>time.UNIVERSE-value
-  ,sinceToAgo =   value=>time.UNIVERSE-value
-  ,sinceToYear =  value=>time.YEAR_NOW-(time.UNIVERSE-value)
-  //
-  ,proto = {
-    set(value,dispatch=true){
-      // todo: update return value
-      this.value = value
-      if (this.type===SINCE) {
-        this.ago = sinceToAgo(value)
-        this.year = sinceToYear(value)
-        this.since = value
-      } else if (this.type===YEAR) {
-        this.ago = yearToAgo(value)
-        this.year = value
-        this.since = yearToSince(value)
-      } else {
-        this.ago = value
-        this.year = agoToYear(value)
-        this.since = agoToSince(value)
-      }
-      dispatch&&this.change.dispatch(this.ago);
-      return this
+const AGO = 'ago'
+const YEAR = 'year'
+//
+const agoToYear =    value=>time.YEAR_NOW-value
+const agoToSince =   value=>time.UNIVERSE-value
+const yearToAgo =    value=>time.YEAR_NOW-value
+const yearToSince =  value=>time.UNIVERSE-value
+const sinceToAgo =   value=>time.UNIVERSE-value
+const sinceToYear =  value=>time.YEAR_NOW-(time.UNIVERSE-value)
+//
+const proto = {
+  set(value,dispatch=true){
+    // todo: update return value
+    this.value = value
+    if (this.type===SINCE) {
+      this.ago = sinceToAgo(value)
+      this.year = sinceToYear(value)
+      this.since = value
+    } else if (this.type===YEAR) {
+      this.ago = yearToAgo(value)
+      this.year = value
+      this.since = yearToSince(value)
+    } else {
+      this.ago = value
+      this.year = agoToYear(value)
+      this.since = agoToSince(value)
     }
-    ,toString(){return time.formatAnnum(this.ago)}
-    ,clone(){return moment(this.ago)}
+    dispatch&&this.change.dispatch(this.ago)
+    return this
   }
+  ,toString(){return time.formatAnnum(this.ago)}
+  ,clone(){return moment(this.ago)}
+}
 
 /**
  * @param {number} value The time value.
@@ -70,12 +70,12 @@ const SINCE = 'since'
 function moment(value,type=AGO){
 
   const writable = true
-    ,inst = Object.create(proto,{
-      value: {writable,value}
-      ,type: {value: type}
-      ,change: {value: new Signal()}
-      ,factory: {value: moment}
-    })
+  const inst = Object.create(proto,{
+    value: {writable,value}
+    ,type: {value: type}
+    ,change: {value: new Signal()}
+    ,factory: {value: moment}
+  })
   inst.set(value)
   return inst
 }

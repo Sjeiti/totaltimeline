@@ -15,17 +15,17 @@ export default collection(
   ,'eras.json'
   ,function(data){
     const aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
-      ,iTimes = aTimes.length
+    const iTimes = aTimes.length
     data.forEach(function(entry){
       const iFrom = parseInt(entry.from,10)
-        ,iTo = parseInt(entry.to,10)
-        ,sName = entry.name
+      const iTo = parseInt(entry.to,10)
+      const sName = entry.name
 
       if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
         let iOffset = 0
         for (let i=0;i<iTimes;i++) {
           const sTimeName = aTimes[i]
-            ,sTimeValue = entry[sTimeName]//getProp(entry,sTimeName)
+          const sTimeValue = entry[sTimeName]//getProp(entry,sTimeName)
 
           if (sTimeValue!=='') {
             iOffset = i
@@ -43,14 +43,14 @@ export default collection(
   }
   ,function(range){
     const iRangeEnd = range.end.ago
-      ,iDuration = range.duration
-      ,show = []
+    const iDuration = range.duration
+    const show = []
     this.forEach(function(period){
       if (period.coincides(range)) {
         const mPeriod = period.element
-          ,iAgo = period.range.start.ago
+        const iAgo = period.range.start.ago
         let fRelLeft = 1-((iAgo-iRangeEnd)/iDuration)
-          ,fRelWidth = period.range.duration/iDuration
+        let fRelWidth = period.range.duration/iDuration
 
         if (fRelLeft<0) {
           fRelWidth += fRelLeft

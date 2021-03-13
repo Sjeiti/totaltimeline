@@ -7,17 +7,17 @@ import createSignal from './'
  * @type Signal
  */
 export default createSignal(function(signal){
-	const win = window
-    ,doc = document
-		,docElm = doc.documentElement
-		,mBody = doc.body
-	let iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
-		,iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
-	win.addEventListener('resize', function(docElm){
-		const iOldW = iW
-			,iOldH = iH
-		iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
-		iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
-		signal.dispatch(iW,iH,iOldW,iOldH)
-	},false)
+  const win = window
+  const doc = document
+		 const docElm = doc.documentElement
+		 const mBody = doc.body
+  let iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
+		 let iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
+  win.addEventListener('resize', function(docElm){
+    const iOldW = iW
+			 const iOldH = iH
+    iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
+    iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
+    signal.dispatch(iW,iH,iOldW,iOldH)
+  },false)
 })

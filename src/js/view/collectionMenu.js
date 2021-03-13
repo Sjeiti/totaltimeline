@@ -9,13 +9,13 @@ export default create(
       const html = getFragment(`<label for="collections-checkbox">collections</label>
 <input type="checkbox" id="collections-checkbox" class="visuallyhidden" />
 <ul></ul>`)
-        ,ul = html.querySelector('ul')
+      const ul = html.querySelector('ul')
 
       ul.addEventListener('change', this._onChange.bind(this))
 
       collections.forEach(collection=>{
         const li = stringToElement(`<li><label><input type="checkbox" checked /> ${collection.name}</label></li>`)
-          ,input = li.querySelector('input')
+        const input = li.querySelector('input')
         input.collection = collection
         ul.appendChild(li)
       })

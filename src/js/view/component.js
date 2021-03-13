@@ -5,29 +5,29 @@ import {parseOptions} from '../util'
  */
 const
   componentFactories = {}
-  ,instances = new Map()
-  ,body = document.body
-  ,eventNames = 'mousedown,mouseup,click,dblclick,submit,focus,blur,keydown,keyup,keypress'.split(/,/g)
-  ,eventHandlers = eventNames.map(name=>'on'+name.substr(0,1).toUpperCase()+name.substr(1))
-  ,eventInstances = eventNames.map(()=>[])
-  ,eventInitialised = eventNames.map(()=>false)
-  //
-  ,writable = true
-  ,basePrototype = {
-    _init(elm,opts){
-      Object.seal(this)
-      this.element = elm
-      this.options = parseOptions(opts)
-      // this.html = document.createDocumentFragment()
-      // while (elm.firstChild) this.html.appendChild(elm.firstChild)
-      return this
-    }
+const instances = new Map()
+const body = document.body
+const eventNames = 'mousedown,mouseup,click,dblclick,submit,focus,blur,keydown,keyup,keypress'.split(/,/g)
+const eventHandlers = eventNames.map(name=>'on'+name.substr(0,1).toUpperCase()+name.substr(1))
+const eventInstances = eventNames.map(()=>[])
+const eventInitialised = eventNames.map(()=>false)
+//
+const writable = true
+const basePrototype = {
+  _init(elm,opts){
+    Object.seal(this)
+    this.element = elm
+    this.options = parseOptions(opts)
+    // this.html = document.createDocumentFragment()
+    // while (elm.firstChild) this.html.appendChild(elm.firstChild)
+    return this
   }
-  ,baseProperties = {
-    element: {writable}
-    ,options: {writable}
-    // ,html: {writable}
-  }
+}
+const baseProperties = {
+  element: {writable}
+  ,options: {writable}
+  // ,html: {writable}
+}
 
 /**
  * Create a component factory bound to an attribute
@@ -40,15 +40,15 @@ export function create(componentAttribute,componentPrototype,componentProperties
     throw new Error(`Component with attribute '${componentAttribute}' already initialised`)
   } else {
     const instances = Object.assign([],{
-        get: function(){
-          return this.length && this[0] || null
-        }
-      })
-      ,name = componentAttribute.replace(/^data\-/,'').replace(/^(.)/,s=>s.toUpperCase())
-      ,proto = Object.assign(componentPrototype||{},basePrototype,{
-        toString: ()=>`[object ${name}]`
-      })
-      ,props = Object.assign(componentProperties||{},baseProperties)
+      get: function(){
+        return this.length && this[0] || null
+      }
+    })
+    const name = componentAttribute.replace(/^data\-/,'').replace(/^(.)/,s=>s.toUpperCase())
+    const proto = Object.assign(componentPrototype||{},basePrototype,{
+      toString: ()=>`[object ${name}]`
+    })
+    const props = Object.assign(componentProperties||{},baseProperties)
     componentFactories[componentAttribute] = (element,options)=>{
       const inst = Object.create(proto,props)._init(element,options)
       inst.init&&inst.init(element,options)
@@ -124,8 +124,8 @@ function initElement(element,attr){
  */
 function initEvents(){
   eventInstances.forEach((list,i)=>{
-    const hasTargets = list.length,
-        isInitialised = eventInitialised[i]
+    const hasTargets = list.length
+    const isInitialised = eventInitialised[i]
     if (hasTargets&&!isInitialised) {
       body.addEventListener(eventNames[i],onEvent.bind(null,list,eventHandlers[i]))
       eventInitialised[i] = true
@@ -152,10 +152,10 @@ function dispatchOnInit(){
  */
 function onEvent(list,handler,e){
   let target = e.target
-  const parents = [];
+  const parents = []
   while (target&&target!==body) {
-      parents.unshift(target);
-      target = target.parentNode;
+    parents.unshift(target)
+    target = target.parentNode
   }
   list.forEach(comp=>{
     parents.includes(comp.element)&&comp[handler](e)

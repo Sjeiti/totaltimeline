@@ -13,27 +13,27 @@ if (document.styleSheets[0].addRule===undefined) {
 }
 
 const forEach = Array.prototype.forEach
-  ,aoStyleSheets = document.styleSheets
-  ,bReversedSelectors = (function(){
-    // creates a new selector and checks if the rule comes out in reverse
-    const oSheet = (function() {
-          const style = document.createElement('style')
-          style.appendChild(document.createTextNode(''))
-          document.head.appendChild(style)
-          return style.sheet
-        })()
-      ,aRules = oSheet.cssRules
-      ,iNumRules = aRules.length
-      ,sSelector = 'span#a.c.d.b'
-    let sSelectorResult
-      ,bIsReversed
-
-    oSheet.addRule(sSelector, 'font-weight:inherit')
-      sSelectorResult = aRules[iNumRules].selectorText
-      bIsReversed = sSelectorResult!=sSelector
-    oSheet.deleteRule(iNumRules)
-    return bIsReversed
+const aoStyleSheets = document.styleSheets
+const bReversedSelectors = (function(){
+  // creates a new selector and checks if the rule comes out in reverse
+  const oSheet = (function() {
+    const style = document.createElement('style')
+    style.appendChild(document.createTextNode(''))
+    document.head.appendChild(style)
+    return style.sheet
   })()
+  const aRules = oSheet.cssRules
+  const iNumRules = aRules.length
+  const sSelector = 'span#a.c.d.b'
+  let sSelectorResult
+  let bIsReversed
+
+  oSheet.addRule(sSelector, 'font-weight:inherit')
+  sSelectorResult = aRules[iNumRules].selectorText
+  bIsReversed = sSelectorResult!=sSelector
+  oSheet.deleteRule(iNumRules)
+  return bIsReversed
+})()
 
 /**
  * Reverses a selector (because IE rearanges selectors)
@@ -43,8 +43,8 @@ const forEach = Array.prototype.forEach
  */
 function getReverse(selector){
   const oSheet = aoStyleSheets[0]
-    ,aRules = oSheet.cssRules
-    ,iNumRules = aRules.length
+  const aRules = oSheet.cssRules
+  const iNumRules = aRules.length
   let sSelectorResult
 
   oSheet.addRule(selector, 'font-weight:inherit')
@@ -101,8 +101,8 @@ function changeRule(selector,rules) {
  * @returns {CssRule}
  */
 function addRule(selector,rules) {
-  let oSheet, sRules = ''
-	forEach.call(rules,(val,prop)=>{sRules+=prop+':'+val+';'})
+  let oSheet; let sRules = ''
+  forEach.call(rules,(val,prop)=>{sRules+=prop+':'+val+';'})
   // loop(rules,function(val,prop){sRules+=prop+':'+val+';';})
   oSheet = aoStyleSheets[0]
   oSheet.addRule(selector,sRules)
@@ -115,7 +115,7 @@ function addRule(selector,rules) {
  */
 function rule(selector) {
   var aStyles = []
-  aStyles.toString = function(){return '[object style.rule:'+selector+']';}
+  aStyles.toString = function(){return '[object style.rule:'+selector+']'}
   aStyles.set = function (key,prop) {
     if (typeof key==='string') {
       set.apply(aStyles,[key,prop])
@@ -148,7 +148,7 @@ function getStyle(el,styleProp) {
 
 // todo: document
 function getSheetByMedia(type) {
-  let oSheet, i, j, l, ll
+  let oSheet; let i; let j; let l; let ll
   for (i=0,l=document.styleSheets.length;i<l;i++) {
     oSheet = document.styleSheets[i]
     for (j=0,ll=oSheet.media.length;j<ll;j++) {

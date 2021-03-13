@@ -17,13 +17,13 @@ const proto = {
   ///////////////////////////////////////
   ,animate(startAgo,endAgo,callback){
     console.log('event.animate',arguments) // todo: remove log
-    // const iStartFrom = this.start.ago
-    //   ,iStartDelta = startAgo - iStartFrom
-    //   ,iEndFrom = this.end.ago
-    //   ,iEndDelta = endAgo - iEndFrom
+    // const startFrom = this.start.ago
+    // const startDelta = startAgo - startFrom
+    // const endFrom = this.end.ago
+    // const endDelta = endAgo - endFrom
     // animate(1000,f=>{
-    //   const fInOut = animate.quadratic.inOut(f)
-    //   this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
+    //   const inOut = animate.quadratic.inOut(f)
+    //   this.set(startFrom+inOut*startDelta,endFrom+inOut*endDelta)
     // },callback)
   }
   ///////////////////////////////////////
@@ -57,24 +57,24 @@ export default function event(moment,info,index,entry){
     ,index: {value:index}
     ,entry: {value:entry}
   })
-  const mWrap = event.element
-  const mEvent = mWrap.querySelector('.event')
-  const mTitle = mWrap.querySelector('h3')
-  const mTime = mWrap.querySelector('time')
+  const wrapper = event.element
+  const eventElement = wrapper.querySelector('.event')
+  const titleElement = wrapper.querySelector('h3')
+  const timeElement = wrapper.querySelector('time')
   //
   const top = 0.15 + 0.7*((index * (137.5/360))%1)
-  const sTop = getPercentage(top)
-  const sHeight = getPercentage(1-top)
+  const topPercent = getPercentage(top)
+  const heightPercent = getPercentage(1-top)
   //
 
-  mEvent.model = event
-  mEvent.style.top = sTop
-  info.icon!==''&&mEvent.classList.add('icon-'+info.icon)
+  eventElement.model = event
+  eventElement.style.top = topPercent
+  info.icon!==''&&eventElement.classList.add('icon-'+info.icon)
 
-  mTitle.style.top = sTop
+  titleElement.style.top = topPercent
 
-  mTime.style.height = sHeight // todo: less vars @eventIconSize
-  mTime.setAttribute('data-after',moment.toString()) // todo: better as textContent
+  timeElement.style.height = heightPercent // todo: less vars @eventIconSize
+  timeElement.setAttribute('data-after',moment.toString()) // todo: better as textContent
 
   model.entryShown.add(onEntryShown)
 
@@ -83,7 +83,7 @@ export default function event(moment,info,index,entry){
    * @param {period|event} entry
    */
   function onEntryShown(entry){
-    mWrap.classList.toggle('selected',entry&&entry.info===info||false)
+    wrapper.classList.toggle('selected',entry&&entry.info===info||false)
   }
 
   return event

@@ -9,23 +9,23 @@ import createSignal from './'
  * @todo: possibly stop when last signal listener is removed
  */
 export default createSignal(function(signal){
-  let fDeltaT = 0
-		 let iCurMillis
-		 let iLastMillis = Date.now()
-		 let iMilliLen = 10
-		 let aMillis = (function(a,n){
-    for (let i=0;i<iMilliLen;i++) a.push(n)
+  let deltaT = 0
+		 let millisCurrent
+		 let millisLast = Date.now()
+		 let millisLength = 10
+		 let millisList = (function(a,n){
+    for (let i=0;i<millisLength;i++) a.push(n)
     return a
-  })([],iLastMillis)
-		 let iFrameNr = 0
+  })([],millisLast)
+		 let frameNumber = 0
   function animate(){
-    iCurMillis = Date.now()
-    aMillis.push(iCurMillis-iLastMillis)
-    aMillis.shift()
-    fDeltaT = 0
-    for (let i=0;i<iMilliLen;i++) fDeltaT += aMillis[i]
-    iLastMillis = iCurMillis
-    signal.dispatch(fDeltaT/iMilliLen,iCurMillis,iFrameNr)
+    millisCurrent = Date.now()
+    millisList.push(millisCurrent-millisLast)
+    millisList.shift()
+    deltaT = 0
+    for (let i=0;i<millisLength;i++) deltaT += millisList[i]
+    millisLast = millisCurrent
+    signal.dispatch(deltaT/millisLength,millisCurrent,frameNumber)
     requestAnimationFrame(animate)
   }
   animate()

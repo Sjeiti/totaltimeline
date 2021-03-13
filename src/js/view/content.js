@@ -95,15 +95,15 @@ export default create(
         const scrollHeight = element.scrollHeight
         const height = element.offsetHeight
         const isSameHeight = height===scrollHeight
-        let fPart
+        let part
         if (isSameHeight&&flexGrowPrefixes['flex-grow']!==1) {
-          fPart = 1
+          part = 1
         } else if (isSameHeight) {
-          fPart = 0
+          part = 0
         } else {
-          fPart = scrollTop/(scrollHeight-height)
+          part = scrollTop/(scrollHeight-height)
         }
-        setContentGrow(1+fPart*2) // todo: get that 1 from less
+        setContentGrow(1+part*2) // todo: get that 1 from less
       }
 
       /**

@@ -105,9 +105,9 @@ export default create(
        * @param e
        */
       function handleDocumentMouseMove(e){
-        const iOffsetX = e.clientX
-        mouseXOffsetDelta = iOffsetX-mouseXOffsetLast
-        mouseXOffsetLast = iOffsetX
+        const offsetX = e.clientX
+        mouseXOffsetDelta = offsetX-mouseXOffsetLast
+        mouseXOffsetLast = offsetX
         if (mouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
           range.moveStart(range.start.ago + Math.round(mouseXOffsetDelta/element.offsetWidth*range.duration))
         }
@@ -120,38 +120,28 @@ export default create(
        */
       function onWheel(direction,e){
         if (isOver) {
-          const fScaleMove = 0.02
-          const fScaleZoom = 0.1
-          const bZoomin = direction>0
-          const iZoomin = bZoomin?1:-1
-          const iStart = range.start.ago
-          let iNewStart
-          let iNewEnd
+          const scaleMove = 0.02
+          const scaleZoom = 0.1
+          const isZoomin = direction>0
+          const zoomin = isZoomin?1:-1
+          const start = range.start.ago
+          let newStart
+          let newEnd
 
           if (key[16]) {
-            iNewStart = iStart + iZoomin*Math.round(fScaleMove*range.duration)
-            range.moveStart(iNewStart)
+            newStart = start + zoomin*Math.round(scaleMove*range.duration)
+            range.moveStart(newStart)
           } else {
-            const fAdd = iZoomin*Math.round(fScaleZoom*range.duration)
+            const add = zoomin*Math.round(scaleZoom*range.duration)
             // offset calculations
-            const iMouseX = e.clientX
-            const fL = (iMouseX-viewL)/viewW
-            const fR = 1-fL
-
-            /*if (!bZoomin) {
-              if (iStart<=time.UNIVERSE) {
-                fL = 0
-                fR = -1
-              }
-            }*/
+            const mouseX = e.clientX
+            const left = (mouseX-viewL)/viewW
+            const right = 1-left
             // new position
-            iNewStart = Math.round(range.start.ago - 0.5*fL*fAdd)
-            iNewEnd = Math.round(range.end.ago + 0.5*fR*fAdd)
-            range.set(iNewStart,iNewEnd)
+            newStart = Math.round(range.start.ago - 0.5*left*add)
+            newEnd = Math.round(range.end.ago + 0.5*right*add)
+            range.set(newStart,newEnd)
           }
-          // todo: refactor dry
-          // if (key[16]) rangeMove(mRange.offsetLeft+(direction>0?2:-2)+iMouseXOffset)
-          // else rangeZoom(direction>0,e.clientX)
         }
       }
 
@@ -186,32 +176,32 @@ export default create(
             // reverse interpolation to find new start and end points
             var iRangeDuration = range.duration
             //
-            var iTouch1Last = lastTouches[0]
-            var iTouch2Last = lastTouches[1]
-            var fTouch1LastTime = range.start.ago - (iTouch1Last/viewW)*iRangeDuration
-            var fTouch2LastTime = range.end.ago + (1-iTouch2Last/viewW)*iRangeDuration
-            var iTouchWLast = iTouch2Last-iTouch1Last
-            var iTouchLastDuration = (iTouchWLast/viewW)*iRangeDuration
+            var touch1Last = lastTouches[0]
+            var touch2Last = lastTouches[1]
+            var touch1LastTime = range.start.ago - (touch1Last/viewW)*iRangeDuration
+            var touch2LastTime = range.end.ago + (1-touch2Last/viewW)*iRangeDuration
+            var touchWLast = touch2Last-touch1Last
+            var touchLastDuration = (touchWLast/viewW)*iRangeDuration
             //
-            var iTouch1 = touches[0]
-            var iTouch2 = touches[1]
-            var iTouchW = iTouch2-iTouch1
+            var touch1 = touches[0]
+            var touch2 = touches[1]
+            var touchW = touch2-touch1
             //
-            var fPart1 = iTouch1/viewW
-            var fPart2 = 1-iTouch2/viewW
-            var fPartW = iTouchW/viewW
+            var part1 = touch1/viewW
+            var part2 = 1-touch2/viewW
+            var partW = touchW/viewW
             //
-            var fPart1W = fPart1/fPartW
-            var fPart2W = fPart2/fPartW
-            var fPart1WDuration = fPart1W*iTouchLastDuration
-            var fPart2WDuration = fPart2W*iTouchLastDuration
+            var part1W = part1/partW
+            var part2W = part2/partW
+            var part1WDuration = part1W*touchLastDuration
+            var part2WDuration = part2W*touchLastDuration
             //
-            var iNewStart =	Math.floor(fTouch1LastTime + fPart1WDuration)
-            var iNewEnd =		Math.floor(fTouch2LastTime - fPart2WDuration)
+            var newStart =	Math.floor(touch1LastTime + part1WDuration)
+            var newEnd =		Math.floor(touch2LastTime - part2WDuration)
 
             range.set(
-              iNewStart
-              ,iNewEnd
+              newStart
+              ,newEnd
             )
             e.preventDefault()
           }
@@ -224,14 +214,14 @@ export default create(
 
       // todo: document
       function moveBackgroundOverlay(range,oldrange){
-        var iCurrentDuration = range.duration
-        var iRangeCenter = range.end.ago + iCurrentDuration/2
-        var iOldRangeCenter = oldrange.end.ago + oldrange.duration/2
-        var iDeltaCenter = iRangeCenter - iOldRangeCenter
-        var iOffset = iDeltaCenter/iCurrentDuration*viewW
+        var currentDuration = range.duration
+        var rangeCenter = range.end.ago + currentDuration/2
+        var oldRangeCenter = oldrange.end.ago + oldrange.duration/2
+        var deltaCenter = rangeCenter - oldRangeCenter
+        var offset = deltaCenter/currentDuration*viewW
 
         // background-size is contain so mod by viewH to prevent errors
-        backgroundPos = (backgroundPos + Math.round(iOffset))%viewH
+        backgroundPos = (backgroundPos + Math.round(offset))%viewH
         elmOverlay.style.backgroundPosition = backgroundPos+'px 0'
       }
       /////////////////////////////////////////////////////

@@ -35,9 +35,9 @@ export default function period(range,info,offset){
    * @param {period|event} entry
    */
   function onEntryShown(entry){
-    const bIs = entry&&entry.info===info||false
-    period.element.classList.toggle('selected',bIs)
-    bIs&&model.range.animate(range.start.ago,range.end.ago)
+    const isEntry = entry&&entry.info===info||false
+    period.element.classList.toggle('selected',isEntry)
+    isEntry&&model.range.animate(range.start.ago,range.end.ago)
   }
 
   return period

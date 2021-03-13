@@ -8,8 +8,8 @@ import animate from './animate'
  * @summary Wrapper namespace for keyboard signals.
  */
 var fn = ()=>{}
-var eLastKeyDown
-var bInit = false
+var lastKeyDownEvent
+var isInitialised = false
 /**
    * Signal for keyPress.<br/>
    * The callback for this signal is Function(keys,event)
@@ -39,8 +39,8 @@ var key = Object.assign([],{
 })
 
 function init(){
-  if (!bInit) {
-    bInit = true
+  if (!isInitialised) {
+    isInitialised = true
     press.add(fn).detach()
     down.add(fn).detach()
     up.add(fn).detach()
@@ -49,10 +49,10 @@ function init(){
 function initDown(signal){
   init()
   document.addEventListener('keydown',function(e){
-    const iKeyCode = e.keyCode
-    key[iKeyCode] = true
-    eLastKeyDown = e
-    signal.dispatch(iKeyCode,key,e)
+    const keyCode = e.keyCode
+    key[keyCode] = true
+    lastKeyDownEvent = e
+    signal.dispatch(keyCode,key,e)
     animate.add(keypress)
   })
 }
@@ -66,7 +66,7 @@ function initUp(signal){
   })
 }
 function keypress(){
-  press.dispatch(key,eLastKeyDown)
+  press.dispatch(key,lastKeyDownEvent)
 }
 
 export default key

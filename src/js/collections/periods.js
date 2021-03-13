@@ -14,54 +14,54 @@ export default collection(
   'periods'
   ,'eras.json'
   ,function(data){
-    const aTimes = 'supereon,eon,era,period,epoch,age'.split(',')
-    const iTimes = aTimes.length
+    const timeNames = 'supereon,eon,era,period,epoch,age'.split(',')
+    const timeNum = timeNames.length
     data.forEach(function(entry){
-      const iFrom = parseInt(entry.from,10)
-      const iTo = parseInt(entry.to,10)
-      const sName = entry.name
+      const from = parseInt(entry.from,10)
+      const to = parseInt(entry.to,10)
+      const name = entry.name
 
-      if (iFrom!==undefined&&iTo!==undefined&&sName!==undefined) {
-        let iOffset = 0
-        for (let i=0;i<iTimes;i++) {
-          const sTimeName = aTimes[i]
-          const sTimeValue = entry[sTimeName]//getProp(entry,sTimeName)
+      if (from!==undefined&&to!==undefined&&name!==undefined) {
+        let offset = 0
+        for (let i=0;i<timeNum;i++) {
+          const timeName = timeNames[i]
+          const timeValue = entry[timeName]//getProp(entry,sTimeName)
 
-          if (sTimeValue!=='') {
-            iOffset = i
+          if (timeValue!=='') {
+            offset = i
             break
           }
         }
         this.push(period(
-          range(moment(iFrom),moment(iTo))
+          range(moment(from),moment(to))
           ,eventInfo().parse(entry)
-          ,iOffset
+          ,offset
         ))
       }
     }.bind(this))
     this.dataLoaded.dispatch(this)
   }
   ,function(range){
-    const iRangeEnd = range.end.ago
-    const iDuration = range.duration
+    const rangeEnd = range.end.ago
+    const duration = range.duration
     const show = []
     this.forEach(function(period){
       if (period.coincides(range)) {
-        const mPeriod = period.element
-        const iAgo = period.range.start.ago
-        let fRelLeft = 1-((iAgo-iRangeEnd)/iDuration)
-        let fRelWidth = period.range.duration/iDuration
+        const periodElement = period.element
+        const ago = period.range.start.ago
+        let relLeft = 1-((ago-rangeEnd)/duration)
+        let relWidth = period.range.duration/duration
 
-        if (fRelLeft<0) {
-          fRelWidth += fRelLeft
-          fRelLeft = 0
+        if (relLeft<0) {
+          relWidth += relLeft
+          relLeft = 0
         }
-        if ((fRelLeft+fRelWidth)>1) {
-          fRelWidth = 1 - fRelLeft
+        if ((relLeft+relWidth)>1) {
+          relWidth = 1 - relLeft
         }
-        mPeriod.style.left = getPercentage(fRelLeft)
-        mPeriod.style.width = getPercentage(fRelWidth)
-        show.push(mPeriod)
+        periodElement.style.left = getPercentage(relLeft)
+        periodElement.style.width = getPercentage(relWidth)
+        show.push(periodElement)
       }
     })
     this._populateElements(show)

@@ -1,6 +1,6 @@
 import moment from './moment'
 import animate from '../animate'
-import time from './time'
+import time from './'
 import {Signal} from 'signals'
 
 /**
@@ -60,13 +60,13 @@ const proto = {
         startAgo = startAgo.start.ago;
       }*/
     return new Promise(resolve=>{
-      const iStartFrom = this.start.ago
-      const iStartDelta = startAgo - iStartFrom
-      const iEndFrom = this.end.ago
-      const iEndDelta = endAgo - iEndFrom
+      const startFrom = this.start.ago
+      const startDelta = startAgo - startFrom
+      const endFrom = this.end.ago
+      const endDelta = endAgo - endFrom
       animate(1000,f=>{
-        const fInOut = animate.quadratic.inOut(f)
-        this.set(iStartFrom+fInOut*iStartDelta,iEndFrom+fInOut*iEndDelta)
+        const inOut = animate.quadratic.inOut(f)
+        this.set(startFrom+inOut*startDelta,endFrom+inOut*endDelta)
       },resolve)
     })
   }

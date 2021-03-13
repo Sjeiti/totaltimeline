@@ -86,15 +86,15 @@ export function clearChildren(parent){
 
 // todo:document
 export function getCssValuePrefix() {
-  const aPrefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
-  const mTmp = document.createElement('div')
-  const sValue = 'linear-gradient(left, #fff, #fff)'
-  for (let i = 0; i < aPrefixes.length; i++) {
-    mTmp.style.backgroundImage = aPrefixes[i] + sValue
-    if (mTmp.style.backgroundImage) {
-      return aPrefixes[i]
+  const prefixes = ['', '-o-', '-ms-', '-moz-', '-webkit-']
+  const tempElement = document.createElement('div')
+  const cssValue = 'linear-gradient(left, #fff, #fff)'
+  for (let i = 0; i < prefixes.length; i++) {
+    tempElement.style.backgroundImage = prefixes[i] + cssValue
+    if (tempElement.style.backgroundImage) {
+      return prefixes[i]
     }
-    mTmp.style.backgroundImage = ''
+    tempElement.style.backgroundImage = ''
   }
 }
 

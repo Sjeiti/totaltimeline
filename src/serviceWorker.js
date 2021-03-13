@@ -1,4 +1,4 @@
-const CACHE_NAME = 'TotalTimeline-v1.0.1';
+const CACHE_NAME = 'TotalTimeline-v1.0.2';
 const urlsToCache = [
   '/',
   '/fonts/icomoon.eot',

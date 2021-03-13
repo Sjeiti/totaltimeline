@@ -6,9 +6,9 @@ const YEAR_NOW = (new Date()).getFullYear()
 const UNIVERSE = 13798000000
 const NOW = 0
 //
-const sSpace = ' '
-const aAnnum = 'a,ka,Ma,Ga'.split(',')
-const aDuration = ' kMGTP'.split('')
+const space = ' '
+const annum = 'a,ka,Ma,Ga'.split(',')
+const durationKeys = ' kMGTP'.split('')
 
 
 /**
@@ -37,8 +37,8 @@ export function formatAnnum(year,round=0,noSlug=true,extended=false){
     amount = Math.round(YEAR_NOW-year)
     returnValue = Math.abs(amount) + (amount<0?space+'BC':(amount<1500?space+'AD':''))
   } else {
-    for (i = 0; amount>1000 && (aAnnum.length>=(i + 2)); i++) amount /= 1000
-    returnValue = amount.toFixed(round).replace(/(\.\d*)0+$/g,'$1').replace(/\.0$/g,'') + space + aAnnum[i]
+    for (i = 0; amount>1000 && (annum.length>=(i + 2)); i++) amount /= 1000
+    returnValue = amount.toFixed(round).replace(/(\.\d*)0+$/g,'$1').replace(/\.0$/g,'') + space + annum[i]
   }
   return (noSlug&&extended?'':(isFuture||isGregorian?'':'-')) + returnValue + (noSlug&&extended?(isFuture?' from now':' ago'):'')
 }
@@ -80,9 +80,9 @@ export function unformatAnnum(formatted){
 function duration(years,round){
   // todo: rounding sometimes off: split at . truncate and join
   if (round===undefined) round = 0
-  for (var i = 0; years>1000 && (aDuration.length>=(i + 2)); i++) years /= 1000
-  var iMult = Math.pow(10,round)
-  return (Math.round(years * iMult) / iMult) +sSpace+ aDuration[i] +sSpace+ 'years'
+  for (var i = 0; years>1000 && (durationKeys.length>=(i + 2)); i++) years /= 1000
+  var multiply = Math.pow(10,round)
+  return (Math.round(years * multiply) / multiply) +space+ durationKeys[i] +space+ 'years'
 }
 
 export default {

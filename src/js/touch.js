@@ -6,7 +6,7 @@
  */
 export default function touch(element, moveCallback, startCallback){
 
-  const aTouchXLast = []
+  const touchXLast = []
 
   element.addEventListener('touchstart',handleTouchStart,false)
   element.addEventListener('touchmove',handleTouchMove,false)
@@ -15,7 +15,7 @@ export default function touch(element, moveCallback, startCallback){
 	 * Handles touchstart event to scroll or zoom the timeline.
 	 */
   function handleTouchStart(e) {
-    aTouchXLast.length = 0
+    touchXLast.length = 0
     startCallback&&startCallback(e)
   }
 
@@ -25,19 +25,19 @@ export default function touch(element, moveCallback, startCallback){
 	 */
   function handleTouchMove(e) {
     var touches = e.touches
-			 var iX = touches.length
-			 var aTouchX = []
-			 var iXLast = aTouchXLast.length
-		
-    for (var i=0;i<iX;i++) {
-      aTouchX.push(touches[i].pageX)
+			 var numTouches = touches.length
+			 var touchesPageX = []
+			 var touchXLastLength = touchXLast.length
+
+    for (var i=0;i<numTouches;i++) {
+      touchesPageX.push(touches[i].pageX)
     }
     // sort if length===2: old fashioned swap is way faster than sort: http://jsperf.com/array-length-2-sort
-    if (iX===2&&aTouchX[0]>aTouchX[1]) {
-      var tmp = aTouchX[0]
-      aTouchX[0] = aTouchX[1]
-      aTouchX[1] = tmp
+    if (numTouches===2&&touchesPageX[0]>touchesPageX[1]) {
+      var tmp = touchesPageX[0]
+      touchesPageX[0] = touchesPageX[1]
+      touchesPageX[1] = tmp
     }
-    moveCallback&&moveCallback(e,iX,aTouchX,iXLast,aTouchXLast)
+    moveCallback&&moveCallback(e,numTouches,touchesPageX,touchXLastLength,touchXLast)
   }
 }

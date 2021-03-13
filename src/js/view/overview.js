@@ -109,9 +109,9 @@ export default create(
        * @param {Event} e
        */
       function onDocumentMouseMove(e){
-        const iOffsetX = e.clientX
-        mouseXOffsetDelta = iOffsetX-mouseXOffsetLast
-        mouseXOffsetLast = iOffsetX
+        const offsetX = e.clientX
+        mouseXOffsetDelta = offsetX-mouseXOffsetLast
+        mouseXOffsetLast = offsetX
         range.moveStart(range.start.ago - Math.round(mouseXOffsetDelta/spanWidth*span.duration))
       }
 
@@ -230,40 +230,40 @@ export default create(
        * @param {number} mouseX Mouse offset
        */
       function rangeZoom(zoomin,mouseX){
-        let fRangeGrowRate = 0.01111*span.duration<<0
-        let iStart = range.start.ago
-        let iEnd = range.end.ago
+        let rangeGrowRate = 0.01111*span.duration<<0
+        let start = range.start.ago
+        let end = range.end.ago
         // offset calculations
-        let iRangeL = elmRange.offsetLeft
-        let iRangeR = iRangeL+elmRange.offsetWidth
-        let iDeltaL = iRangeL-mouseX
-        let iDeltaR = mouseX-iRangeR
-        let iDeltaTotal = Math.abs(iDeltaL) + Math.abs(iDeltaR)
-        let fDeltaL = iDeltaL/iDeltaTotal
-        let fDeltaR = iDeltaR/iDeltaTotal
+        let rangeL = elmRange.offsetLeft
+        let rangeR = rangeL+elmRange.offsetWidth
+        let deltaL = rangeL-mouseX
+        let deltaR = mouseX-rangeR
+        let deltaTotal = Math.abs(deltaL) + Math.abs(deltaR)
+        let deltaLPart = deltaL/deltaTotal
+        let deltaRPart = deltaR/deltaTotal
         // new positions
-        let iNewStart
-        let iNewEnd
+        let newStart
+        let newEnd
         //
         if (!zoomin) {
-          if (iStart===time.UNIVERSE) {
-            fDeltaL = 0
-            fDeltaR = -1
+          if (start===time.UNIVERSE) {
+            deltaLPart = 0
+            deltaRPart = -1
           }
-          if (iEnd===0) {
-            fDeltaL = -1
-            fDeltaR = 0
+          if (end===0) {
+            deltaLPart = -1
+            deltaRPart = 0
           }
         }
-        iNewStart = iStart + fDeltaL*(zoomin?fRangeGrowRate:-fRangeGrowRate)
-        iNewEnd = iEnd + fDeltaR*(zoomin?-fRangeGrowRate:fRangeGrowRate)
+        newStart = start + deltaLPart*(zoomin?rangeGrowRate:-rangeGrowRate)
+        newEnd = end + deltaRPart*(zoomin?-rangeGrowRate:rangeGrowRate)
         //
-        if (iNewEnd>iNewStart) {
-          const iHalf = iNewStart + Math.ceil((iNewEnd-iNewStart)/2)
-          iNewStart = iHalf-1
-          iNewEnd = iHalf
+        if (newEnd>newStart) {
+          const iHalf = newStart + Math.ceil((newEnd-newStart)/2)
+          newStart = iHalf-1
+          newEnd = iHalf
         }
-        range.set(iNewStart,iNewEnd)
+        range.set(newStart,newEnd)
       }
 
       /**

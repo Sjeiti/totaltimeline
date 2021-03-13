@@ -11,12 +11,12 @@ const FF = Math.pow(2,8)-1
 const rgb2int = (r,g,b)=>r<<16|g<<8|b
 const int2rgb = i=>[(i>>16)&FF,(i>>8)&FF,i&FF]
 const int2hex = i=>'#'+i.toString(16).padStart(6,'0')
-const fBr = 0.241
-const fBg = 0.691
-const fBb = 0.068
+const floatR = 0.241
+const floatG = 0.691
+const floatB = 0.068
 const brightness = c=>{
   const r = c.r/FF; const g = c.g/FF; const b = c.b/FF
-  return r*r*fBr + g*g*fBg + b*b*fBb
+  return r*r*floatR + g*g*floatG + b*b*floatB
 }
 const rgb2hsl = (r,g,b)=>{
   const max = Math.max(r,g,b)
@@ -152,7 +152,7 @@ const proto = {
       } else {
         this.h = f;
         makeHSL2RGB();
-        return oReturn;
+        return returnValue;
       }
     }*/
   /*,saturation

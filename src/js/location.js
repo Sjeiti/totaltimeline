@@ -14,8 +14,8 @@ const formatAnnum = time.formatAnnum
 const entryShown = model.entryShown
 const visibleRange = model.range
 const pathname = location.pathname.substr(1)
-let sLocationOriginalPath = location.pathname
-let sDocumentTitle = document.title
+let locationOriginalPath = location.pathname
+let documentTitle = document.title
 let isFirstChange = true
 let hash = location.hash.substr(1)
 let search = location.search.substr(1).split(/&/g)
@@ -71,32 +71,32 @@ function onEntryShown(collectionEntry){
  * @param {string} hash
  */
 function updated(path,hash){
-  const bNoHash = hash===undefined||hash===''
-  const sPath = bNoHash?path:hash
-  if (sPath.length>0) {
-    const aPath = sPath.split('/')
-    const iPath = aPath.length
+  const hasNoHash = hash===undefined||hash===''
+  const pathOrHash = hasNoHash?path:hash
+  if (pathOrHash.length>0) {
+    const splitPath = pathOrHash.split('/')
+    const pathLength = splitPath.length
     // Event
-    if  (iPath===1||iPath===3) {
-      const sLocationSlug = aPath[0]
+    if  (pathLength===1||pathLength===3) {
+      const locationSlug = splitPath[0]
       if (collections.length!==collections.loaded) {
-        collections.dataLoaded.add(showSlugEntry.bind(null,sLocationSlug))
+        collections.dataLoaded.add(showSlugEntry.bind(null,locationSlug))
       } else {
-        showSlugEntry(sLocationSlug)
+        showSlugEntry(locationSlug)
       }
     }
     // Range
-    if (iPath>=2) {
-      const bPath2 = iPath===2
-      const iAgoStart = time.unformatAnnum(aPath[bPath2?0:1])
-      const iAgoEnd = time.unformatAnnum(aPath[bPath2?1:2])
+    if (pathLength>=2) {
+      const isPathLength2 = pathLength===2
+      const agoStart = time.unformatAnnum(splitPath[isPathLength2?0:1])
+      const agoEnd = time.unformatAnnum(splitPath[isPathLength2?1:2])
 
       // don't animate the very first time
       if (isFirstChange) {
-        visibleRange.set(iAgoStart,iAgoEnd)
+        visibleRange.set(agoStart,agoEnd)
         isFirstChange = false
       } else {
-        visibleRange.animate(iAgoStart,iAgoEnd)// callback
+        visibleRange.animate(agoStart,agoEnd)// callback
       }
     }
   } else {
@@ -137,8 +137,8 @@ function update(event,range){
   const {pathname} = location
   const slugStart = range&&formatAnnum(range.start.ago,2,false)
   const slugEnd = range&&formatAnnum(range.end.ago,2,false)
-  if (range&&sLocationOriginalPath.indexOf(slugStart)!==-1) { // why?
-    sLocationOriginalPath = sLocationOriginalPath.split(slugStart).shift()
+  if (range&&locationOriginalPath.indexOf(slugStart)!==-1) { // why?
+    locationOriginalPath = locationOriginalPath.split(slugStart).shift()
   }
   const pathList = ['']
 
@@ -167,7 +167,7 @@ function update(event,range){
  * @param {range} [range]
  */
 function setDocumentTitle(event,range){
-  document.title = `${event?`${event.info.name} | ${event.moment} | `:range?`${visibleRange.start} - ${visibleRange.end} | `:''}${sDocumentTitle}`
+  document.title = `${event?`${event.info.name} | ${event.moment} | `:range?`${visibleRange.start} - ${visibleRange.end} | `:''}${documentTitle}`
 }
 
 function combine(...functions){

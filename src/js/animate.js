@@ -9,12 +9,12 @@
  */
 function animate(duration,step,complete){
   let t = Date.now()
-  let bRunning = true
+  let isRunning = true
   let fnRun = ()=>{
-    if (bRunning) {
-      let iTCurrent = Date.now()-t
-      if (iTCurrent<duration) {
-        step(iTCurrent/duration)
+    if (isRunning) {
+      let millisCurrent = Date.now()-t
+      if (millisCurrent<duration) {
+        step(millisCurrent/duration)
         requestAnimationFrame(fnRun)
       } else {
         step(1)
@@ -25,7 +25,7 @@ function animate(duration,step,complete){
   fnRun()
   return {
     cancel(){
-      bRunning = false
+      isRunning = false
     }
   }
 }

@@ -10,14 +10,14 @@ export default createSignal(function(signal){
   const win = window
   const doc = document
 		 const docElm = doc.documentElement
-		 const mBody = doc.body
-  let iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
-		 let iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
+		 const body = doc.body
+  let w = win.innerWidth || docElm.clientWidth || body.clientWidth
+		 let h = win.innerHeight|| docElm.clientHeight|| body.clientHeight
   win.addEventListener('resize', function(docElm){
-    const iOldW = iW
-			 const iOldH = iH
-    iW = win.innerWidth || docElm.clientWidth || mBody.clientWidth
-    iH = win.innerHeight|| docElm.clientHeight|| mBody.clientHeight
-    signal.dispatch(iW,iH,iOldW,iOldH)
+    const oldW = w
+			 const oldH = h
+    w = win.innerWidth || docElm.clientWidth || body.clientWidth
+    h = win.innerHeight|| docElm.clientHeight|| body.clientHeight
+    signal.dispatch(w,h,oldW,oldH)
   },false)
 })

@@ -10,11 +10,11 @@
  * @summary Linear congruential generator
  * @todo document
  // */
-var iMultiplier = 48271
-		 var iIncrement = 0
-		 var iModulus = 2147483647
-		 var iSeed = 123
-		 var oReturn = {
+var multiplier = 48271
+		 var increment = 0
+		 var modulus = 2147483647
+		 var seed = 123
+		 var returnValue = {
   rnd: rnd
   ,random: random
   //
@@ -32,7 +32,7 @@ var iMultiplier = 48271
   ,presetJava: presetJava
   ,presetNumeralRecipes: presetNumeralRecipes
 }
-	
+
 
 /**
 	 * Returns a random number between zero and the set modulus
@@ -42,10 +42,10 @@ var iMultiplier = 48271
 	 * @returns {number} An integer between zero and the set modulus
 	 */
 export function rnd(seed,iterate) {
-  if (seed!==undefined) iSeed = seed
+  if (seed!==undefined) seed = seed
   if (iterate===undefined) iterate = 1
-  while (iterate--) iSeed = (iMultiplier*iSeed+iIncrement)%iModulus
-  return iSeed
+  while (iterate--) seed = (multiplier*seed+increment)%modulus
+  return seed
 }
 
 /**
@@ -56,50 +56,50 @@ export function rnd(seed,iterate) {
 	 * @returns {number} A floating point between zero and one
 	 */
 export function random(seed,iterate) {
-  return rnd(seed,iterate)/iModulus
+  return rnd(seed,iterate)/modulus
 }
 
 /**
 	 * @memberOf prng
 	 * @param {number} seed The integer seed
 	 */
-function setSeed(seed) { iSeed = seed }
+function setSeed(seed) { seed = seed }
 
 /**
 	 * @memberOf prng
 	 * @param {number} multiplier The integer multiplier
 	 */
-function setMultiplier(multiplier){	iMultiplier = multiplier }
+function setMultiplier(multiplier){	multiplier = multiplier }
 
 /**
 	 * @memberOf prng
 	 * @param {number} increment The integer increment
 	 */
-function setIncrement(increment){	iIncrement = increment }
+function setIncrement(increment){	increment = increment }
 
 /**
 	 * @memberOf prng
 	 * @param {number} modulus The integer modulus
 	 */
-function setModulus(modulus){		iModulus = modulus }
+function setModulus(modulus){		modulus = modulus }
 
 /**
 	 * @memberOf prng
 	 * @returns {number} ThFe current multiplier
 	 */
-function getMultiplier(){ return iMultiplier }
+function getMultiplier(){ return multiplier }
 
 /**
 	 * @memberOf prng
 	 * @returns {number} The current increment
 	 */
-function getIncrement(){ return iIncrement }
+function getIncrement(){ return increment }
 
 /**
 	 * @memberOf prng
 	 * @returns {number} The current modulus
 	 */
-function getModulus(){ return iModulus }
+function getModulus(){ return modulus }
 
 /**
 	 * Sets the current lcg settings to Lehmer
@@ -108,10 +108,10 @@ function getModulus(){ return iModulus }
 	 * @returns {lcg}
 	 */
 function presetLehmer(minstd) {
-  iMultiplier = minstd?16807:48271
-  iIncrement = 0
-  iModulus = 2147483647 // 2E31-1 mersenne prime
-  return oReturn
+  multiplier = minstd?16807:48271
+  increment = 0
+  modulus = 2147483647 // 2E31-1 mersenne prime
+  return returnValue
 }
 
 /**
@@ -120,10 +120,10 @@ function presetLehmer(minstd) {
 	 * @returns {lcg}
 	 */
 function presetJava() {
-  iMultiplier = 25214903917
-  iIncrement = 11
-  iModulus = 2E48
-  return oReturn
+  multiplier = 25214903917
+  increment = 11
+  modulus = 2E48
+  return returnValue
 }
 
 /**
@@ -132,10 +132,10 @@ function presetJava() {
 	 * @returns {lcg}
 	 */
 function presetNumeralRecipes() {
-  iMultiplier = 1664525
-  iIncrement = 1013904223
-  iModulus = 2E32
-  return oReturn
+  multiplier = 1664525
+  increment = 1013904223
+  modulus = 2E32
+  return returnValue
 }
 
 export default {

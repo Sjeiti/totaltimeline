@@ -6,15 +6,15 @@ import model from '../model'
 /**
  * @name view
  */
-const iLight1 = 150E6
-const iLight2 = 1E9
-const iLight0 = iLight1 + (iLight2-iLight1)/2
-const iLightA = 0.25*(iLight2-iLight1)
+const light1 = 150E6
+const light2 = 1E9
+const light0 = light1 + (light2-light1)/2
+const lightA = 0.25*(light2-light1)
 
-const aBackgroundColors = [
+const backgroundColors = [
   {time:time.UNIVERSE,					        color:'#171B30'}//171B30
-  ,{time:time.UNIVERSE-iLight0+iLightA,	color:'#585873'}//585873
-  ,{time:time.UNIVERSE-iLight0-iLightA,	color:'#799193'}//CCE7E7
+  ,{time:time.UNIVERSE-light0+lightA,	color:'#585873'}//585873
+  ,{time:time.UNIVERSE-light0-lightA,	color:'#799193'}//CCE7E7
   ,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
   ,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
   ,{time:time.NOW,					            color:'#D8945A'}
@@ -47,50 +47,50 @@ function handleRangeChange(range){
 
 // todo: document
 function getGradient(range){
-  const iAgoFrom = range.start.ago
-  const iAgoTo = range.end.ago
-  const iDeltaRange = range.duration
-  const aGradient = []
+  const agoFrom = range.start.ago
+  const agoTo = range.end.ago
+  const deltaRange = range.duration
+  const gradients = []
   //
-  let oLastColor = color()
-  let bZeroSet = false
+  let lastColor = color()
+  let isZeroSet = false
 
-  for (let i=0,l=aBackgroundColors.length;i<l;i++) {
-    const oColor = aBackgroundColors[i]
-    const iTime = oColor.time
-    const bTimeLow = iTime>iAgoFrom
-    const bTimeHigh = iTime<iAgoTo
-    const bTimeMiddle = !bTimeLow&&!bTimeHigh
-    const fPos = 1-(iTime-iAgoTo)/iDeltaRange
+  for (let i=0,l=backgroundColors.length;i<l;i++) {
+    const color = backgroundColors[i]
+    const time = color.time
+    const isTimeLow = time>agoFrom
+    const isTimeHigh = time<agoTo
+    const isTimeMiddle = !isTimeLow&&!isTimeHigh
+    const pos = 1-(time-agoTo)/deltaRange
 
     // calculate average color when one or both colors are outside the range
     if (
-      (!bZeroSet&&bTimeMiddle&&i!==0&&iTime!==iAgoFrom)
-      ||bTimeHigh
+      (!isZeroSet&&isTimeMiddle&&i!==0&&time!==agoFrom)
+      ||isTimeHigh
     ) {
-      if (!bZeroSet&&bTimeHigh) {
-        aGradient.push(getAverageColor(oLastColor,oColor,fPos,true))
+      if (!isZeroSet&&isTimeHigh) {
+        gradients.push(getAverageColor(lastColor,color,pos,true))
       }
-      aGradient.push(getAverageColor(oLastColor,oColor,fPos,!bTimeHigh))
-      if (bTimeHigh) break
-      bZeroSet = true
+      gradients.push(getAverageColor(lastColor,color,pos,!isTimeHigh))
+      if (isTimeHigh) break
+      isZeroSet = true
     }
     // set the gradient position for values inside the range
-    if (bTimeMiddle) {
-      aGradient.push([oColor.color,getPercentage(fPos)])
+    if (isTimeMiddle) {
+      gradients.push([color.color,getPercentage(pos)])
     }
-    oLastColor = oColor
-    oLastColor.pos = fPos
+    lastColor = color
+    lastColor.pos = pos
   }
-  return aGradient
+  return gradients
 }
 
 function getAverageColor(last,current,pos,low){
-  const fPosStart = last.pos
-  const fPart = (pos-(low?0:1))/(pos-fPosStart)
-  const oColorAvrg = color(current.color).average(color(last.color),fPart)
+  const posStart = last.pos
+  const part = (pos-(low?0:1))/(pos-posStart)
+  const colorAvarage = color(current.color).average(color(last.color),part)
 
-  return [oColorAvrg.toString(),(low?'0%':'100%')]
+  return [colorAvarage.toString(),(low?'0%':'100%')]
 }
 
 export default view

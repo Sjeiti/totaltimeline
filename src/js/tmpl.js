@@ -22,13 +22,13 @@
  *  </div>
  *</script>
  */
-var oTmplCache = {}
+var templateCache = {}
 export default function tmpl(str, data){
   /* jshint -W054 */
   // Figure out if we're getting a template, or if we need to
   // load the template - and be sure to cache the result.
   var fn = !/\W/.test(str) ?
-    oTmplCache[str] = oTmplCache[str] ||
+    templateCache[str] = templateCache[str] ||
     tmpl(document.getElementById(str).innerHTML) :
     // Generate a reusable function that will serve as a template
     // generator (and which will be cached).

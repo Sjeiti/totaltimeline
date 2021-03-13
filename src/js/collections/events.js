@@ -46,8 +46,8 @@ export default collection(
       const isInside = ago<=rangeStart&&ago>=rangeEnd
       if (isInside) {
         const element = event.element
-        const fRel = 1-((ago-rangeEnd)/duration)
-        element.style.left = getPercentage(fRel)
+        const relative = 1-((ago-rangeEnd)/duration)
+        element.style.left = getPercentage(relative)
         show.push(element)
       }
       event.inside(isInside)

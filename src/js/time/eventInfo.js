@@ -36,7 +36,7 @@ export default function eventInfo(objectToParse){
   const inst = Object.seal(Object.create({
     parse(o) {
       // todo: markdown.toHTML(explanation)
-      for (var s in o) {
+      for (const s in o) {
         if (this.hasOwnProperty(s)) {
           this[s] = o[s]
           if (s==='name') {

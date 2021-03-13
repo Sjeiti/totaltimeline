@@ -117,7 +117,7 @@ const collections = Object.create(Object.assign({
           if (item!==checkItem) {
             const checkInfo = checkItem.info
             const checkSlug = checkInfo.slug
-            let checkName = checkInfo.name
+            const checkName = checkInfo.name
             let rxMatch = new RegExp('([\\s]('+checkName+')[^a-z])','i')
             let matchString = copy.match(rxMatch)
             let isMatch = !!matchString

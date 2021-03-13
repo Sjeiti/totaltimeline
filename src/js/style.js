@@ -1,5 +1,3 @@
-console.log('style.js') // todo: remove log
-
 /**
  * Namespace to manipulate existing stylesheets.
  * @name style
@@ -25,12 +23,10 @@ const isReversedSelectors = (function(){
   const rules = sheet.cssRules
   const numRules = rules.length
   const selector = 'span#a.c.d.b'
-  let selectorResult
-  let isReversed
 
   sheet.addRule(selector, 'font-weight:inherit')
-  selectorResult = rules[numRules].selectorText
-  isReversed = selectorResult!=selector
+  const selectorResult = rules[numRules].selectorText
+  const isReversed = selectorResult!==selector
   sheet.deleteRule(numRules)
   return isReversed
 })()
@@ -45,10 +41,9 @@ function getReverse(selector){
   const sheet = styleSheets[0]
   const rules = sheet.cssRules
   const numRules = rules.length
-  let selectorResult
 
   sheet.addRule(selector, 'font-weight:inherit')
-  selectorResult = rules[numRules].selectorText
+  const selectorResult = rules[numRules].selectorText
   sheet.deleteRule(numRules)
   return selectorResult
 }
@@ -62,11 +57,11 @@ export function select(selector){
   selector = isReversedSelectors?getReverse(parseSelector(selector)):parseSelector(selector)
   const styles = rule(selector)
   forEach.apply(styleSheets,[function(styleSheet){
-    let rules = styleSheet.cssRules
+    const rules = styleSheet.cssRules
     rules && forEach.apply(rules,[function (rule) {
       if (rule.constructor===window.CSSStyleRule) {
         //console.log('rule.selectorText',rule.selectorText); // log
-        if (rule.selectorText.split(' {').shift()==selector) {
+        if (rule.selectorText.split(' {').shift()===selector) {
           styles.push(rule)
         }
       }
@@ -98,14 +93,12 @@ function changeRule(selector,rules) {
  * Adds a new rule to the selector
  * @param selector
  * @param rules
- * @returns {CssRule}
+ * @returns {CSSRule}
  */
 function addRule(selector,rules) {
-  let sheet
   let rulesString = ''
   forEach.call(rules,(val,prop)=>{rulesString+=prop+':'+val+';'})
-  // loop(rules,function(val,prop){rulesString+=prop+':'+val+';';})
-  sheet = styleSheets[0]
+  const sheet = styleSheets[0]
   sheet.addRule(selector,rulesString)
   return sheet.cssRules[sheet.cssRules.length-1]
 }
@@ -115,20 +108,20 @@ function addRule(selector,rules) {
  * @returns {CSSStyleRule[]}
  */
 function rule(selector) {
-  var styles = []
+  const styles = []
   styles.toString = function(){return '[object style.rule:'+selector+']'}
   styles.set = function (key,prop) {
     if (typeof key==='string') {
       set.apply(styles,[key,prop])
     } else {
-      for (var s in key) {
+      for (const s in key) {
         set.apply(styles,[s,key[s]])
       }
     }
   }
   function set(key,prop) {
     styles.forEach(function (rule) {
-      var style = rule.style
+      const style = rule.style
       style.removeProperty(key)
       style[key] = prop
     })

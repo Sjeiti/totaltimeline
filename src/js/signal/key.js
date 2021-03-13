@@ -7,32 +7,32 @@ import animate from './animate'
  * @name key
  * @summary Wrapper namespace for keyboard signals.
  */
-var fn = ()=>{}
-var lastKeyDownEvent
-var isInitialised = false
+const fn = ()=>{}
+let lastKeyDownEvent
+let isInitialised = false
 /**
    * Signal for keyPress.<br/>
    * The callback for this signal is Function(keys,event)
    * @name keypress
    * @type Signal
    */
-var press = createSignal(init)
+const press = createSignal(init)
 /**
    * Signal for keyDown.<br/>
    * The callback for this signal is Function(keyCode,keys,event)
    * @name keydown
    * @type Signal
    */
-var down = createSignal(initDown)
+const down = createSignal(initDown)
 /**
    * Signal for keyUp.<br/>
    * The callback for this signal is Function(keyCode,keys,event)
    * @name keyup
    * @type Signal
    */
-var up = createSignal(initUp)
+const up = createSignal(initUp)
 //
-var key = Object.assign([],{
+const key = Object.assign([],{
   press: press
   ,down: down
   ,up: up

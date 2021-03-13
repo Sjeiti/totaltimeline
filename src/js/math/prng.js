@@ -10,11 +10,11 @@
  * @summary Linear congruential generator
  * @todo document
  // */
-var multiplier = 48271
-		 var increment = 0
-		 var modulus = 2147483647
-		 var seed = 123
-		 var returnValue = {
+let multiplier = 48271
+		 let increment = 0
+		 let modulus = 2147483647
+		 const seed = 123
+		 const returnValue = {
   rnd: rnd
   ,random: random
   //

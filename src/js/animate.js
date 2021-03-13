@@ -8,11 +8,11 @@
  * @returns {Object} An animation object with a cancel function.
  */
 function animate(duration,step,complete){
-  let t = Date.now()
+  const t = Date.now()
   let isRunning = true
-  let fnRun = ()=>{
+  const fnRun = ()=>{
     if (isRunning) {
-      let millisCurrent = Date.now()-t
+      const millisCurrent = Date.now()-t
       if (millisCurrent<duration) {
         step(millisCurrent/duration)
         requestAnimationFrame(fnRun)
@@ -146,7 +146,7 @@ export default Object.assign(animate,{
 
     In: function (k) {
 
-      var s = 1.70158
+      const s = 1.70158
 
       return k * k * ((s + 1) * k - s)
 
@@ -154,7 +154,7 @@ export default Object.assign(animate,{
 
     Out: function (k) {
 
-      var s = 1.70158
+      const s = 1.70158
 
       return --k * k * ((s + 1) * k + s) + 1
 
@@ -162,7 +162,7 @@ export default Object.assign(animate,{
 
     InOut: function (k) {
 
-      var s = 1.70158 * 1.525
+      const s = 1.70158 * 1.525
 
       if ((k *= 2) < 1) {
         return 0.5 * (k * k * ((s + 1) * k - s))

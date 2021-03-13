@@ -23,7 +23,7 @@ const rgb2hsl = (r,g,b)=>{
   const min = Math.min(r,g,b)
   const a = max+min
   const d = max-min
-  let h; let s; let l = a/2
+  let h; let s; const l = a/2
   if (max===min) {
     h = s = 0
   } else {

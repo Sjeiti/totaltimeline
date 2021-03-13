@@ -230,15 +230,15 @@ export default create(
        * @param {number} mouseX Mouse offset
        */
       function rangeZoom(zoomin,mouseX){
-        let rangeGrowRate = 0.01111*span.duration<<0
-        let start = range.start.ago
-        let end = range.end.ago
+        const rangeGrowRate = 0.01111*span.duration<<0
+        const start = range.start.ago
+        const end = range.end.ago
         // offset calculations
-        let rangeL = elmRange.offsetLeft
-        let rangeR = rangeL+elmRange.offsetWidth
-        let deltaL = rangeL-mouseX
-        let deltaR = mouseX-rangeR
-        let deltaTotal = Math.abs(deltaL) + Math.abs(deltaR)
+        const rangeL = elmRange.offsetLeft
+        const rangeR = rangeL+elmRange.offsetWidth
+        const deltaL = rangeL-mouseX
+        const deltaR = mouseX-rangeR
+        const deltaTotal = Math.abs(deltaL) + Math.abs(deltaR)
         let deltaLPart = deltaL/deltaTotal
         let deltaRPart = deltaR/deltaTotal
         // new positions

@@ -111,7 +111,7 @@ export default create(
        * @param {number} value
        */
       function setContentGrow(value){
-        for (let s in flexGrowPrefixes) {
+        for (const s in flexGrowPrefixes) {
           flexGrowPrefixes[s] = value
         }
         contentStyle.set(flexGrowPrefixes)

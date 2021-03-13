@@ -12,12 +12,12 @@ export default createSignal(function(signal){
   let deltaT = 0
 		 let millisCurrent
 		 let millisLast = Date.now()
-		 let millisLength = 10
-		 let millisList = (function(a,n){
+		 const millisLength = 10
+		 const millisList = (function(a,n){
     for (let i=0;i<millisLength;i++) a.push(n)
     return a
   })([],millisLast)
-		 let frameNumber = 0
+		 const frameNumber = 0
   function animate(){
     millisCurrent = Date.now()
     millisList.push(millisCurrent-millisLast)

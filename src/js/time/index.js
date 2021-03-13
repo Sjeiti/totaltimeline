@@ -28,10 +28,10 @@ export function formatAnnum(year,round=0,noSlug=true,extended=false){
   // todo: rounding sometimes off: split at . truncate and join
   // todo: also round absolutes, ie: 4 to 4.00
   let returnValue
-  let isFuture = year<0
+  const isFuture = year<0
   let amount = Math.abs(year)
-  let isGregorian = amount<4000
-  let space = noSlug?' ':''
+  const isGregorian = amount<4000
+  const space = noSlug?' ':''
   let i
   if (isGregorian) {
     amount = Math.round(YEAR_NOW-year)
@@ -80,8 +80,9 @@ export function unformatAnnum(formatted){
 function duration(years,round){
   // todo: rounding sometimes off: split at . truncate and join
   if (round===undefined) round = 0
-  for (var i = 0; years>1000 && (durationKeys.length>=(i + 2)); i++) years /= 1000
-  var multiply = Math.pow(10,round)
+  let i
+  for (i = 0; years>1000 && (durationKeys.length>=(i + 2)); i++) years /= 1000
+  const multiply = Math.pow(10,round)
   return (Math.round(years * multiply) / multiply) +space+ durationKeys[i] +space+ 'years'
 }
 

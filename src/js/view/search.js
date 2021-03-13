@@ -54,8 +54,8 @@ export default create(
           found
             .sort((a, b) => a[0] > b[0] ? -1 : 1)
             .forEach(found => {
-              let entry = found[1]
-              let info = entry.info || entry
+              const entry = found[1]
+              const info = entry.info || entry
               searchFragment.appendChild(getFragment(`<li><a href="#${info.slug}">${info.name.replace(query, `<strong>${query}</strong>`)}</a></li>`))
             })
           searchResult.appendChild(searchFragment)

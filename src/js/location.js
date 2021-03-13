@@ -15,13 +15,13 @@ const entryShown = model.entryShown
 const visibleRange = model.range
 const pathname = location.pathname.substr(1)
 let locationOriginalPath = location.pathname
-let documentTitle = document.title
+const documentTitle = document.title
 let isFirstChange = true
 let hash = location.hash.substr(1)
-let search = location.search.substr(1).split(/&/g)
+const search = location.search.substr(1).split(/&/g)
   .map(kv=>kv.split(/=/))
   .reduce((p,c)=>(p[c[0]] = c[1],p), {})
-let searchQuery = search.q||''
+const searchQuery = search.q||''
 
 // fist set hash according to incoming uri
 if (hash!==pathname) {
@@ -124,9 +124,9 @@ function showSlugEntry(slug){
 }
 
 let timeoutID = 0
-let stringEmpty = ''
-let stringSlash = '/'
-let stateTitle = 'title'
+const stringEmpty = ''
+const stringSlash = '/'
+const stateTitle = 'title'
 
 /**
  * Update option selection variable and try to call pushState.

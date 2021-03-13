@@ -174,30 +174,30 @@ export default create(
             e.preventDefault()
           } else if (numTouches===2) {
             // reverse interpolation to find new start and end points
-            var iRangeDuration = range.duration
+            const iRangeDuration = range.duration
             //
-            var touch1Last = lastTouches[0]
-            var touch2Last = lastTouches[1]
-            var touch1LastTime = range.start.ago - (touch1Last/viewW)*iRangeDuration
-            var touch2LastTime = range.end.ago + (1-touch2Last/viewW)*iRangeDuration
-            var touchWLast = touch2Last-touch1Last
-            var touchLastDuration = (touchWLast/viewW)*iRangeDuration
+            const touch1Last = lastTouches[0]
+            const touch2Last = lastTouches[1]
+            const touch1LastTime = range.start.ago - (touch1Last/viewW)*iRangeDuration
+            const touch2LastTime = range.end.ago + (1-touch2Last/viewW)*iRangeDuration
+            const touchWLast = touch2Last-touch1Last
+            const touchLastDuration = (touchWLast/viewW)*iRangeDuration
             //
-            var touch1 = touches[0]
-            var touch2 = touches[1]
-            var touchW = touch2-touch1
+            const touch1 = touches[0]
+            const touch2 = touches[1]
+            const touchW = touch2-touch1
             //
-            var part1 = touch1/viewW
-            var part2 = 1-touch2/viewW
-            var partW = touchW/viewW
+            const part1 = touch1/viewW
+            const part2 = 1-touch2/viewW
+            const partW = touchW/viewW
             //
-            var part1W = part1/partW
-            var part2W = part2/partW
-            var part1WDuration = part1W*touchLastDuration
-            var part2WDuration = part2W*touchLastDuration
+            const part1W = part1/partW
+            const part2W = part2/partW
+            const part1WDuration = part1W*touchLastDuration
+            const part2WDuration = part2W*touchLastDuration
             //
-            var newStart =	Math.floor(touch1LastTime + part1WDuration)
-            var newEnd =		Math.floor(touch2LastTime - part2WDuration)
+            const newStart =	Math.floor(touch1LastTime + part1WDuration)
+            const newEnd =		Math.floor(touch2LastTime - part2WDuration)
 
             range.set(
               newStart
@@ -214,11 +214,11 @@ export default create(
 
       // todo: document
       function moveBackgroundOverlay(range,oldrange){
-        var currentDuration = range.duration
-        var rangeCenter = range.end.ago + currentDuration/2
-        var oldRangeCenter = oldrange.end.ago + oldrange.duration/2
-        var deltaCenter = rangeCenter - oldRangeCenter
-        var offset = deltaCenter/currentDuration*viewW
+        const currentDuration = range.duration
+        const rangeCenter = range.end.ago + currentDuration/2
+        const oldRangeCenter = oldrange.end.ago + oldrange.duration/2
+        const deltaCenter = rangeCenter - oldRangeCenter
+        const offset = deltaCenter/currentDuration*viewW
 
         // background-size is contain so mod by viewH to prevent errors
         backgroundPos = (backgroundPos + Math.round(offset))%viewH

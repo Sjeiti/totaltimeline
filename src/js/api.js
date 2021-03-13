@@ -84,7 +84,8 @@ function onClick(element,{target}){
 }
 
 function reload(){
-	window.location.reload(false)
+	// window.location.reload(false)
+	window.location.reload()
 }
 
 function newEvent(){

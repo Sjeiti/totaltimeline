@@ -3,21 +3,21 @@
  */
 
 const fs = require('fs')
-  ,express    = require('express')
-  ,bodyParser = require('body-parser')
-  ,serveStatic = require('serve-static')
-  ,openBrowser = require('open')
-  ,utils = require('./utils')
-  ,{read,save,warn} = utils
-  ,root = process.argv[2]||'src'
-  ,port = process.argv[3]||8183
-  ,router = express.Router()
-  ,path = require('path')
-  //
-  ,eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
-  ,{getWikiMedia,getImageThumb} = require(__dirname+'/wikiUtils')
-  ,jsonSrc = './src/static/events.json'
-  ,jsonDist = './dist/static/events.json'
+const express    = require('express')
+const bodyParser = require('body-parser')
+const serveStatic = require('serve-static')
+const openBrowser = require('open')
+const utils = require('./utils')
+const {read,save,warn} = utils
+const root = process.argv[2]||'src'
+const port = process.argv[3]||8183
+const router = express.Router()
+const path = require('path')
+//
+const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
+const {getWikiMedia,getImageThumb} = require(__dirname+'/wikiUtils')
+const jsonSrc = './src/static/events.json'
+const jsonDist = './dist/static/events.json'
 
 express()
     .use(serveStatic('./'+root+'/'))
@@ -71,7 +71,7 @@ function onDeleteEvent(request, response){
  */
 function onPostEvent(request, response){
   const body = request.body
-      ,index = parseInt(body.index,10)
+  const index = parseInt(body.index, 10)
   //
   /*console.log('request'
     ,JSON.stringify(request.params)
@@ -80,19 +80,17 @@ function onPostEvent(request, response){
   );*/ // todo: remove log
   //
   const hasTime = isValidNumber(body.ago)||isValidNumber(body.since)||isValidNumber(body.year)
-    ,hasName = isValidString(body.name)
-    ,hasWiki = isValidString(body.wikimediakey)
-    ,hasImage = isValidString(body.image)
+  const hasName = isValidString(body.name)
+  const hasWiki = isValidString(body.wikimediakey)
+  const hasImage = isValidString(body.image)
   if (hasTime&&hasName&&hasWiki&&hasImage) {
     //
     const resultEvent = eventKeys.reduce((obj,prop)=>{
         obj[prop] = body[prop]||''
         return obj
       },{})
-      ,hasWikiMedia = !!body.wikimedia
-      ,hasThumb = !!body.thumb
-    console.log('hasWikiMedia',hasWikiMedia); // todo: remove log
-    console.log('hasThumb',hasThumb); // todo: remove log
+    const hasWikiMedia = !!body.wikimedia
+    const hasThumb = !!body.thumb
     //
     Promise.all([
         hasWikiMedia||getWikiMedia(body.wikimediakey)
@@ -130,6 +128,7 @@ function saveJsonEntry(entry,index){
       } else {
         throw new Error(`Index ${index} out of bounds`)
       }
+      console.log('saveJsonEntry',index,data?.[index]?.name) // todo: remove log
       return Promise.all([
         save(jsonDist,JSON.stringify(data))
         ,save(jsonSrc,JSON.stringify(data))

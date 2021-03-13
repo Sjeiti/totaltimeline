@@ -1,8 +1,8 @@
-const request = require('request')
-  ,{parseWikitext} = require(__dirname+'/wikiText')
-  ,sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query&prop=revisions&rvprop=content&titles=
-	,sEndPointCommons = 'http://commons.wikimedia.org/w/api.php?'//action=query&prop=revisions&rvprop=content&format=json&titles=File%3AESO-VLT-Laser-phot-33a-07.jpg%7CFile%3AESO-VLT-Laser-phot-33a-07_rsz.jpg%22'
-	,oGetVars = {
+// const request = require('request')
+const {parseWikitext} = require(__dirname+'/wikiText')
+const sEndPointEn = 'http://en.wikipedia.org/w/api.php?'//format=json&action=query&prop=revisions&rvprop=content&titles=
+const sEndPointCommons = 'http://commons.wikimedia.org/w/api.php?'//action=query&prop=revisions&rvprop=content&format=json&titles=File%3AESO-VLT-Laser-phot-33a-07.jpg%7CFile%3AESO-VLT-Laser-phot-33a-07_rsz.jpg%22'
+const oGetVars = {
 		format: 'json'
 		,action: 'query'
 		,prop: 'revisions'
@@ -143,7 +143,8 @@ function getImageThumb(fileName){
 }
 
 function getWikiJson(url, json=true){
-  return new Promise((resolve,reject)=>{
+  return fetch(url).then(response=>response.json())
+  /*return new Promise((resolve,reject)=>{
     request({url,json}, (error, response, body)=>{
     	const pages = body&&body.query&&body.query.pages
       if (!error && response.statusCode === 200 && pages) {
@@ -152,7 +153,7 @@ function getWikiJson(url, json=true){
         reject(error)
       }
     })
-  })
+  })*/
 }
 
 /**

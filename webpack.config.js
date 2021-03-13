@@ -82,8 +82,12 @@ module.exports = env => {
               ,{
                 loader: 'less-loader'
                 ,options: {
-                  plugins: [lessPluginGlob]
-                  ,paths: [path.resolve(__dirname, 'src')] // This is the important part!
+                  // plugins: [new lessPluginGlob()]
+                  // ,paths: [path.resolve(__dirname, 'src')] // This is the important part!
+									lessOptions: {
+                  	plugins: [lessPluginGlob]
+										,paths: [path.resolve(__dirname, 'src')],
+									}
                 }
               }
           ]
@@ -122,11 +126,12 @@ module.exports = env => {
       }]
     }
     ,plugins: [
-      new CopyWebpackPlugin([
-          { from: 'src/*', to: './', flatten: true, dot: true}
+      new CopyWebpackPlugin({patterns:[
+          // { from: 'src/*', to: './', /*flatten: true,*/ globOptions: {dot: true}}
+          { from: 'src/*', to: '[name][ext]', /*flatten: true,*/ globOptions: {dot: true}}
           ,{ from: 'src/fonts', to: './fonts' }
           ,{ from: 'src/static', to: './static' }
-      ], {})
+      ]})
       ,new webpack.DefinePlugin({
         _VERSION: JSON.stringify(require('./package.json').version)
         ,_ENV: JSON.stringify(env||{})

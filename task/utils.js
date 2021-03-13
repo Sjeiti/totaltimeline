@@ -45,7 +45,7 @@ function readdir(path){
  */
 function save(file,data) {
   console.log('saving',file,formatBytes(data.length));
-  return mkdirp(getDirName(file))
+  return require('mkdirp')(getDirName(file))
       .then(()=>new Promise(function(resolve){//,reject
         require('fs').writeFile(file, data, resolve);
       }),console.warn.bind(console));
@@ -78,7 +78,7 @@ function extend(base,extension,overwrite){
 function copy(source, target) {
   console.log('copying',source,'to',target);
   var fs = require('fs');
-  return mkdirp(getDirName(target))
+  return require('mkdirp')(getDirName(target))
       .then(()=>new Promise(function(resolve,reject){
         var cbCalled = false
             ,readStream = fs.createReadStream(source)
@@ -94,12 +94,6 @@ function copy(source, target) {
           }
         }
       }),console.warn.bind(console));
-}
-
-function mkdirp(dir, opts) {
-  return new Promise((resolve,reject)=>{
-    require('mkdirp')(dir, opts, (err,made)=>err===null?resolve(made):reject(err));
-  });
 }
 
 /**

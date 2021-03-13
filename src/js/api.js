@@ -63,7 +63,7 @@ function onEditEvent(event){
 </div></div>`)
 	document.body.appendChild(element)
   element.querySelector('form').addEventListener('submit',onSubmit)
-  element.addEventListener('click',onClick.bind(null,event))
+  element.addEventListener('click',onClick.bind(null,element))
 }
 
 function onSubmit(e){
@@ -71,11 +71,11 @@ function onSubmit(e){
   postForm(e.target)
     .then(response=>{
       console.log('response',response)
-      response.error||reload()
+      // response.error||reload()
     })
 }
 
-function onClick(event,{target}){
+function onClick(element,{target}){
   if (target.nodeName==='BUTTON') {
     target.hasAttribute('data-close')&&document.body.removeChild(element)
     ||target.hasAttribute('data-new')&&newEvent()

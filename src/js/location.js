@@ -10,18 +10,18 @@ import model from './model'
 import content from './view/content'
 
 const history = window.history
-  ,formatAnnum = time.formatAnnum
-  ,entryShown = model.entryShown
-  ,visibleRange = model.range
-  ,pathname = location.pathname.substr(1)
+const formatAnnum = time.formatAnnum
+const entryShown = model.entryShown
+const visibleRange = model.range
+const pathname = location.pathname.substr(1)
 let sLocationOriginalPath = location.pathname
-  ,sDocumentTitle = document.title
-  ,isFirstChange = true
-  ,hash = location.hash.substr(1)
-  ,search = location.search.substr(1).split(/&/g)
+let sDocumentTitle = document.title
+let isFirstChange = true
+let hash = location.hash.substr(1)
+let search = location.search.substr(1).split(/&/g)
     .map(kv=>kv.split(/=/))
     .reduce((p,c)=>(p[c[0]] = c[1],p), {})
-  ,searchQuery = search.q||''
+let searchQuery = search.q||''
 
 // fist set hash according to incoming uri
 if (hash!==pathname) {
@@ -123,36 +123,41 @@ function showSlugEntry(slug){
   }
 }
 
+let timeoutID = 0
+let stringEmpty = ''
+let stringSlash = '/'
+let stateTitle = 'title'
+
 /**
  * Update option selection variable and try to call pushState.
  * @param {event} [event] Optional current event.
  * @param {range} [range] The current range.
  */
 function update(event,range){
-  const sSlugStart = range&&formatAnnum(range.start.ago,2,false)
-    ,sSlugEnd = range&&formatAnnum(range.end.ago,2,false)
-  if (range&&sLocationOriginalPath.indexOf(sSlugStart)!==-1) { // why?
-    sLocationOriginalPath = sLocationOriginalPath.split(sSlugStart).shift()
+	const {pathname} = location
+  const slugStart = range&&formatAnnum(range.start.ago,2,false)
+  const slugEnd = range&&formatAnnum(range.end.ago,2,false)
+  if (range&&sLocationOriginalPath.indexOf(slugStart)!==-1) { // why?
+    sLocationOriginalPath = sLocationOriginalPath.split(slugStart).shift()
   }
-  if (history.pushState) {//todo:what if no pushstate
-    const aPath = ['']
-      ,sPath = location.pathname
+	const pathList = ['']
 
-    if (event) aPath.push(event.info.slug)
-    if (range) {
-      aPath.push(sSlugStart)
-      aPath.push(sSlugEnd)
-    }
-    const sNewPath = aPath.join('/')
-    if (sNewPath!==sPath) {
-      if (location.pathname==='/') {
-        history.pushState('','foobar',sNewPath)
-      } else {
-        history.replaceState('','foobar',sNewPath)
-      }
-    }
-  }
-  setDocumentTitle(event,range)
+	if (event) pathList.push(event.info.slug)
+	if (range) {
+		pathList.push(slugStart)
+		pathList.push(slugEnd)
+	}
+	const pathnameNew = pathList.join(stringSlash)
+	if (pathnameNew!==pathname) {
+		clearTimeout(timeoutID)
+		const setState = pathname===stringSlash?history.pushState:history.replaceState
+		const setSateAndTitle = combine(
+			setState.bind(history, stringEmpty,stateTitle,pathnameNew)
+			, setDocumentTitle.bind(null, event, range)
+		)
+		timeoutID = setTimeout(setSateAndTitle, 300)
+	}
+  // setDocumentTitle(event,range)
 }
 
 /**
@@ -163,4 +168,8 @@ function update(event,range){
  */
 function setDocumentTitle(event,range){
   document.title = `${event?`${event.info.name} | ${event.moment} | `:range?`${visibleRange.start} - ${visibleRange.end} | `:''}${sDocumentTitle}`
+}
+
+function combine(...functions){
+	return ()=>functions.forEach(fnc=>fnc())
 }

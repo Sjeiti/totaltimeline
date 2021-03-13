@@ -1,3 +1,5 @@
+console.log('style.js') // todo: remove log
+
 /**
  * Namespace to manipulate existing stylesheets.
  * @name style
@@ -146,7 +148,7 @@ function getStyle(el,styleProp) {
 
 // todo: document
 function getSheetByMedia(type) {
-  let oSheet, i, j
+  let oSheet, i, j, l, ll
   for (i=0,l=document.styleSheets.length;i<l;i++) {
     oSheet = document.styleSheets[i]
     for (j=0,ll=oSheet.media.length;j<ll;j++) {

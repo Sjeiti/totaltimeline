@@ -242,13 +242,11 @@ export const graphs = collection(
      * When the range changes the labels of the colors should to
      */
     function onRangeChange(){ // todo: possibly refactor since also called by collections -> col.dataLoaded
-      // console.log('onRangeChange',this); // todo: remove log
       this.forEach(({axeLeft,axeRight})=>{
         axeLeft.style.backgroundColor = view.colorFirst
         axeRight.style.backgroundColor = view.colorLast
       })
     }
-
     this.dataLoaded.dispatch(this)
   }
   ,function(range){

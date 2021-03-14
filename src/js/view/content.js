@@ -65,7 +65,6 @@ export const content = create(
             if (!currentRange.coincides(entry.moment)&&animateIfNeeded) {
               // zoom the entry with to n-closest entries
               const range = collections.getEntryRange(entry, 2, 2)
-              const {entryShown} = model
               range && currentRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
             }
           } else if (entry.range) {

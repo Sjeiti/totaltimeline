@@ -114,9 +114,7 @@ function rule(selector) {
     if (typeof key==='string') {
       set.apply(styles,[key,prop])
     } else {
-      for (const s in key) {
-        set.apply(styles,[s,key[s]])
-      }
+      Object.keys(key).forEach(s=>set.apply(styles,[s,key[s]]))
     }
   }
   function set(key,prop) {

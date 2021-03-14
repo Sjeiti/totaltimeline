@@ -36,7 +36,8 @@ export function eventInfo(objectToParse){
   const inst = Object.seal(Object.create({
     parse(o) {
       // todo: markdown.toHTML(explanation)
-      for (const s in o) {
+      // console.log('eventInfo o',o) // todo: remove log
+      Object.keys(o).forEach(s=>{
         if (this.hasOwnProperty(s)) {
           this[s] = o[s]
           if (s==='name') {
@@ -45,7 +46,17 @@ export function eventInfo(objectToParse){
             this.tags = o[s].split(',').map((s)=> {return s.replace(/^\s*|\s*$/g,'')}).filter((s)=> {return !s.match(/^[\s\n\t]*$/)})
           }
         }
-      }
+      })
+      // for (const s in o) {
+      //   if (this.hasOwnProperty(s)) {
+      //     this[s] = o[s]
+      //     if (s==='name') {
+      //       this.slug = slug(o[s])
+      //     } else if (s==='tags') {
+      //       this.tags = o[s].split(',').map((s)=> {return s.replace(/^\s*|\s*$/g,'')}).filter((s)=> {return !s.match(/^[\s\n\t]*$/)})
+      //     }
+      //   }
+      // }
       return this
     }
     ,toString(){return `[object EventInfo '${this.name}']`}

@@ -101,5 +101,5 @@ export function collection(slug,dataFileName,callback,render){
     ,dataLoaded: {value:new Signal()}
     ,isDataLoaded: {value:false,writable:true}
     ,_render: {value:render}
-  }).init(slug,dataFileName,callback))
+  })).init(slug,dataFileName,callback)
 }

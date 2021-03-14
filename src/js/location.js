@@ -68,8 +68,7 @@ function onEntryShown(collectionEntry){
  * @param {string} hash
  */
 function updated(path,hash){
-  const hasNoHash = hash===undefined||hash===''
-  const pathOrHash = hasNoHash?path:hash
+  const pathOrHash = hash||path
   if (pathOrHash.length>0) {
     const splitPath = pathOrHash.split('/')
     const pathLength = splitPath.length

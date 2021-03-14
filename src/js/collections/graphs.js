@@ -1,11 +1,11 @@
-import collection from './collection'
-import moment from '../time/moment'
-import model from '../model'
-import range from '../time/range'
+import {collection} from './collection'
+import {moment} from '../time/moment'
+import {currentRange} from '../model'
+import {range} from '../time/range'
 import {stringToElement} from '../util'
 import {fetchFile} from '../fetchProxy'
-import color from '../math/color'
-import view from '../view'
+// import {color} from '../math/color'
+import {view} from '../view'
 
 /**
  * Temperature collections
@@ -89,7 +89,6 @@ export const graphs = collection(
       ,draw
     })
 
-    const currentRange = model.range
     const boundRangeChange = onRangeChange.bind(this)
     currentRange.change.add(onRangeChange.bind(this))
 
@@ -261,9 +260,4 @@ export const graphs = collection(
 
 export function graphCollection(dataFileName,callback){
   fetchFile(dataFileName).then(callback)
-}
-
-export default {
-  graphs
-  ,graphCollection
 }

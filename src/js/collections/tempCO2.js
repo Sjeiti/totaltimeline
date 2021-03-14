@@ -6,7 +6,7 @@ import {getMinMax, getMap} from '../util'
  * @type collectionInstance
  * @name temperature
  */
-export default graphCollection(
+graphCollection(
   'Epica-tpt-co2.csv'
   ,(data)=> {
 

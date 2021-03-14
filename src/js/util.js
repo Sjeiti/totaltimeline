@@ -126,25 +126,10 @@ export function getMap(min,max) {
 
 export function getMinMax(array){
   return array.reduce((minmax,val)=>{
+    // eslint-disable-next-line no-unused-expressions
     if (isNaN(val)) val
     else if (val<minmax.min) minmax.min = val
     else if  (val>minmax.max) minmax.max = val
     return minmax
   },{min:Number.POSITIVE_INFINITY,max:Number.NEGATIVE_INFINITY})
-}
-
-export default {
-  parseOptions
-  ,isJSONString
-  ,isObjectString
-  ,getFragment
-  ,stringToElement
-  ,slug
-  ,getPercentage
-  ,clearChildren
-  ,getCssValuePrefix
-  ,assignable
-  ,emptyNode
-  ,getMap
-  ,getMinMax
 }

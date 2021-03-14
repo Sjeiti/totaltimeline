@@ -1,8 +1,8 @@
-import collection from './collection'
-import moment from '../time/moment'
-import range from '../time/range'
-import eventInfo from '../time/eventInfo'
-import period from './period'
+import {collection} from './collection'
+import {moment} from '../time/moment'
+import {range} from '../time/range'
+import {eventInfo} from '../time/eventInfo'
+import {period} from './period'
 import {getPercentage} from '../util'
 
 /**
@@ -10,7 +10,7 @@ import {getPercentage} from '../util'
  * @type collectionInstance
  * @name periods
  */
-export default collection(
+collection(
   'periods'
   ,'eras.json'
   ,function(data){

@@ -1,20 +1,18 @@
 import Signal from 'signals'
-import time from './time'
-import moment from './time/moment'
-import range from './time/range'
-import util from './util'
+import {UNIVERSE, NOW} from './time'
+import {moment} from './time/moment'
+import {range} from './time/range'
+import {getCssValuePrefix} from './util'
 
-/**
- * @name model
- */
-export default {
-  span: range(moment(time.UNIVERSE),moment(time.NOW))
-  ,range: range(moment(time.UNIVERSE),moment(time.NOW),moment(time.UNIVERSE))
-  ,entryShown: new Signal()
-  ,editEvent: new Signal()
-  ,cssPrefix: util.getCssValuePrefix()
-  ,userAgent: {
-    isPhantom: navigator.userAgent.match(/PhantomJS/)
-  }
-  ,api: false
+
+export const span = range(moment(UNIVERSE),moment(NOW))
+export const currentRange = range(moment(UNIVERSE),moment(NOW),moment(UNIVERSE))
+export const entryShown = new Signal()
+export const editEvent = new Signal()
+export const cssPrefix = getCssValuePrefix()
+export const userAgent = {
+  isPhantom: navigator.userAgent.match(/PhantomJS/)
 }
+export const api = {exists:false}
+
+

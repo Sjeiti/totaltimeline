@@ -1,8 +1,8 @@
 import {create} from './component'
-import collections from '../collections'
+import {collections} from '../collections'
 import {stringToElement,getFragment} from '../util'
 
-export default create(
+create(
   'data-collection-menu'
   ,{
     init(element){

@@ -2,7 +2,7 @@ import {create} from './component'
 import {getFragment} from '../util'
 import {VERSION} from "../config"
 
-export default create(
+create(
   'data-header'
   ,{
     init(element){

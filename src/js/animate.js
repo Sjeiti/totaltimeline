@@ -1,13 +1,13 @@
 /**
  * Animates something
- * @name animate
+ * @name _animate
  * @method
  * @param {Number} duration Length of animation in milliseconds.
  * @param {Function} step Function called each step with a progress parameter (a 0-1 float).
  * @param {Function} complete Callback function when animation finishes.
  * @returns {Object} An animation object with a cancel function.
  */
-function animate(duration,step,complete){
+function _animate(duration,step,complete){
   const t = Date.now()
   let isRunning = true
   const fnRun = ()=>{
@@ -29,7 +29,7 @@ function animate(duration,step,complete){
     }
   }
 }
-export default Object.assign(animate,{
+export const animate = Object.assign(_animate,{
   linear: {
     none: k=>k
   }

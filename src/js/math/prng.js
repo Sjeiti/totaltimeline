@@ -137,8 +137,3 @@ function presetNumeralRecipes() {
   modulus = 2E32
   return returnValue
 }
-
-export default {
-	  random
-  ,rnd
-}

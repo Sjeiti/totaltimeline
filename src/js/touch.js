@@ -4,7 +4,7 @@
 /**
  * @namespace totaltimeline.touch
  */
-export default function touch(element, moveCallback, startCallback){
+export function touch(element, moveCallback, startCallback){
 
   const touchXLast = []
 

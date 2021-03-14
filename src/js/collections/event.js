@@ -3,19 +3,19 @@
  * @module event
  */
 // import {random} from '../math/prng'
-// import animate from '../animate'
-import model from '../model'
+// import {animate} from '../animate'
+import {entryShown} from '../model'
 import {getPercentage,getFragment} from '../util'
 
 const proto = {
   toString(){return '[event \''+this.info.name+'\', '+this.moment.value+' '+this.moment.type+']'}
   ,inside(is){
     if (!is&&this.element.classList.contains('selected')) {
-      model.entryShown.dispatch()
+      entryShown.dispatch()
     }
   }
   ///////////////////////////////////////
-  ,animate(startAgo,endAgo,callback){
+  ,animate(/*startAgo, endAgo, callback*/){
     console.log('event.animate',arguments) // todo: remove log
     // const startFrom = this.start.ago
     // const startDelta = startAgo - startFrom
@@ -45,7 +45,7 @@ const proto = {
  * @param {object} entry
  * @returns {event}
  */
-export default function event(moment,info,index,entry){
+export function event(moment, info, index, entry){
   const event = Object.create(proto,{
     moment: {value:moment}
     ,info: {value:info}
@@ -76,7 +76,7 @@ export default function event(moment,info,index,entry){
   timeElement.style.height = heightPercent // todo: less vars @eventIconSize
   timeElement.setAttribute('data-after',moment.toString()) // todo: better as textContent
 
-  model.entryShown.add(onEntryShown)
+  entryShown.add(onEntryShown)
 
   /**
    * Handles entryShown signal

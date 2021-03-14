@@ -1,20 +1,18 @@
 import {create} from './component'
-import time from '../time'
-import view from './'
+import {duration, UNIVERSE} from '../time'
+import {view} from './'
 import {getPercentage,stringToElement,clearChildren} from '../util'
-import model from '../model'
-import touch from '../touch'
-import key from '../signal/key'
-import resize from '../signal/resize'
-import mouseWheel from '../signal/mouseWheel'
+import {span,currentRange} from '../model'
+import {touch} from '../touch'
+import {key} from '../signal/key'
+import {resize} from '../signal/resize'
+import {mouseWheel} from '../signal/mouseWheel'
 
-export default create(
+create(
   'data-overview'
   ,{
     init(element){
 
-      const span = model.span
-      const range = model.range
       const body = document.body
       const elmSpan = stringToElement(`<div class="span">
 	<time>${span.start.toString()}</time>
@@ -55,7 +53,7 @@ export default create(
       elmRange.addEventListener('mousedown',onRangeMouseDownUp,false)
       // wheel
       mouseWheel.add(onWheel)
-      range.change.add(onRangeChange)
+      currentRange.change.add(onRangeChange)
       // touch
       elmRange.addEventListener('touchstart',onTouchStart,false)
       elmRange.addEventListener('touchend',onTouchEnd,false)
@@ -112,7 +110,7 @@ export default create(
         const offsetX = e.clientX
         mouseXOffsetDelta = offsetX-mouseXOffsetLast
         mouseXOffsetLast = offsetX
-        range.moveStart(range.start.ago - Math.round(mouseXOffsetDelta/spanWidth*span.duration))
+        currentRange.moveStart(currentRange.start.ago - Math.round(mouseXOffsetDelta/spanWidth*span.duration))
       }
 
       /**
@@ -132,17 +130,17 @@ export default create(
        */
       function onRangeChange(){
         Object.assign(rangeStyle,{
-          width: getPercentage(range.duration/span.duration)
-          ,left: getPercentage(1-range.start.ago/span.duration)
+          width: getPercentage(currentRange.duration/span.duration)
+          ,left: getPercentage(1-currentRange.start.ago/span.duration)
           ,backgroundImage: view.rangeGradient
         })
         //
         elmBefore.style.backgroundColor = view.colorFirst
         elmAfter.style.backgroundColor = view.colorLast
         //
-        elmTime.textContent = time.duration(range.duration,2)
-        elmTimeFrom.textContent = range.start.toString()
-        elmTimeTo.textContent = range.end.toString()
+        elmTime.textContent = duration(currentRange.duration,2)
+        elmTimeFrom.textContent = currentRange.start.toString()
+        elmTimeTo.textContent = currentRange.end.toString()
       }
 
       /**
@@ -186,7 +184,7 @@ export default create(
           }
           e.preventDefault()
         } else if (numTouches===2){
-          range.set(relativeOffset(touches[0]),relativeOffset(touches[1]))
+          currentRange.set(relativeOffset(touches[0]),relativeOffset(touches[1]))
           e.preventDefault()
         }
       }
@@ -217,7 +215,7 @@ export default create(
       function onElementChange(e){
         const {target} = e
         const {id} = target
-        range.lock = ['lockNone','lockStart','lockEnd'].indexOf(id)
+        currentRange.lock = ['lockNone','lockStart','lockEnd'].indexOf(id)
       }
 
       function rangeZoomTouch(touch){
@@ -231,8 +229,8 @@ export default create(
        */
       function rangeZoom(zoomin,mouseX){
         const rangeGrowRate = 0.01111*span.duration<<0
-        const start = range.start.ago
-        const end = range.end.ago
+        const start = currentRange.start.ago
+        const end = currentRange.end.ago
         // offset calculations
         const rangeL = elmRange.offsetLeft
         const rangeR = rangeL+elmRange.offsetWidth
@@ -246,7 +244,7 @@ export default create(
         let newEnd
         //
         if (!zoomin) {
-          if (start===time.UNIVERSE) {
+          if (start===UNIVERSE) {
             deltaLPart = 0
             deltaRPart = -1
           }
@@ -263,7 +261,7 @@ export default create(
           newStart = iHalf-1
           newEnd = iHalf
         }
-        range.set(newStart,newEnd)
+        currentRange.set(newStart,newEnd)
       }
 
       /**
@@ -271,7 +269,7 @@ export default create(
        * @param {number} x The amount of pixels to move.
        */
       function rangeMove(x){
-        range.moveStart(relativeOffset(x-mouseXOffset))
+        currentRange.moveStart(relativeOffset(x-mouseXOffset))
       }
 
       /**

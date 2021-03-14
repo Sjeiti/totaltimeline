@@ -1,7 +1,7 @@
 import {getPercentage} from '../util'
-import time from '../time'
-import color from '../math/color'
-import model from '../model'
+import {UNIVERSE, NOW} from '../time'
+import {color} from '../math/color'
+import {cssPrefix, currentRange} from '../model'
 
 /**
  * @name view
@@ -12,35 +12,35 @@ const light0 = light1 + (light2-light1)/2
 const lightA = 0.25*(light2-light1)
 
 const backgroundColors = [
-  {time:time.UNIVERSE,					        color:'#171B30'}//171B30
-  ,{time:time.UNIVERSE-light0+lightA,	color:'#585873'}//585873
-  ,{time:time.UNIVERSE-light0-lightA,	color:'#799193'}//CCE7E7
-  ,{time:Math.floor(0.8*time.UNIVERSE),	color:'#2E4346'}
-  ,{time:Math.floor(0.4*time.UNIVERSE),	color:'#657851'}
-  ,{time:time.NOW,					            color:'#D8945A'}
-  ,{time:time.NOW-1,				            color:'#F7C367'}
-  ,{time:-1E9,							            color:'#8A5246'}
-  ,{time:-9E9,							            color:'#460505'}
+  {time:UNIVERSE,					          color:'#171B30'}//171B30
+  ,{time:UNIVERSE-light0+lightA,	  color:'#585873'}//585873
+  ,{time:UNIVERSE-light0-lightA,	  color:'#799193'}//CCE7E7
+  ,{time:Math.floor(0.8*UNIVERSE),	color:'#2E4346'}
+  ,{time:Math.floor(0.4*UNIVERSE),	color:'#657851'}
+  ,{time:NOW,					              color:'#D8945A'}
+  ,{time:NOW-1,				              color:'#F7C367'}
+  ,{time:-1E9,							        color:'#8A5246'}
+  ,{time:-9E9,							        color:'#460505'}
 ]
 
 const viewProto = {
   toString(){return '[object View]'}
 }
 const writable = true
-const view = Object.create(viewProto,{
+export const view = Object.create(viewProto,{
   rangeGradient: {writable},
   colorFirst: {writable},
   colorLast: {writable}
 })
 
-model.range.change.add(handleRangeChange,-1)
-handleRangeChange(model.range)
+currentRange.change.add(handleRangeChange,-1)
+handleRangeChange(currentRange)
 
 // todo: document
 function handleRangeChange(range){
   const gradients = getGradient(range)
   const hasGradients = gradients.length!==0
-  view.rangeGradient = model.cssPrefix+'linear-gradient(left,'+gradients.map(a=>a.join(' ')).join(',')+')'
+  view.rangeGradient = cssPrefix+'linear-gradient(left,'+gradients.map(a=>a.join(' ')).join(',')+')'
   view.colorFirst = hasGradients?gradients[0][0]:0
   view.colorLast = hasGradients?gradients[gradients.length-1][0]:0
 }
@@ -92,5 +92,3 @@ function getAverageColor(last,current,pos,low){
 
   return [colorAvarage.toString(),(low?'0%':'100%')]
 }
-
-export default view

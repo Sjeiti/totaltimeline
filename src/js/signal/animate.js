@@ -1,4 +1,4 @@
-import createSignal from './'
+import {createSignal} from './'
 
 /**
  * Keyframe dispatcher using requestAnimationFrame for continuous animation.
@@ -8,7 +8,7 @@ import createSignal from './'
  * @requires iddqd.requestAnimationFrame
  * @todo: possibly stop when last signal listener is removed
  */
-export default createSignal((signal)=> {
+export const animate = createSignal((signal)=> {
   let deltaT = 0
 		 let millisCurrent
 		 let millisLast = Date.now()

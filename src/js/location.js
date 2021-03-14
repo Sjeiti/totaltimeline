@@ -3,16 +3,13 @@
  * @module location
  */
 
-import time from './time'
-import collections from './collections'
-import about from './collections/about'
-import model from './model'
-import content from './view/content'
+import {formatAnnum, unformatAnnum, UNIVERSE, NOW} from './time'
+import {collections} from './collections'
+import {about} from './collections/about'
+import {entryShown,currentRange} from './model'
+import {content} from './view/content'
 
 const history = window.history
-const formatAnnum = time.formatAnnum
-const entryShown = model.entryShown
-const visibleRange = model.range
 const pathname = location.pathname.substr(1)
 let locationOriginalPath = location.pathname
 const documentTitle = document.title
@@ -30,23 +27,23 @@ if (hash!==pathname) {
   hash = searchQuery
 }
 
-visibleRange.change.add(onRangeChange)
+currentRange.change.add(onRangeChange)
 window.addEventListener('popstate', onPopstate, false)
 entryShown.add(onEntryShown)
 
-visibleRange.set(time.UNIVERSE,time.NOW)
+currentRange.set(UNIVERSE,NOW)
 updated(hash)
 
 /**
  * Update location when range changes
  */
 function onRangeChange(){
-  if (visibleRange.start.ago===time.UNIVERSE&&visibleRange.end.ago===time.NOW) {
+  if (currentRange.start.ago===UNIVERSE&&currentRange.end.ago===NOW) {
     update()
   } else {
     const contentInstance = content.get()
     const currentEntry = contentInstance&&contentInstance.currentEntry
-    update(currentEntry,visibleRange)
+    update(currentEntry,currentRange)
   }
 }
 
@@ -62,7 +59,7 @@ function onPopstate() {
  * @param {collectionEntry} collectionEntry
  */
 function onEntryShown(collectionEntry){
-  update(collectionEntry,visibleRange)
+  update(collectionEntry,currentRange)
 }
 
 /**
@@ -88,19 +85,19 @@ function updated(path,hash){
     // Range
     if (pathLength>=2) {
       const isPathLength2 = pathLength===2
-      const agoStart = time.unformatAnnum(splitPath[isPathLength2?0:1])
-      const agoEnd = time.unformatAnnum(splitPath[isPathLength2?1:2])
+      const agoStart = unformatAnnum(splitPath[isPathLength2?0:1])
+      const agoEnd = unformatAnnum(splitPath[isPathLength2?1:2])
 
       // don't animate the very first time
       if (isFirstChange) {
-        visibleRange.set(agoStart,agoEnd)
+        currentRange.set(agoStart,agoEnd)
         isFirstChange = false
       } else {
-        visibleRange.animate(agoStart,agoEnd)// callback
+        currentRange.animate(agoStart,agoEnd)// callback
       }
     }
   } else {
-    visibleRange.animate(time.UNIVERSE,time.NOW)
+    currentRange.animate(UNIVERSE,NOW)
   }
 }
 
@@ -113,7 +110,7 @@ function showSlugEntry(slug){
   //////////////////////////////////
   if (!oSlugInst&&slug==='totaltimeline') {
     // todo: check distance before animating
-    visibleRange.animate(time.UNIVERSE,time.YEAR_NOW)
+    currentRange.animate(UNIVERSE,YEAR_NOW)
       .then(entryShown.dispatch.bind(entryShown,about))
   }
   //////////////////////////////////
@@ -167,7 +164,7 @@ function update(event,range){
  * @param {range} [range]
  */
 function setDocumentTitle(event,range){
-  document.title = `${event?`${event.info.name} | ${event.moment} | `:range?`${visibleRange.start} - ${visibleRange.end} | `:''}${documentTitle}`
+  document.title = `${event?`${event.info.name} | ${event.moment} | `:range?`${currentRange.start} - ${currentRange.end} | `:''}${documentTitle}`
 }
 
 function combine(...functions){

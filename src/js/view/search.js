@@ -1,11 +1,11 @@
 import {create} from './component'
 import {getFragment,clearChildren} from '../util'
-import collections from '../collections'
+import {collections} from '../collections'
 
 const writable = true
 const classNameVisible = 'visible'
 
-export default create(
+create(
   'data-search'
   ,{
     init(element){

@@ -85,7 +85,7 @@ function parseSelector(selector) {
  * @param {Object} rules
  * @returns {CSSStyleRule[]} The Array created by select
  */
-function changeRule(selector,rules) {
+export function changeRule(selector,rules) {
   return select(selector).set(rules)
 }
 
@@ -95,7 +95,7 @@ function changeRule(selector,rules) {
  * @param rules
  * @returns {CSSRule}
  */
-function addRule(selector,rules) {
+export function addRule(selector,rules) {
   let rulesString = ''
   forEach.call(rules,(val,prop)=>{rulesString+=prop+':'+val+';'})
   const sheet = styleSheets[0]
@@ -136,12 +136,12 @@ function rule(selector) {
  * @param styleProp
  * @returns {*|string}
  */
-function getStyle(el,styleProp) {
+export function getStyle(el,styleProp) {
   return el.currentStyle?el.currentStyle[styleProp]:document.defaultView.getComputedStyle(el,null).getPropertyValue(styleProp)
 }
 
 // todo: document
-function getSheetByMedia(type) {
+export function getSheetByMedia(type) {
   let sheet
   let i
   let j
@@ -154,12 +154,4 @@ function getSheetByMedia(type) {
     }
   }
   return sheet
-}
-
-export default {
-  select
-  ,changeRule
-  ,addRule
-  ,get: getStyle
-  ,getSheetByMedia
 }

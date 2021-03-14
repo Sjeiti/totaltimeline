@@ -9,7 +9,7 @@
 
 const FF = Math.pow(2,8)-1
 const rgb2int = (r,g,b)=>r<<16|g<<8|b
-const int2rgb = i=>[(i>>16)&FF,(i>>8)&FF,i&FF]
+// const int2rgb = i=>[(i>>16)&FF,(i>>8)&FF,i&FF]
 const int2hex = i=>'#'+i.toString(16).padStart(6,'0')
 const floatR = 0.241
 const floatG = 0.691
@@ -18,7 +18,7 @@ const brightness = c=>{
   const r = c.r/FF; const g = c.g/FF; const b = c.b/FF
   return r*r*floatR + g*g*floatG + b*b*floatB
 }
-const rgb2hsl = (r,g,b)=>{
+/*const rgb2hsl = (r,g,b)=>{
   const max = Math.max(r,g,b)
   const min = Math.min(r,g,b)
   const a = max+min
@@ -37,21 +37,19 @@ const rgb2hsl = (r,g,b)=>{
   }
   return {h,s,l}
 }
-const hue2rgb = (p,q,t)=>
-
-{
+const hue2rgb = (p,q,t)=>{
   if (t<0) t += 1
   if (t>1) t -= 1
   if (t<1/6) return p + (q-p)*6*t
   if (t<1/2) return q
   if (t<2/3) return p + (q-p)*(2/3-t)*6
   return p
-}
+}*/
 //
 const writable = true
 const proto = {
   set(...values){
-    const [r,g,b,a] = values
+    const [r,g,b/*,a*/] = values
     const numValues = values.length
     if (numValues===0){
       this.randomize()
@@ -59,7 +57,7 @@ const proto = {
       const type = typeof r
       if (type==='string') {
         if (r.match(/^rgb/gi)) {
-          setRgbString(r)
+          this.setRgbString(r)
         } else {
           this.setHex(r)
         }
@@ -87,7 +85,7 @@ const proto = {
     }
     return this.setInteger(parseInt(s,16))
   }
-  ,setRgbString(s){
+  ,setRgbString(/*s*/){
     const rgbm = v.match(/\d+/g)
     const rgb = rgbm.map(c=>parseInt(c,10))
     const [r,g,b] = rgb
@@ -165,7 +163,7 @@ function isColor(c){
   return Object.getPrototypeOf(c)===proto
 }
 
-export default function color(...values){
+export function color(...values){
   return Object.create(proto,{
     integer: {writable}
     ,r: {writable}

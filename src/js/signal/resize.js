@@ -1,4 +1,4 @@
-import createSignal from './'
+import {createSignal} from './'
 
 /**
  * Dispatched when the viewport resizes.<br/>
@@ -6,7 +6,7 @@ import createSignal from './'
  * @name resize
  * @type Signal
  */
-export default createSignal((signal)=> {
+export const resize = createSignal((signal)=> {
   const win = window
   const doc = document
 		 const docElm = doc.documentElement

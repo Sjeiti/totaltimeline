@@ -1,7 +1,7 @@
-import collection from './collection'
-import event from './event'
-import moment from '../time/moment'
-import eventInfo from '../time/eventInfo'
+import {collection} from './collection'
+import {event} from './event'
+import {moment} from '../time/moment'
+import {eventInfo} from '../time/eventInfo'
 import {getPercentage} from '../util'
 
 /**
@@ -9,7 +9,7 @@ import {getPercentage} from '../util'
  * @type collectionInstance
  * @name events
  */
-export default collection(
+export const events = collection(
   'events'
   ,'events.json'
   ,function(data){

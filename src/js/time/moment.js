@@ -25,19 +25,19 @@
  * @param {string} type
  * @returns {moment}
  */
-import time from './'
+import {YEAR_NOW, UNIVERSE, formatAnnum} from './'
 import {Signal} from 'signals'
 
 const SINCE = 'since'
 const AGO = 'ago'
 const YEAR = 'year'
 //
-const agoToYear =    value=>time.YEAR_NOW-value
-const agoToSince =   value=>time.UNIVERSE-value
-const yearToAgo =    value=>time.YEAR_NOW-value
-const yearToSince =  value=>time.UNIVERSE-value
-const sinceToAgo =   value=>time.UNIVERSE-value
-const sinceToYear =  value=>time.YEAR_NOW-(time.UNIVERSE-value)
+const agoToYear =    value=>YEAR_NOW-value
+const agoToSince =   value=>UNIVERSE-value
+const yearToAgo =    value=>YEAR_NOW-value
+const yearToSince =  value=>UNIVERSE-value
+const sinceToAgo =   value=>UNIVERSE-value
+const sinceToYear =  value=>YEAR_NOW-(UNIVERSE-value)
 //
 const proto = {
   set(value,dispatch=true){
@@ -59,7 +59,7 @@ const proto = {
     dispatch&&this.change.dispatch(this.ago)
     return this
   }
-  ,toString(){return time.formatAnnum(this.ago)}
+  ,toString(){return formatAnnum(this.ago)}
   ,clone(){return moment(this.ago)}
 }
 
@@ -67,7 +67,7 @@ const proto = {
  * @param {number} value The time value.
  * @param {string} [type=moment.AGO] Denotes what type of value is parsed: moment.AGO, moment.SINCE or moment.YEAR.
  */
-function moment(value,type=AGO){
+export function moment(value,type=AGO){
 
   const writable = true
   const inst = Object.create(proto,{
@@ -77,11 +77,9 @@ function moment(value,type=AGO){
     ,factory: {value: moment}
   })
   inst.set(value)
-  return inst
+  return Object.assign(inst,{
+    SINCE
+    ,AGO
+    ,YEAR
+  })
 }
-
-export default Object.assign(moment,{
-  SINCE
-  ,AGO
-  ,YEAR
-})

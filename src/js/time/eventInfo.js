@@ -31,7 +31,7 @@
  */
 import {slug} from '../util'
 
-export default function eventInfo(objectToParse){
+export function eventInfo(objectToParse){
   const writable = true
   const inst = Object.seal(Object.create({
     parse(o) {

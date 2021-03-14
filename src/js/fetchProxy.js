@@ -35,9 +35,3 @@ export function del(url,body){
   })
     .then(response=>response.json(),console.warn.bind(console,'error:'))
 }
-
-export default {
-  fetchFile
-  ,postForm
-  ,del
-}

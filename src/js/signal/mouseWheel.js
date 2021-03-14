@@ -1,4 +1,4 @@
-import createSignal from './'
+import {createSignal} from './'
 
 /**
  * Signal for mouseWheel.<br/>
@@ -6,7 +6,7 @@ import createSignal from './'
  * @name iddqd.signal.mouseWheel
  * @type Signal
  */
-export default createSignal((signal)=> {
+export const mouseWheel = createSignal((signal)=> {
   window.addEventListener('DOMMouseScroll',(e)=> {
     signal.dispatch(10*e.detail,e)
   },false)

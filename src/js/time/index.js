@@ -2,9 +2,9 @@
  * @name time
  */
 
-const YEAR_NOW = (new Date()).getFullYear()
-const UNIVERSE = 13798000000
-const NOW = 0
+export const YEAR_NOW = (new Date()).getFullYear()
+export const UNIVERSE = 13798000000
+export const NOW = 0
 //
 const space = ' '
 const annum = 'a,ka,Ma,Ga'.split(',')
@@ -77,20 +77,11 @@ export function unformatAnnum(formatted){
  * @param {number} round
  * @returns {string}
  */
-function duration(years,round){
+export function duration(years,round){
   // todo: rounding sometimes off: split at . truncate and join
   if (round===undefined) round = 0
   let i
   for (i = 0; years>1000 && (durationKeys.length>=(i + 2)); i++) years /= 1000
   const multiply = Math.pow(10,round)
   return (Math.round(years * multiply) / multiply) +space+ durationKeys[i] +space+ 'years'
-}
-
-export default {
-  YEAR_NOW
-  ,UNIVERSE
-  ,NOW
-  ,formatAnnum
-  ,unformatAnnum
-  ,duration
 }

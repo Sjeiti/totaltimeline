@@ -1,5 +1,5 @@
-import createSignal from './'
-import animate from './animate'
+import {createSignal} from './'
+import {animate} from './animate'
 
 /**
  * Wrapper namespace for keyboard signals.<br/>
@@ -32,7 +32,7 @@ const down = createSignal(initDown)
    */
 const up = createSignal(initUp)
 //
-const key = Object.assign([],{
+export const key = Object.assign([],{
   press: press
   ,down: down
   ,up: up
@@ -68,5 +68,3 @@ function initUp(signal){
 function keypress(){
   press.dispatch(key,lastKeyDownEvent)
 }
-
-export default key

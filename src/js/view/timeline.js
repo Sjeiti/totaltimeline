@@ -1,22 +1,20 @@
 import {create} from './component'
-import time from '../time'
-import view from './'
+import {view} from './'
 import {getFragment} from '../util'
-import collections from '../collections'
-import model from '../model'
-import touch from '../touch'
-import key from '../signal/key'
-import resize from '../signal/resize'
-import mouseWheel from '../signal/mouseWheel'
+import {collections} from '../collections'
+import {currentRange} from '../model'
+import {touch} from '../touch'
+import {key} from '../signal/key'
+import {resize} from '../signal/resize'
+import {mouseWheel} from '../signal/mouseWheel'
 
-export default create(
+create(
   'data-timeline'
   ,{
     init(element){
       /////////////////////////////////////////////////////
       /////////////////////////////////////////////////////
 
-      const range = model.range
       const body = document.body
       const elements = getFragment(`<time></time><time></time>
 <div class="before"></div><div class="after"></div>
@@ -56,8 +54,8 @@ export default create(
       // touch
       touch(element,onTouchMove)
       // range
-      range.change.add(onRangeChange)
-      range.change.add(moveBackgroundOverlay)
+      currentRange.change.add(onRangeChange)
+      currentRange.change.add(moveBackgroundOverlay)
 
       // Initialise view
       element.appendChild(elements)
@@ -73,7 +71,7 @@ export default create(
         viewH = element.offsetHeight
         viewL = element.offsetLeft
         clearTimeout(resizeTimeout)
-        resizeTimeout = setTimeout(collections.resize.bind(collections,viewW,viewH,range),200)
+        resizeTimeout = setTimeout(collections.resize.bind(collections,viewW,viewH,currentRange),200)
       }
 
       /**
@@ -109,7 +107,7 @@ export default create(
         mouseXOffsetDelta = offsetX-mouseXOffsetLast
         mouseXOffsetLast = offsetX
         if (mouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
-          range.moveStart(range.start.ago + Math.round(mouseXOffsetDelta/element.offsetWidth*range.duration))
+          currentRange.moveStart(currentRange.start.ago + Math.round(mouseXOffsetDelta/element.offsetWidth*currentRange.duration))
         }
       }
 
@@ -124,23 +122,23 @@ export default create(
           const scaleZoom = 0.1
           const isZoomin = direction>0
           const zoomin = isZoomin?1:-1
-          const start = range.start.ago
+          const start = currentRange.start.ago
           let newStart
           let newEnd
 
           if (key[16]) {
-            newStart = start + zoomin*Math.round(scaleMove*range.duration)
-            range.moveStart(newStart)
+            newStart = start + zoomin*Math.round(scaleMove*currentRange.duration)
+            currentRange.moveStart(newStart)
           } else {
-            const add = zoomin*Math.round(scaleZoom*range.duration)
+            const add = zoomin*Math.round(scaleZoom*currentRange.duration)
             // offset calculations
             const mouseX = e.clientX
             const left = (mouseX-viewL)/viewW
             const right = 1-left
             // new position
-            newStart = Math.round(range.start.ago - 0.5*left*add)
-            newEnd = Math.round(range.end.ago + 0.5*right*add)
-            range.set(newStart,newEnd)
+            newStart = Math.round(currentRange.start.ago - 0.5*left*add)
+            newEnd = Math.round(currentRange.end.ago + 0.5*right*add)
+            currentRange.set(newStart,newEnd)
           }
         }
       }
@@ -149,14 +147,14 @@ export default create(
        * When the range changes all view element are recalculated
        */
       function onRangeChange(){ // todo: possibly refactor since also called by collections -> col.dataLoaded
-        elmTimeFrom.innerText = range.start.toString()
-        elmTimeTo.innerText = range.end.toString()
+        elmTimeFrom.innerText = currentRange.start.toString()
+        elmTimeTo.innerText = currentRange.end.toString()
         element.style.backgroundImage = view.rangeGradient
         //
         elmBefore.style.backgroundColor = view.colorFirst
         elmAfter.style.backgroundColor = view.colorLast
         //
-        collections.render(range)
+        collections.render(currentRange)
       }
 
       /**
@@ -170,16 +168,16 @@ export default create(
       function onTouchMove(e,numTouches,touches,numLastTouches,lastTouches) {
         if (numTouches===numLastTouches) {
           if (numTouches===1) {
-            range.moveStart(range.start.ago+(touches[0]-lastTouches[0])*(range.duration/element.offsetWidth))
+            currentRange.moveStart(currentRange.start.ago+(touches[0]-lastTouches[0])*(currentRange.duration/element.offsetWidth))
             e.preventDefault()
           } else if (numTouches===2) {
             // reverse interpolation to find new start and end points
-            const iRangeDuration = range.duration
+            const iRangeDuration = currentRange.duration
             //
             const touch1Last = lastTouches[0]
             const touch2Last = lastTouches[1]
-            const touch1LastTime = range.start.ago - (touch1Last/viewW)*iRangeDuration
-            const touch2LastTime = range.end.ago + (1-touch2Last/viewW)*iRangeDuration
+            const touch1LastTime = currentRange.start.ago - (touch1Last/viewW)*iRangeDuration
+            const touch2LastTime = currentRange.end.ago + (1-touch2Last/viewW)*iRangeDuration
             const touchWLast = touch2Last-touch1Last
             const touchLastDuration = (touchWLast/viewW)*iRangeDuration
             //
@@ -199,7 +197,7 @@ export default create(
             const newStart =	Math.floor(touch1LastTime + part1WDuration)
             const newEnd =		Math.floor(touch2LastTime - part2WDuration)
 
-            range.set(
+            currentRange.set(
               newStart
               ,newEnd
             )

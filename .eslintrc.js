@@ -18,6 +18,9 @@ module.exports = {
     'indent': ['error', 2],
     'no-var': 'error',
     'prefer-const': 'error',
-    'prefer-arrow-callback': 'error'
+    'prefer-arrow-callback': 'error',
+    'no-unused-expressions': ['error', { 'allowShortCircuit': true }],
+    'no-unused-vars': 'error'/*,
+    'no-default-export': 'error'*/
   }
 }

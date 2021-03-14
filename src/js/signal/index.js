@@ -28,7 +28,7 @@ import Signal from 'signals'
  * @todo add window.addEventListener('popstate',handleCloseOverlay);
  * @todo is !createNow premature optimization?
  */
-export default function createSignal(init,createNow){
+export function createSignal(init,createNow){
   const signal = new Signal()
 		 const fnTmpAdd = signal.add
 		 const fnTmpAddOnce = signal.addOnce

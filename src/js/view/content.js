@@ -5,22 +5,21 @@
 
 import {create} from './component'
 import {stringToElement,clearChildren} from '../util'
-import model from '../model'
-import style from '../style'
+import {currentRange, entryShown, editEvent, api} from '../model'
+import {select} from '../style'
 import {formatAnnum} from '../time'
-import collections from '../collections'
+import {collections} from '../collections'
 
 const writable = true
 
-export default create(
+export const content = create(
   'data-content'
   ,{
     init(element){
       const that = this
       //
-      const visibleRange = model.range
       const classNameReveal = 'reveal'
-      const contentStyle = style.select('[data-content]')
+      const contentStyle = select('[data-content]')
       const elmContentWrapper = stringToElement('<div class="content"></div>')
       const fragment = document.createDocumentFragment()
       const flexGrowPrefixes = {
@@ -31,7 +30,7 @@ export default create(
       }
 
       // Initialise event listeners (and signals).
-      model.entryShown.add(onEntryShown)
+      entryShown.add(onEntryShown)
       element.addEventListener('scroll',onContentScroll)
       // resize.add(onContentScroll)
 
@@ -41,8 +40,8 @@ export default create(
       // close view
       element.addEventListener('click',({target})=>{
         if (target.nodeName==='BUTTON') {
-          target.hasAttribute('data-close')&&model.entryShown.dispatch()
-          target.hasAttribute('data-edit')&&model.editEvent.dispatch(this.currentEntry)
+          target.hasAttribute('data-close')&&entryShown.dispatch()
+          target.hasAttribute('data-edit')&&editEvent.dispatch(this.currentEntry)
         }
       })
 
@@ -63,11 +62,11 @@ export default create(
           if (entry.moment) {
             time = formatAnnum(entry.moment.ago,2,true,true)
             // scroll if entry is not within view
-            if (!visibleRange.coincides(entry.moment)&&animateIfNeeded) {
+            if (!currentRange.coincides(entry.moment)&&animateIfNeeded) {
               // zoom the entry with to n-closest entries
               const range = collections.getEntryRange(entry, 2, 2)
               const {entryShown} = model
-              range && visibleRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
+              range && currentRange.animate(...range).then(entryShown.dispatch.bind(entryShown, entry, false))
             }
           } else if (entry.range) {
             time = `${formatAnnum(entry.range.start.ago,2,true,true)} to ${formatAnnum(entry.range.end.ago,2,true,true)}`
@@ -111,9 +110,9 @@ export default create(
        * @param {number} value
        */
       function setContentGrow(value){
-        for (const s in flexGrowPrefixes) {
-          flexGrowPrefixes[s] = value
-        }
+        Object.keys(flexGrowPrefixes).forEach(key=>{
+          flexGrowPrefixes[key] = value
+        })
         contentStyle.set(flexGrowPrefixes)
       }
 
@@ -133,7 +132,7 @@ export default create(
             <h3>${name}</h3>
             <time>${time}</time>
             <button class="icn-cross" data-close></button>
-            ${model.api?'<button class="icn-pencil" data-edit></button>':''}
+            ${api.exists?'<button class="icn-pencil" data-edit></button>':''}
           </header>
           <img alt="${name}" src="${img}"/>
           ${text}

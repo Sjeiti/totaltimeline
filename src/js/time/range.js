@@ -1,6 +1,6 @@
-import moment from './moment'
-import animate from '../animate'
-import time from './'
+import {moment} from './moment'
+import {animate} from '../animate'
+import {UNIVERSE, NOW} from './'
 import {Signal} from 'signals'
 
 /**
@@ -117,10 +117,10 @@ const proto = {
 
   ,set lock(type){
     if (type===lock.START) {
-      this.animate(time.UNIVERSE,this.end.ago)
+      this.animate(UNIVERSE,this.end.ago)
         .then(()=>(this._lock = type))
     } else if (type===lock.END) {
-      this.animate(this.start.ago,time.NOW)
+      this.animate(this.start.ago,NOW)
         .then(()=>(this._lock = type))
     } else {
       this._lock = lock.NONE
@@ -179,7 +179,7 @@ const proto = {
  * @param {moment} max
  * @returns {timeRange}
  */
-function range(start,end,min,max){
+export function range(start,end,min,max){
   // todo: moment.types should be the same
   const writable = true
   const inst = Object.create(proto,{
@@ -199,9 +199,5 @@ function range(start,end,min,max){
   inst._setDuration()
   inst.start.change.add(inst._onChange.bind(inst))
   inst.end.change.add(inst._onChange.bind(inst))
-  return inst
+  return Object.assign(inst,{lock})
 }
-
-export default Object.assign(range,{
-  lock
-})

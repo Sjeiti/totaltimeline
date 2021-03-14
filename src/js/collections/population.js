@@ -6,7 +6,7 @@ import {getMinMax, getMap} from '../util'
  * @type collectionInstance
  * @name temperature
  */
-export default graphCollection(
+graphCollection(
   'Hyde-3.1-population.csv'
   ,(data)=> {
 

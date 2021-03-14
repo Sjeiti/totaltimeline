@@ -4,7 +4,7 @@ import {getFragment} from '../util'
 const writable = true
 let oldLog
 
-export default create(
+create(
   'data-console'
   ,{
     init(element){

@@ -1,8 +1,8 @@
-import event from './event'
-import eventInfo from '../time/eventInfo'
-import moment from '../time/moment'
+import {event} from './event'
+import {eventInfo} from '../time/eventInfo'
+import {moment} from '../time/moment'
 
-export default event(moment(0),eventInfo({
+export const about = event(moment(0),eventInfo({
   name: 'totaltimeline',
   explanation: `<p>TotalTimeLine is a timeline of everything. It is an <a href="https://github.com/Sjeiti/totaltimeline">open source project</a> that tries to make <a href="#homo">people</a> aware of their insignificance.</p>
 <p>The depicted events are astronomical events, natural events or major accomplishments in the history of human kind.<br/>

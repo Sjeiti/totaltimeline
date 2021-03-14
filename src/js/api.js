@@ -1,11 +1,11 @@
 
-import model from './model'
+import {editEvent,api} from './model'
 import {stringToElement} from './util'
 import {postForm,del} from './fetchProxy'
-import event from './collections/event'
-import events from './collections/events'
-import moment from './time/moment'
-import eventInfo from './time/eventInfo'
+import {event} from './collections/event'
+import {events} from './collections/events'
+import {moment} from './time/moment'
+import {eventInfo} from './time/eventInfo'
 
 const noop = ()=>{}
 const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
@@ -15,13 +15,13 @@ fetch('/api')
   .then(response=>response.json(),noop)
   .then(data=>{
     if (data.success) {
-      model.api = true
+      api.exists = true
       initApi()
     }
   },noop)
 
 function initApi(){
-  model.editEvent.add(onEditEvent)
+  editEvent.add(onEditEvent)
   // get list of available icons
   Array.from(document.styleSheets).forEach(sheet=>{
     Array.from(sheet.cssRules).forEach(rule=>{

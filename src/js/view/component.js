@@ -85,7 +85,7 @@ export function of(element){
  * @private
  */
 function initComponents(rootElement,childOfAttr){
-  for (const attr in componentFactories) {
+  Object.keys(componentFactories).forEach(attr=>{
     const elements = Array.from(rootElement.querySelectorAll(`[${attr}]`))
     const isRecursive = attr===childOfAttr&&elements.length
     if (isRecursive) {
@@ -94,7 +94,7 @@ function initComponents(rootElement,childOfAttr){
     } else {
       elements.map(element=>initElement(element,attr))
     }
-  }
+  })
 }
 
 /**
@@ -138,14 +138,12 @@ function initEvents(){
  * @private
  */
 function dispatchOnInit(){
-  for (const instance of instances.values()) {
-    instance.onInit&&instance.onInit()
-  }
+  Array.from(instances.values()).forEach(instance=>instance.onInit?.())
 }
 
 /**
  * Global event handler proxy delegating events to subscribed components
- * @param {BaseComponent[]} list
+ * @param {object[]} list (BaseComponent??)
  * @param {function} handler
  * @param {Event} e
  * @private
@@ -160,10 +158,4 @@ function onEvent(list,handler,e){
   list.forEach(comp=>{
     parents.includes(comp.element)&&comp[handler](e)
   })
-}
-
-export default {
-  create
-  ,initialise
-  ,of
 }

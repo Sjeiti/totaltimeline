@@ -16,7 +16,7 @@ const itemSlugMap = new Map()
 const assignableArrayPrototype = assignable(Array.prototype)
 //
 const writable = true
-const collections = Object.create(Object.assign({
+export const collections = Object.create(Object.assign({
   /**
      * Adds a new collection type to the timeline.
      * @name collections.add
@@ -149,5 +149,3 @@ const collections = Object.create(Object.assign({
 })
 
 collections.dataLoaded.add(collections._onCollectionDataLoaded)
-
-export default collections

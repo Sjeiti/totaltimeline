@@ -1,6 +1,6 @@
-import collections from './'
+import {collections} from './'
 import Signal from 'signals'
-import model from '../model'
+import {entryShown} from '../model'
 import {fetchFile} from '../fetchProxy'
 import {assignable} from '../util'
 
@@ -79,7 +79,7 @@ const collectionViewInstancePrototype = Object.assign({
   ,_onWrapperClick(e) {
     const target = e.target
 		  const targetModel = target.model
-    targetModel&&targetModel.info&&model.entryShown.dispatch(targetModel)
+    targetModel&&targetModel.info&&entryShown.dispatch(targetModel)
   }
 },assignableArrayPrototype)
 
@@ -92,7 +92,7 @@ const collectionViewInstancePrototype = Object.assign({
  * @param {collectionRender} render The method that populates the collections.
  * @returns {collectionInstance} Collection instance object.
  */
-export default function collection(slug,dataFileName,callback,render){
+export function collection(slug,dataFileName,callback,render){
   return collections.add(Object.create(collectionViewInstancePrototype,{
     length: {value:0,writable:true}
     ,name: {value:slug}

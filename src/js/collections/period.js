@@ -1,5 +1,5 @@
 
-import model from '../model'
+import {entryShown, currentRange} from '../model'
 import {getFragment} from '../util'
 
 const proto = {
@@ -17,7 +17,7 @@ const proto = {
  * @param {eventInfo} info
  * @param {number} offset
  */
-export default function period(range,info,offset){
+export function period(range,info,offset){
 
   const period = Object.create(proto,{
     range: {value:range}
@@ -28,7 +28,7 @@ export default function period(range,info,offset){
   })
 
   period.element.querySelector('h3').model = period
-  model.entryShown.add(onEntryShown) // todo: not very efficient
+  entryShown.add(onEntryShown) // todo: not very efficient
 
   /**
    * Handles entryShown signal
@@ -37,7 +37,7 @@ export default function period(range,info,offset){
   function onEntryShown(entry){
     const isEntry = entry&&entry.info===info||false
     period.element.classList.toggle('selected',isEntry)
-    isEntry&&model.range.animate(range.start.ago,range.end.ago)
+    isEntry&&currentRange.animate(range.start.ago,range.end.ago)
   }
 
   return period

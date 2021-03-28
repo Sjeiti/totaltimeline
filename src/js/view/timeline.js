@@ -7,23 +7,22 @@ import {touch} from '../touch'
 import {key} from '../signal/key'
 import {resize} from '../signal/resize'
 import {mouseWheel} from '../signal/mouseWheel'
+import {lock} from '../time/range'
 
 create(
   'data-timeline'
   ,{
     init(element){
-      /////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////
 
       const body = document.body
       const elements = getFragment(`<time></time><time></time>
 <div class="before"></div><div class="after"></div>
 <div class="overlay"></div>`)
       const elmOverlay = elements.querySelector('.overlay')
-      const elmTimeFrom = elements.querySelector('time')//document.createElement('time')
-      const elmTimeTo = elements.querySelector('time:nth-child(2)')//document.createElement('time')
-      const elmBefore = elements.querySelector('.before')//.createElement('div')
-      const elmAfter = elements.querySelector('.after')//document.createElement('div')
+      const elmTimeFrom = elements.querySelector('time')
+      const elmTimeTo = elements.querySelector('time:nth-child(2)')
+      const elmBefore = elements.querySelector('.before')
+      const elmAfter = elements.querySelector('.after')
 
       let backgroundPos = 0
       let viewW
@@ -100,21 +99,21 @@ create(
 
       /**
        * Handles move event and moves mRange if the mouse is down.
-       * @param e
+       * @param {MouseEvent} e
        */
       function handleDocumentMouseMove(e){
         const offsetX = e.clientX
         mouseXOffsetDelta = offsetX-mouseXOffsetLast
         mouseXOffsetLast = offsetX
         if (mouseXOffsetDelta!==0) { // otherwise stuff gets re-added due to inefficient population (causing click events not to fire)
-          currentRange.moveStart(currentRange.start.ago + Math.round(mouseXOffsetDelta/element.offsetWidth*currentRange.duration))
+          moveOrSetCurrentRange(Math.round(mouseXOffsetDelta/element.offsetWidth*currentRange.duration))
         }
       }
 
       /**
        * Handles the wheel event to zoom or move mRange.
        * @param {number} direction Corresponds to wheelDelta
-       * @param {Event} e The WheelEvent
+       * @param {WheelEvent} e The WheelEvent
        */
       function onWheel(direction,e){
         if (isOver) {
@@ -168,7 +167,7 @@ create(
       function onTouchMove(e,numTouches,touches,numLastTouches,lastTouches) {
         if (numTouches===numLastTouches) {
           if (numTouches===1) {
-            currentRange.moveStart(currentRange.start.ago+(touches[0]-lastTouches[0])*(currentRange.duration/element.offsetWidth))
+            moveOrSetCurrentRange((touches[0] - lastTouches[0]) * (currentRange.duration / element.offsetWidth))
             e.preventDefault()
           } else if (numTouches===2) {
             // reverse interpolation to find new start and end points
@@ -210,20 +209,35 @@ create(
         }
       }
 
-      // todo: document
+      /**
+       * Move the current range unless it is locked
+       * @param {number} byAgo
+       */
+      function moveOrSetCurrentRange(byAgo){
+      	if (currentRange.lock!==lock.NONE) {
+          currentRange.lock===lock.END
+            &&currentRange.set(currentRange.start.ago + byAgo, currentRange.end.ago)
+            ||currentRange.set(currentRange.start.ago, currentRange.end.ago + byAgo)
+        } else {
+          currentRange.moveStart(currentRange.start.ago + byAgo)
+        }
+      }
+
+      /**
+       * Move the background overlay
+       * @param {timeRange} range
+       * @param {timeRange} oldrange
+       */
       function moveBackgroundOverlay(range,oldrange){
         const currentDuration = range.duration
         const rangeCenter = range.end.ago + currentDuration/2
         const oldRangeCenter = oldrange.end.ago + oldrange.duration/2
         const deltaCenter = rangeCenter - oldRangeCenter
         const offset = deltaCenter/currentDuration*viewW
-
         // background-size is contain so mod by viewH to prevent errors
         backgroundPos = (backgroundPos + Math.round(offset))%viewH
         elmOverlay.style.backgroundPosition = backgroundPos+'px 0'
       }
-      /////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////
     }
   }
 )

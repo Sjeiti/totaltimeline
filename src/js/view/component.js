@@ -32,10 +32,10 @@ const baseProperties = {
 /**
  * Create a component factory bound to an attribute
  * @param {string} componentAttribute
- * @param {function} componentPrototype
- * @param {function} componentProperties
+ * @param {object} componentPrototype
+ * @param {object} [componentProperties={}]
  */
-export function create(componentAttribute,componentPrototype,componentProperties){
+export function create(componentAttribute,componentPrototype,componentProperties={}){
   if (componentFactories[componentAttribute]) {
     throw new Error(`Component with attribute '${componentAttribute}' already initialised`)
   } else {
@@ -48,7 +48,7 @@ export function create(componentAttribute,componentPrototype,componentProperties
     const proto = Object.assign(componentPrototype||{},basePrototype,{
       toString: ()=>`[object ${name}]`
     })
-    const props = Object.assign(componentProperties||{},baseProperties)
+    const props = Object.assign(componentProperties,baseProperties)
     componentFactories[componentAttribute] = (element,options)=>{
       const inst = Object.create(proto,props)._init(element,options)
       inst.init&&inst.init(element,options)

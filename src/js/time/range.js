@@ -19,11 +19,13 @@ import {Signal} from 'signals'
  * @property {function} factory Direct link back to the original factory
  * @property {number} lock
  */
-const lock = {
+
+export const lock = {
   NONE: 0
   ,START: 1
   ,END: 2
 }
+
 const proto = {
   toString(){return '[object range, '+this.start.toString()+' to '+this.end.toString()+']'}
 
@@ -89,10 +91,10 @@ const proto = {
   }
 
   /**
-     * todo:document
-     * @param {moment|range} time
-     * @returns {boolean}
-     */
+   * Test if range coincides with a time or range
+   * @param {moment|range} time
+   * @returns {boolean}
+   */
   ,coincides(time){
     let isCoinciding = false
     if (time.factory===moment) {
@@ -110,7 +112,10 @@ const proto = {
     return isCoinciding
   }
 
-  // todo: document... maybe remove
+  /**
+   * Clone the range
+   * @return {timeRange}
+   */
   ,clone(){
     return range(this.start.clone(),this.end.clone())
   }

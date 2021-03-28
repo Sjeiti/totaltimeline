@@ -61,11 +61,10 @@ export function event(moment, info, index, entry){
   const eventElement = wrapper.querySelector('.event')
   const titleElement = wrapper.querySelector('h3')
   const timeElement = wrapper.querySelector('time')
-  //
+
   const top = 0.15 + 0.7*((index * (137.5/360))%1)
   const topPercent = getPercentage(top)
   const heightPercent = getPercentage(1-top)
-  //
 
   eventElement.model = event
   eventElement.style.top = topPercent

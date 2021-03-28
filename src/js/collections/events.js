@@ -1,6 +1,6 @@
 import {collection} from './collection'
 import {event} from './event'
-import {moment} from '../time/moment'
+import {moment, SINCE, YEAR} from '../time/moment'
 import {eventInfo} from '../time/eventInfo'
 import {getPercentage} from '../util'
 
@@ -13,13 +13,13 @@ export const events = collection(
   'events'
   ,'events.json'
   ,function(data){
-    //ago, since, year, name, example, exclude, importance, explanation, link, accuracy, remark
     data.forEach((entry,index)=> {
-      //console.log('event',getProp(entry,'name'),getProp(entry,'ago'),getProp(entry,'ago',true)); // log
+
       const ago = parseInt(entry.ago,10)
       const since = parseInt(entry.since,10)
       const year = parseInt(entry.year,10)
-      const entryMoment = ago?moment(ago):(since?moment(since,moment.SINCE):year&&moment(year,moment.YEAR))
+
+      const entryMoment = ago?moment(ago):(since?moment(since,SINCE):year&&moment(year,YEAR))
       const isExcluded = entry.exclude==='1'
       if (entryMoment&&!isExcluded) {
         this.push(event(

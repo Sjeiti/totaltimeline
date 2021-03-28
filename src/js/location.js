@@ -3,7 +3,7 @@
  * @module location
  */
 
-import {formatAnnum, unformatAnnum, UNIVERSE, NOW} from './time'
+import {formatAnnum, unformatAnnum, UNIVERSE, NOW, YEAR_NOW} from './time'
 import {collections} from './collections'
 import {about} from './collections/about'
 import {entryShown,currentRange} from './model'
@@ -109,7 +109,7 @@ function showSlugEntry(slug){
   //////////////////////////////////
   if (!oSlugInst&&slug==='totaltimeline') {
     // todo: check distance before animating
-    currentRange.animate(UNIVERSE,YEAR_NOW)
+    currentRange.animate(UNIVERSE, YEAR_NOW)
       .then(entryShown.dispatch.bind(entryShown,about))
   }
   //////////////////////////////////

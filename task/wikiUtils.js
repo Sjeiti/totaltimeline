@@ -143,6 +143,7 @@ function getImageThumb(fileName){
 }
 
 function getWikiJson(url, json=true){
+  const fetch = require('node-fetch')
   return fetch(url).then(response=>response.json())
   /*return new Promise((resolve,reject)=>{
     request({url,json}, (error, response, body)=>{

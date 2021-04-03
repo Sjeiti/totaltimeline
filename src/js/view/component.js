@@ -83,7 +83,7 @@ export function of(element){
  * @todo childOfAttr should be array of all recursed attrs
  * @private
  */
-function initComponents(rootElement,childOfAttr){
+export function initComponents(rootElement,childOfAttr){
   Object.keys(componentFactories).forEach(attr=>{
     const elements = Array.from(rootElement.querySelectorAll(`[${attr}]`))
     const isRecursive = attr===childOfAttr&&elements.length
@@ -94,6 +94,7 @@ function initComponents(rootElement,childOfAttr){
       elements.map(element=>initElement(element,attr))
     }
   })
+  return rootElement
 }
 
 /**

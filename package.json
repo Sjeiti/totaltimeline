@@ -7,8 +7,8 @@
   "scripts": {
     "start": "run-p build serve",
     "build": "run-s clean \"webpack -- --env development --watch\"",
-    "build:prod": "run-s clean icomoon \"webpack -- --env production\" build:sitemap",
-    "build:unzip": "unzip src/style/totaltimeline.zip temp/icomoon",
+    "build:prod": "run-s clean \"webpack -- --env production\" build:sitemap",
+    "build:unzip": "unzip src/style/icomoon.zip temp/icomoon",
     "build:sitemap": "node task/sitemap",
     "webpack": "npx webpack --config webpack.config.js",
     "lint": "eslint src/js/**/*.js",
@@ -39,6 +39,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/preset-env": "^7.13.10",
+    "@emmetio/expand-abbreviation": "^0.7.3",
     "adm-zip": "^0.5.4",
     "adm-zip-cli": "^1.0.0",
     "autoprefixer": "^10.2.5",

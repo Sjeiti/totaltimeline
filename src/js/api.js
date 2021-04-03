@@ -6,10 +6,14 @@ import {event} from './collections/event'
 import {events} from './collections/events'
 import {moment} from './time/moment'
 import {eventInfo} from './time/eventInfo'
+import {initComponents} from "./view/component";
+import {parentQuerySelector} from "./utils/html";
 
 const noop = ()=>{}
 const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
 const eventLists = { category: [], icon: [] }
+
+const initString = s=>initComponents(stringToElement(s))
 
 fetch('/api')
   .then(response=>response.json(),noop)
@@ -47,8 +51,8 @@ function onEditEvent(event){
     }
     inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${(event.entry[prop]||'').replace(/(["<>\n])/g,'\\$1')||''}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
   })
-  const element = stringToElement(`<div class="modal"><div class="modal-content">
-  <button class="btn-icon icn-cross float-right" data-close></button>
+  const element = initString(`<div class="modal"><div class="modal-content">
+  <button class="btn-icon float-right" data-close><svg data-icon="cross"></svg></button>
   <h4>Edit event</h4>
   <form method="post" action="/api/events">
     ${inputs.join('')}
@@ -75,11 +79,13 @@ function onSubmit(e){
     })
 }
 
-function onClick(element,{target}){
-  if (target.nodeName==='BUTTON') {
-    target.hasAttribute('data-close')&&document.body.removeChild(element)
-    ||target.hasAttribute('data-new')&&newEvent()
-    ||target.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
+function onClick(element,e){
+  const {target} = e
+  const button = parentQuerySelector(target, 'button', true)
+  if (button) {
+    button.hasAttribute('data-close')&&document.body.removeChild(element)
+    ||button.hasAttribute('data-new')&&newEvent()
+    ||button.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
   }
 }
 

@@ -3,8 +3,7 @@ import {parseOptions} from '../util'
 /**
  * A component factory
  */
-const
-  componentFactories = {}
+const componentFactories = {}
 const instances = new Map()
 const body = document.body
 const eventNames = 'mousedown,mouseup,click,dblclick,submit,focus,blur,keydown,keyup,keypress'.split(/,/g)

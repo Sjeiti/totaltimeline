@@ -139,6 +139,7 @@ if (sFontDest) {
     console.log('\t', fileName); // log
     var sTargetFile = sFontDest + fileName;
     if (fs.existsSync(sTargetFile)) fs.unlinkSync(sTargetFile);
-    fs.linkSync(sFontsDir + fileName, sTargetFile);
+    //fs.linkSync(sFontsDir + fileName, sTargetFile);
+    fs.copyFileSync(sFontsDir + fileName, sTargetFile)
   });
 }

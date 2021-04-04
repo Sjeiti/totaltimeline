@@ -1,13 +1,14 @@
 
-import {editEvent,api} from './model'
+import {editEvent,newEvent} from './model'
 import {stringToElement} from './util'
 import {postForm,del} from './fetchProxy'
 import {event} from './collections/event'
 import {events} from './collections/events'
 import {moment} from './time/moment'
 import {eventInfo} from './time/eventInfo'
-import {initComponents} from "./view/component";
-import {parentQuerySelector} from "./utils/html";
+import {initComponents} from "./view/component"
+import {parentQuerySelector} from "./utils/html"
+import {ENV} from './config'
 
 const noop = ()=>{}
 const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
@@ -15,17 +16,13 @@ const eventLists = { category: [], icon: [] }
 
 const initString = s=>initComponents(stringToElement(s))
 
-fetch('/api')
+ENV.development&&fetch('/api')
   .then(response=>response.json(),noop)
-  .then(data=>{
-    if (data.success) {
-      api.exists = true
-      initApi()
-    }
-  },noop)
+  .then(data=>data.success&&initApi(),noop)
 
 function initApi(){
   editEvent.add(onEditEvent)
+  newEvent.add(onNewEvent)
   // get list of available icons
   Array.from(document.styleSheets).forEach(sheet=>{
     Array.from(sheet.cssRules).forEach(rule=>{
@@ -84,7 +81,7 @@ function onClick(element,e){
   const button = parentQuerySelector(target, 'button', true)
   if (button) {
     button.hasAttribute('data-close')&&document.body.removeChild(element)
-    ||button.hasAttribute('data-new')&&newEvent()
+    ||button.hasAttribute('data-new')&&onNewEvent()
     ||button.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
   }
 }
@@ -94,7 +91,7 @@ function reload(){
   window.location.reload()
 }
 
-function newEvent(){
+function onNewEvent(){
   onEditEvent(event(
     moment(0)
     ,eventInfo()//.parse(entry)

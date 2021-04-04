@@ -5,11 +5,12 @@
 
 import {create, initComponents} from './component'
 import {stringToElement,clearChildren} from '../util'
-import {currentRange, entryShown, editEvent, api} from '../model'
+import {currentRange, entryShown, editEvent} from '../model'
 import {select} from '../style'
 import {formatAnnum} from '../time'
 import {collections} from '../collections'
-import {parentQuerySelector} from "../utils/html";
+import {parentQuerySelector} from '../utils/html'
+import {ENV} from '../config'
 
 const writable = true
 
@@ -136,7 +137,7 @@ export const content = create(
             <h3>${name}</h3>
             <time>${time}</time>
             <button data-close><svg data-icon="cross"></svg></button>
-            ${api.exists?'<button data-edit><svg data-icon="pencil"></svg></button>':''}
+            ${ENV.development?'<button data-edit><svg data-icon="pencil"></svg></button>':''}
           </header>
           <img alt="${name}" src="${img}"/>
           ${text}

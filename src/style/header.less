@@ -15,15 +15,13 @@
     text-transform: uppercase;
     transform: translateY(10%);
   }
-  /*nav {
-    font: 400 1rem/1.6rem 'Yanone Kaffeesatz', sans-serif;
-    line-height: @headerHeight;
-    a { margin-left: .5rem; }
-  }*/
+}
+
+[data-new] {
+  flex: 0 0 @headerHeight;
 }
 
 [data-search] {
-  position: relative;
   height: @headerHeight;
   input {
     float: right;
@@ -57,39 +55,55 @@
   }
 }
 
-[data-collection-menu] {
+[data-config] {
   position: relative;
-  z-index: 999;
+  flex: 0 0 @headerHeight;
+  z-index: 9999;
   >label {
     display: block;
-    padding: 0 1rem;
     background-color: #F8F8F8;
     box-shadow: 0 -1px 2px fade(black, 30%) inset;
+    //color: @colorAnchor;
+  }
+  svg {
+    fill: #666;
+    width: 1rem;
+    height: 1rem;
+    margin: 0.3rem 0 0 0.3rem;
+  }
+  input {
+    &+*{
+      position: absolute;
+      right: 0;
+      top: @headerHeight;
+      z-index: 999;
+      padding: 0.25rem 1rem 1rem;
+      transform: translateX(100%);
+      transition: transform 200ms ease-out;
+      background-color: white;
+    }
+    &:checked+* {
+      transform: translateX(0);
+    }
   }
   ul {
     padding: 0 0 0 1rem;
     list-style: none;
-    background-color: white;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 200ms ease-out;
-  }
-  input:checked+ul {
-    max-height: 4rem;
   }
   li {
     padding: 0 1rem 0 0;
+    white-space: nowrap;
   }
   input {
     transform: translateY(0.15rem);
   }
   //@media only screen and (min-device-width: 768px) {
-  @media only screen and (min-width: 768px) {
+  /*@media only screen and (min-width: 768px) {
     >label { display: none; }
     ul {
       max-height: none;
       text-align: right;
     }
     li { display: inline-block; }
-  }
+  }*/
 }

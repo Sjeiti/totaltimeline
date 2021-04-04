@@ -8,7 +8,7 @@ import './view/overview'
 import './view/timeline'
 import './view/content'
 import './view/console'
-import './view/collectionMenu'
+import './view/config'
 import './view/icon'
 import './api'
 

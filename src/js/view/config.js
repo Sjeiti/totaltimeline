@@ -3,12 +3,15 @@ import {collections} from '../collections'
 import {stringToElement,getFragment} from '../util'
 
 create(
-  'data-collection-menu'
+  'data-config'
   ,{
     init(element){
-      const html = getFragment(`<label for="collections-checkbox">collections</label>
+      const html = getFragment(`<label for="collections-checkbox"><svg data-icon="cog"></svg></label>
 <input type="checkbox" id="collections-checkbox" class="visuallyhidden" />
-<ul></ul>`)
+<div>
+<h4>collections</h4>
+<ul></ul>
+</div>`)
       const ul = html.querySelector('ul')
 
       ul.addEventListener('change', this._onChange.bind(this))

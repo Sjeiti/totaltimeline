@@ -6,8 +6,8 @@
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "start": "run-p build serve",
-    "build": "run-s clean \"webpack -- --env development --watch\"",
-    "build:prod": "run-s clean \"webpack -- --env production\" build:sitemap",
+    "build": "run-s clean build:unzip \"webpack -- --env development --watch\"",
+    "build:prod": "run-s clean build:unzip \"webpack -- --env production\" build:sitemap",
     "build:unzip": "unzip src/style/icomoon.zip temp/icomoon",
     "build:sitemap": "node task/sitemap",
     "webpack": "npx webpack --config webpack.config.js",

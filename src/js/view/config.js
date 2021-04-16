@@ -11,6 +11,7 @@ create(
 <div>
 <h4>collections</h4>
 <ul></ul>
+<h4><label><input type=checkbox data-dark /> dark mode</label></h4>
 </div>`)
       const ul = html.querySelector('ul')
 
@@ -24,9 +25,16 @@ create(
       })
 
       element.appendChild(html)
+
+
+      document.querySelector('[data-dark]').addEventListener('change', this._onChangeDark.bind(this))
     }
     ,_onChange({target}){
       target.collection.show(target.checked)
+      console.log(collection.name)
+    }
+    ,_onChangeDark(e){
+      console.log(e)
     }
   }
 )

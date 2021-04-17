@@ -1,4 +1,8 @@
-const CACHE_NAME = 'TotalTimeline-v1.0.13';
+<<<<<<< Updated upstream
+const CACHE_NAME = 'TotalTimeline-v1.0.15';
+=======
+const CACHE_NAME = 'TotalTimeline-v1.0.14';
+>>>>>>> Stashed changes
 const urlsToCache = [
   '/',
   '/fonts/icomoon.eot',

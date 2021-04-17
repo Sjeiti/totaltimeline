@@ -1,5 +1,16 @@
 /* apply a natural box layout model to all elements */
 
+:root {
+  --color-fore: @colorText;
+  --color-back: @colorBackground;
+}
+
+.darkmode {
+  --color-fore: @colorBackground;
+  --color-back: @colorText;
+}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -10,14 +21,14 @@
 }
 
 html {
-  background-color: @colorBackground;
+  background-color: var(--color-back);
 }
 
 body {
   font-size: @fontBaseSize;
   line-height: 1.6em;
   font-family: @fontNameBody;
-  color: @colorText;
+  color: var(--color-fore);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -40,7 +51,7 @@ a, button, label {
 }
 
 img {
-  background-color: @colorGrayLighter;
+  background-color: var(--color-back);
 }
 
 ul.list {
@@ -52,6 +63,8 @@ input {
   &[type=text] {
     padding: 0 .8rem;
     border: 0;
+    background-color: var(--color-back);
+    color: var(--color-fore); 
     box-shadow: 0 0 0 1px #EEE inset, 2px 4px 8px fade(black, 5%) inset;
     line-height: @headerHeight;
     transition: box-shadow;

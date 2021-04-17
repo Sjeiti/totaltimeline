@@ -2,6 +2,8 @@ import {create} from './component'
 import {collections} from '../collections'
 import {stringToElement,getFragment} from '../util'
 
+const {documentElement} = document
+
 create(
   'data-config'
   ,{
@@ -17,9 +19,9 @@ create(
       const checkbox = html.querySelector('#config-checkbox')
       const label = html.querySelector('label')
       const div = html.querySelector('div')
-      //document.documentElement.addEventListener('mousedown', this._onDownOutside.bind(this, checkbox, label, div))
-      //document.documentElement.addEventListener('mousedown', ::this._onDownOutside(checkbox, label, div))
-      document.documentElement.addEventListener('mousedown', e=>{
+      //documentElement.addEventListener('mousedown', this._onDownOutside.bind(this, checkbox, label, div))
+      //documentElement.addEventListener('mousedown', ::this._onDownOutside(checkbox, label, div))
+      documentElement.addEventListener('mousedown', e=>{
         const {target} = e
         const isOutside = div!==target&&!div.contains(target)
                           &&label!==target&&!label.contains(target)
@@ -38,7 +40,7 @@ create(
 
       element.appendChild(html)
 
-
+      localStorage.dark&&this._setDarkmode()
       document.querySelector('[data-dark]').addEventListener('change', ::this._onChangeDark)
     }
     ,_onChange({target}){
@@ -46,14 +48,18 @@ create(
       console.log(collection.name)
     }
     ,_onChangeDark(e){
-      // todo localStorage
-      document.documentElement.classList.toggle('darkmode')
+      const isDark = !!localStorage.dark
+      isDark?localStorage.removeItem('dark'):localStorage.setItem('dark',1)
+      this._setDarkmode(!isDark)
     }
     ,_onDownOutside(e, checkbox, label, div){
       const {target} = e
       const isOutside = div!==target&&!div.contains(target)
                         &&label!==target&&!label.contains(target)
       isOutside&&(checkbox.checked = false)
+    }
+    ,_setDarkmode(dark=true){
+      document.documentElement.classList.toggle('darkmode', dark)
     }
   }
 )

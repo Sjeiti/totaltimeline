@@ -34,7 +34,8 @@ create(
       console.log(collection.name)
     }
     ,_onChangeDark(e){
-      console.log(e)
+      // todo localStorage
+      document.documentElement.classList.toggle('darkmode')
     }
   }
 )

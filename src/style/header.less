@@ -8,7 +8,7 @@
     flex: 1 1 auto;
     &:first-child { flex: 0 0 40%; }
   }
-  a { color: @colorText; }
+  a { color: var(--color-fore); }
   h2 {
     margin: 0;
     font: bold 1rem/1.6rem 'Yanone Kaffeesatz', sans-serif;
@@ -36,15 +36,16 @@
     z-index: 4000;
     width: 100%;
     min-width: 12rem;
-    background-color: @colorGrayLighter;
-    box-shadow: -4px 8px 16px fade(black, 30%);
+    //background-color: @colorGrayLighter;
+    background-color: var(--color-back);
+    //box-shadow: -4px 8px 16px fade(black, 30%);
     list-style: none;
-    &.visible {
-      display: block;
-    }
+    &.visible { display: block; }
     li {
       &:nth-child(even) {
-        background-color: darken(@colorGrayLight, 1%);
+        //background-color: darken(@colorGrayLight, 1%);
+        //background: rgba(255,255,255,0.1), var(--color-back), rgba(255,255,255,0.1);
+        //box-shadow: 0 -2rem 4rem var(--color-fore) inset;
       }
     }
     a {
@@ -61,7 +62,7 @@
   z-index: 9999;
   >label {
     display: block;
-    background-color: #F8F8F8;
+    background-color: var(--color-back);
     box-shadow: 0 -1px 2px fade(black, 30%) inset;
     //color: @colorAnchor;
   }
@@ -80,7 +81,7 @@
       padding: 0.25rem 1rem 1rem;
       transform: translateX(100%);
       transition: transform 200ms ease-out;
-      background-color: white;
+      background-color: var(--color-back);
     }
     &:checked+* {
       transform: translateX(0);

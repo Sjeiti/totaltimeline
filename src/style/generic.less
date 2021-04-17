@@ -1,19 +1,25 @@
-/* apply a natural box layout model to all elements */
 
 :root {
+  --color-light: @colorWhite;
+  --color-dark: @colorGrayDarkest;
   --color-fore: @colorText;
   --color-back: @colorBackground;
+  --color-mid: #AAA;
+  --color-anchor: @colorAnchor;
 }
 
 .darkmode {
-  --color-fore: @colorBackground;
+  --color-light: #BBB;
+  --color-fore: #BBB;
   --color-back: @colorText;
+  --color-mid: #444;
+  --color-anchor: @colorBlueLight;
 }
 
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 *, *:before, *:after {
@@ -42,7 +48,7 @@ h4 { font-size: 1.1em; line-height: 1.4em; }
 
 a, button, label {
   cursor: pointer;
-  color: @colorAnchor;
+  color: var(--color-anchor);
   text-decoration: none;
   &:hover {
     text-decoration: underline;
@@ -64,13 +70,15 @@ input {
     padding: 0 .8rem;
     border: 0;
     background-color: var(--color-back);
-    color: var(--color-fore); 
-    box-shadow: 0 0 0 1px #EEE inset, 2px 4px 8px fade(black, 5%) inset;
+    color: var(--color-fore);
+    box-shadow: 1px 0 0 var(--color-mid) inset, -1px 0 0  var(--color-mid) inset;
     line-height: @headerHeight;
     transition: box-shadow;
-    &:focus {
-      box-shadow: 0 0 0 1px #EEE inset, 2px 4px 8px fade(black, 20%) inset;
-    }
+    &:focus { outline: none; }
+  }
+  &[type=checkbox] {
+    background-color: var(--color-back);
+    color: var(--color-anchor);
   }
 }
 

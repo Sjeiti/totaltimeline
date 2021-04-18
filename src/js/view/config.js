@@ -29,7 +29,7 @@ create(
     ,_initCollections(html){
       const ul = html.querySelector('ul')
       const map = collections.reduce((acc, collection)=>{
-        const li = stringToElement(`<li><label><input type="checkbox" checked /> ${collection.name}</label></li>`)
+        const li = stringToElement(`<li><label><input type="checkbox" ${collection._hidden?'':'checked'} /> ${collection.name}</label></li>`)
         const input = li.querySelector('input')
         ul.appendChild(li)
         return acc.set(input, collection)

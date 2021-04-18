@@ -222,7 +222,6 @@ create(
        * @param {Event} e
        */
       function onElementChange(e){
-        console.log('onElementChange',e) // todo: remove log
         const {target} = e
         const {id} = target
         currentRange.lock = ['lockNone','lockStart','lockEnd'].indexOf(id)

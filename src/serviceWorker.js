@@ -1,5 +1,5 @@
 <<<<<<< Updated upstream
-const CACHE_NAME = 'TotalTimeline-v1.0.18';
+const CACHE_NAME = 'TotalTimeline-v1.0.19';
 =======
 const CACHE_NAME = 'TotalTimeline-v1.0.14';
 >>>>>>> Stashed changes

@@ -2,12 +2,12 @@ import '../style/screen.less'
 
 import {initialise} from './view/component'
 
+import './view/console'
 import './view/header'
 import './view/search'
 import './view/overview'
 import './view/timeline'
 import './view/content'
-import './view/console'
 import './view/config'
 import './view/icon'
 import './api'

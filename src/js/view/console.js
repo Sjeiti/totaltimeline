@@ -21,15 +21,24 @@ create(
         /*window.addEventListener('error',e=>{
           this.output(JSON.stringify(e))
         })*/
-        window.addEventListener('error', (msg, url, line, col, error)=>{
-          this.output('err',msg, url, line, col, error)
+        window.addEventListener('error', e=>{
+          const {message, filename, lineno, colno, error} = e
+          this.output('err',
+            message,'\n',
+            filename,
+            lineno,
+            colno,
+            error)
         })
 
         Object.assign(this._pre.style,{
           width: '100%',
+          overflow: 'scroll',
           backgroundColor: '#888',
           border: '1px solid gray',
-          font: '8px/8px Monospace'
+          font: '8px/8px Monospace',
+          whiteSpace: 'wrap',
+          color: 'black'
         })
        
       }

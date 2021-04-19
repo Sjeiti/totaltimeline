@@ -46,7 +46,8 @@ function onEditEvent(event){
     if (eventLists.hasOwnProperty(prop)) {
       list = `<datalist id="${prop}list">${eventLists[prop].map(value=>`<option value="${value}" />`).join('')}</datalist>`
     }
-    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${(event.entry[prop]||'').replace(/(["<>\n])/g,'\\$1')||''}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
+    const value = (event.entry[prop]?.toString()||'').replace(/(["<>\n])/g,'\\$1')||''
+    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${value}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
   })
   const element = initString(`<div class="modal"><div class="modal-content">
   <button class="btn-icon float-right" data-close><svg data-icon="cross"></svg></button>

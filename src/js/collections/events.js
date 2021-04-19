@@ -40,15 +40,32 @@ export const events = collection(
     const rangeStart = range.start.ago
     const rangeEnd = range.end.ago
     const duration = range.duration
+    // const durationImportance = duration/13798000000
+    // const durationImportance = duration/13798000000**1E-1
+    // const durationImportance = 1-(1-duration/13798000000)**1E5
+    // const durationImportance = 1-((1-duration/13798000000)**1E5)
+    // const durationImportance = 1-((1-duration/13798000000)**3E6)
+    const durationImportance = 1E-2*duration
+    // console.log('durationImportance',durationImportance) // todo: remove log
+    // console.log('durationImportance',duration/13798000000,durationImportance) // todo: remove log
     const show = []
     this.forEach(event=>{
-      const ago = event.moment.ago
+      const {moment, element, info: {importance=1}} = event
+      const ago = moment.ago
       const isInside = ago<=rangeStart&&ago>=rangeEnd
       if (isInside) {
-        const element = event.element
-        const relative = 1-((ago-rangeEnd)/duration)
-        element.style.left = getPercentage(relative)
-        show.push(element)
+        // todo event scale vs duration scale
+        const isImportant = importance===''||importance>durationImportance
+
+        // console.log('event.importance', importance, duration/13798000000, duration) // todo: remove log
+        // console.log('event',event) // todo: remove log
+        //
+        if (isImportant) {
+          // event.index===111&&console.log('event',{event},durationImportance) // todo: remove log
+          const relative = 1-((ago-rangeEnd)/duration)
+          element.style.left = getPercentage(relative)
+          show.push(element)
+        }
       }
       event.inside(isInside)
     })

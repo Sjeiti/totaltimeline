@@ -70,7 +70,6 @@ create(
       const lockNone = elmSpan.querySelector('#lockNone')
       element.addEventListener('click',onElementClick)
       element.addEventListener('change',onElementChange)
-      console.log('add__onElementClick') // todo: remove log
 
       // Initialise view
       clearChildren(element).appendChild(elmSpan)

@@ -2,11 +2,9 @@
  * node task/serve dist 8383
  */
 
-// const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
-const openBrowser = require('open')
 const utils = require('./utils')
 const {read, save, warn} = utils
 const root = process.argv[2] || 'src'
@@ -19,14 +17,17 @@ const {getWikiMedia, getImageThumb} = require(__dirname + '/wikiUtils')
 const jsonSrc = './src/static/events.json'
 const jsonDist = './dist/static/events.json'
 
+const err = res=>(a)=>res.json({error: true,a})
+
 express()
   .use(serveStatic('./' + root + '/'))
   .use(bodyParser.urlencoded({extended: true}))
   .use(bodyParser.json())
   .get('/api', (req, res) => res.json({success: true}))
-  .get('/api/events', (req, res) => read(jsonSrc).then(res.json))
+  .get('/api/events', (req, res) => read(jsonSrc).then(s=>res.json(JSON.parse(s))).catch(err(res)))
   .post('/api/events', onPostEvent)
   .delete('/api/events', onDeleteEvent)
+  .get('/api/events/importance', onSetImportance)
   .get('/*', (req, res) => res.sendFile(path.join(__dirname + '/../dist/index.html')))
   .use(bodyParser.json())
   .use('/api', router)
@@ -132,21 +133,17 @@ function saveJsonEntry(entry, index) {
       //
       cleanEvents(data)
       sortEvents(data)
-      calculateImportance(data)
       //
-      return Promise.all([
-        save(jsonDist, JSON.stringify(data))
-        , save(jsonSrc, JSON.stringify(data))
-      ])
+      return saveSrcAndDist(data)
     })
 }
 
 function cleanEvents(events) {
   events.forEach(evt => {
     ['since', 'ago', 'year', 'importance'].forEach(prop=>numberProp(evt, prop))
-    // evt.ago?.length > 0 && (evt.ago = parseInt(evt.ago, 10))
-    // evt.year?.length > 0 && (evt.year = parseInt(evt.year, 10))
-    // evt.since?.length > 0 && (evt.since = parseInt(evt.since, 10))
+    // evt.ago?.length > 0 && (evt.ago = parseFloat(evt.ago))
+    // evt.year?.length > 0 && (evt.year = parseFloat(evt.year))
+    // evt.since?.length > 0 && (evt.since = parseFloat(evt.since))
   })
   return events
 }
@@ -160,6 +157,22 @@ function sortEvents(events) {
   return events
 }
 
+function saveSrcAndDist(data){
+  return Promise.all([
+    save(jsonDist, JSON.stringify(data))
+    , save(jsonSrc, JSON.stringify(data))
+  ])
+}
+
+function onSetImportance(req, res){
+  read(jsonSrc)
+    .then(JSON.parse)
+    .then(data => {
+      calculateImportance(data)
+      saveSrcAndDist(data)
+      res.json(data)
+    })
+}
 function calculateImportance(events) {
   for (let i=1,l=events.length-1;i<l;i++) {
   	const event = events[i]
@@ -176,7 +189,8 @@ function getAgo(event){
 
 function numberProp(obj, prop){
   const objProp = obj[prop]
-  objProp && objProp?.length > 0 && (obj[prop] = objProp.includes('.') ? parseFloat(objProp) : parseInt(objProp, 10))
+  // parseInt fails for exponential values, ie 2E4 becomes 2
+  objProp && objProp?.length > 0 && (obj[prop] = parseFloat(objProp))
 }
 
 /**
@@ -185,7 +199,9 @@ function numberProp(obj, prop){
  * @returns {boolean}
  */
 function isValidNumber(number) {
-  return /^-?\d+$/.test(number)
+  const parsed = parseFloat(number)
+  const isNumber = !isNaN(parsed)
+  return isNumber&&parsed.toString()===number
 }
 
 /**
@@ -197,5 +213,4 @@ function isValidString(string) {
   return string !== undefined && /^.+$/.test(string)
 }
 
-// openBrowser('http://localhost:' + port)
 

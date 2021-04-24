@@ -21,7 +21,8 @@ function read(file){
     require('fs').readFile(file,(err,data)=>
       err?reject(err):resolve(data.toString())
     )
-  ).catch(console.log.bind(null, 'caught promise'))
+  )//.catch(console.log.bind(null, 'caught promise'))
+  // return require('fs').readFile(file)//.catch(console.log.bind(null, 'caught promise'))
 }
 
 /**

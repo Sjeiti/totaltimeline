@@ -15,9 +15,10 @@ export const events = collection(
   ,function(data){
     data.forEach((entry,index)=> {
 
-      const ago = parseInt(entry.ago,10)
-      const since = parseInt(entry.since,10)
-      const year = parseInt(entry.year,10)
+      // parseInt fails for exponential values, ie 2E4 becomes 2
+      const ago = parseFloat(entry.ago)
+      const since = parseFloat(entry.since)
+      const year = parseFloat(entry.year)
 
       const entryMoment = ago?moment(ago):(since?moment(since,SINCE):year&&moment(year,YEAR))
       const isExcluded = entry.exclude==='1'

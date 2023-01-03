@@ -41,7 +41,7 @@
     "adm-zip": "^0.5.4",
     "autoprefixer": "^10.2.5",
     "babel-eslint": "^9.0.0",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.3.0",
     "babel-preset-babili": "0.0.12",
     "babel-preset-minify": "^0.5.1",
     "body-parser": "^1.20.1",

@@ -8,6 +8,11 @@
  */
 import {emmetExpand} from './emmet'
 
+export const className = {
+  selected: 'selected'
+}
+
+
 // /**
 //  * Shortcut method for quickly appending elements
 //  * @param {HTMLElement} parent

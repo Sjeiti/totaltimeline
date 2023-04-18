@@ -54,14 +54,18 @@ export const events = collection(
       const {moment, element, info: {importance=1}} = event
       const ago = moment.ago
       const isInside = ago<=rangeStart&&ago>=rangeEnd
+
+      // event.info.name==='bees'&&console.log('bees', event) // todo: remove log
+
       if (isInside) {
         // todo event scale vs duration scale
         const isImportant = importance===''||importance>durationImportance
+        const {selected} = event
 
         // console.log('event.importance', importance, duration/13798000000, duration) // todo: remove log
         // console.log('event',event) // todo: remove log
         //
-        if (isImportant) {
+        if (isImportant||selected) {
           // event.index===111&&console.log('event',{event},durationImportance) // todo: remove log
           const relative = 1-((ago-rangeEnd)/duration)
           element.style.left = getPercentage(relative)

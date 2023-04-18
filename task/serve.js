@@ -19,6 +19,8 @@ const jsonDist = './dist/static/events.json'
 
 const err = res=>(a)=>res.json({error: true,a})
 
+console.log('Running on http://localhost:'+port)
+
 express()
   .use(serveStatic('./' + root + '/'))
   .use(bodyParser.urlencoded({extended: true}))

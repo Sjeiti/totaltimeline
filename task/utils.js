@@ -21,7 +21,8 @@ function read(file){
     require('fs').readFile(file,(err,data)=>
       err?reject(err):resolve(data.toString())
     )
-  );
+  )//.catch(console.log.bind(null, 'caught promise'))
+  // return require('fs').readFile(file)//.catch(console.log.bind(null, 'caught promise'))
 }
 
 /**
@@ -30,6 +31,7 @@ function read(file){
  * @returns {Promise}
  */
 function readdir(path){
+  console.log('readdir path',path) // todo: remove log
   return new Promise((resolve,reject)=>
     require('fs').readdir(path,(err,data)=>
       err?reject(err):resolve(data)
@@ -46,9 +48,9 @@ function readdir(path){
 function save(file,data) {
   console.log('saving',file,formatBytes(data.length));
   return require('mkdirp')(getDirName(file))
-      .then(()=>new Promise(function(resolve){//,reject
-        require('fs').writeFile(file, data, resolve);
-      }),console.warn.bind(console));
+    .then(()=>new Promise(resolve=>{//,reject
+      require('fs').writeFile(file, data, resolve);
+    }),console.warn.bind(console));
 }
 
 /**

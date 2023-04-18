@@ -17,8 +17,8 @@ collection(
     const timeNames = 'supereon,eon,era,period,epoch,age'.split(',')
     const timeNum = timeNames.length
     data.forEach((entry)=> {
-      const from = parseInt(entry.from,10)
-      const to = parseInt(entry.to,10)
+      const from = parseFloat(entry.from)
+      const to = parseFloat(entry.to)
       const name = entry.name
 
       if (from!==undefined&&to!==undefined&&name!==undefined) {

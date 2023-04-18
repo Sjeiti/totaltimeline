@@ -22,6 +22,7 @@
 }
 
 [data-search] {
+  position: relative;
   height: @headerHeight;
   input {
     float: right;
@@ -31,16 +32,17 @@
   ul {
     .rt;
     display: none;
-    right: -@screenPadding;
+    left: 0;
     top: @headerHeight;
     z-index: 4000;
-    width: 100%;
+    //width: 100%;
     min-width: 12rem;
     //background-color: @colorGrayLighter;
     background-color: var(--color-back);
     //box-shadow: -4px 8px 16px fade(black, 30%);
     list-style: none;
     &.visible { display: block; }
+    &.visible { display: inline-table; }
     li {
       &:nth-child(even) {
         //background-color: darken(@colorGrayLight, 1%);

@@ -41,23 +41,24 @@ const assignableArrayPrototype = assignable(Array.prototype)
 const collectionViewInstancePrototype = Object.assign({
 
   /**
-     * Initialise
-     * @param {string} slug The name of the collections (will serve as classname in the view).
-     * @param {string} dataFileName Filename for the collection data
-     * @param {collectionDataLoaded} callback The callback uri to process the collections data.
-     * @returns {collectionInstance}
-     */
+    * Initialise
+    * @param {string} slug The name of the collections (will serve as classname in the view).
+    * @param {string} dataFileName Filename for the collection data
+    * @param {collectionDataLoaded} callback The callback uri to process the collections data.
+    * @returns {collectionInstance}
+    */
   init(slug,dataFileName,callback){
     this.wrapper.classList.add(slug)
     this.wrapper.addEventListener('click', this._onWrapperClick, false)
     this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
     dataFileName&&fetchFile(dataFileName).then(callback.bind(this))||callback.call(this)
+    this._setVisibility(this._hidden)
     return this
   }
   /**
-     * Populates the collections wrapper for a specific {@link totaltimeline.time.range|time range}.
-     * @memberof collectionInstance
-     */
+    * Populates the collections wrapper for a specific {@link totaltimeline.time.range|time range}.
+    * @memberof collectionInstance
+    */
   ,render(range){
     this.isDataLoaded&&this._render.call(this,range)
   }
@@ -69,8 +70,16 @@ const collectionViewInstancePrototype = Object.assign({
     elements.forEach(elm=>elm.parentNode!==this.wrapper&&this.fragment.appendChild(elm))
     this.wrapper.appendChild(this.fragment)
   }
+  ,get _hidden(){
+    return !!localStorage[this.name]
+  }
+  ,_setVisibility(hide){
+    this.wrapper.classList.toggle('hide', hide)
+  }
   ,show(show){
-    this.wrapper.classList.toggle('hide',!show)
+    const doHide = show!==undefined?!show:!this._hidden
+    !doHide?localStorage.removeItem(name):localStorage.setItem(name,1)
+    this._setVisibility(doHide)
   }
   /**
      * Handles the click event on the wrapper.

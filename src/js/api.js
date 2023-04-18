@@ -1,27 +1,28 @@
 
-import {editEvent,api} from './model'
+import {editEvent,newEvent} from './model'
 import {stringToElement} from './util'
 import {postForm,del} from './fetchProxy'
 import {event} from './collections/event'
 import {events} from './collections/events'
 import {moment} from './time/moment'
 import {eventInfo} from './time/eventInfo'
+import {initComponents} from "./view/component"
+import {parentQuerySelector} from "./utils/html"
+import {ENV} from './config'
 
 const noop = ()=>{}
 const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
 const eventLists = { category: [], icon: [] }
 
-fetch('/api')
+const initString = s=>initComponents(stringToElement(s))
+
+ENV.development&&fetch('/api')
   .then(response=>response.json(),noop)
-  .then(data=>{
-    if (data.success) {
-      api.exists = true
-      initApi()
-    }
-  },noop)
+  .then(data=>data.success&&initApi(),noop)
 
 function initApi(){
   editEvent.add(onEditEvent)
+  newEvent.add(onNewEvent)
   // get list of available icons
   Array.from(document.styleSheets).forEach(sheet=>{
     Array.from(sheet.cssRules).forEach(rule=>{
@@ -45,10 +46,11 @@ function onEditEvent(event){
     if (eventLists.hasOwnProperty(prop)) {
       list = `<datalist id="${prop}list">${eventLists[prop].map(value=>`<option value="${value}" />`).join('')}</datalist>`
     }
-    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${(event.entry[prop]||'').replace(/(["<>\n])/g,'\\$1')||''}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
+    const value = (event.entry[prop]?.toString()||'').replace(/(["<>\n])/g,'\\$1')||''
+    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${value}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
   })
-  const element = stringToElement(`<div class="modal"><div class="modal-content">
-  <button class="btn-icon icn-cross float-right" data-close></button>
+  const element = initString(`<div class="modal"><div class="modal-content">
+  <button class="btn-icon float-right" data-close><svg data-icon="cross"></svg></button>
   <h4>Edit event</h4>
   <form method="post" action="/api/events">
     ${inputs.join('')}
@@ -75,11 +77,13 @@ function onSubmit(e){
     })
 }
 
-function onClick(element,{target}){
-  if (target.nodeName==='BUTTON') {
-    target.hasAttribute('data-close')&&document.body.removeChild(element)
-    ||target.hasAttribute('data-new')&&newEvent()
-    ||target.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
+function onClick(element,e){
+  const {target} = e
+  const button = parentQuerySelector(target, 'button', true)
+  if (button) {
+    button.hasAttribute('data-close')&&document.body.removeChild(element)
+    ||button.hasAttribute('data-new')&&onNewEvent()
+    ||button.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
   }
 }
 
@@ -88,7 +92,7 @@ function reload(){
   window.location.reload()
 }
 
-function newEvent(){
+function onNewEvent(){
   onEditEvent(event(
     moment(0)
     ,eventInfo()//.parse(entry)

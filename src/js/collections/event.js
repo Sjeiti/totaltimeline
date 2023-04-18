@@ -5,14 +5,21 @@
 // import {random} from '../math/prng'
 // import {animate} from '../animate'
 import {entryShown} from '../model'
-import {getPercentage,getFragment} from '../util'
+import {getPercentage, getFragment} from '../util'
+import {className} from '../utils/html'
+
+const {selected} = className
 
 const proto = {
   toString(){return '[event \''+this.info.name+'\', '+this.moment.value+' '+this.moment.type+']'}
   ,inside(is){
-    if (!is&&this.element.classList.contains('selected')) {
+    // if (!is&&this.element.classList.contains(selected)) {
+    if (!is&&this.selected) {
       entryShown.dispatch()
     }
+  }
+  ,get selected(){
+    return this.element.classList.contains(selected)
   }
   ///////////////////////////////////////
   ,animate(/*startAgo, endAgo, callback*/){
@@ -82,7 +89,7 @@ export function event(moment, info, index, entry){
    * @param {period|event} entry
    */
   function onEntryShown(entry){
-    wrapper.classList.toggle('selected',entry&&entry.info===info||false)
+    wrapper.classList.toggle(selected,entry&&entry.info===info||false)
   }
 
   return event

@@ -129,7 +129,7 @@ module.exports = env => {
       new CopyWebpackPlugin({patterns:[
           // { from: 'src/*', to: './', /*flatten: true,*/ globOptions: {dot: true}}
           { from: 'src/*', to: '[name][ext]', /*flatten: true,*/ globOptions: {dot: true}}
-          ,{ from: 'src/fonts', to: './fonts' }
+          //,{ from: 'src/fonts', to: './fonts' }
           ,{ from: 'src/static', to: './static' }
       ]})
       ,new webpack.DefinePlugin({

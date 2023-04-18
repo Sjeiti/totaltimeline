@@ -7,6 +7,7 @@ import {touch} from '../touch'
 import {key} from '../signal/key'
 import {resize} from '../signal/resize'
 import {mouseWheel} from '../signal/mouseWheel'
+import {parentQuerySelector} from '../utils/html'
 
 create(
   'data-overview'
@@ -17,8 +18,14 @@ create(
       const elmSpan = stringToElement(`<div class="span">
 	<time>${span.start.toString()}</time>
 	<time>${span.end.toString()}</time>
-	<input type="radio" name="lock" class="visuallyhidden" id="lockStart" /><label class="icn-unlocked" for="lockStart"></label>
-	<input type="radio" name="lock" class="visuallyhidden" id="lockEnd" /><label class="icn-unlocked" for="lockEnd"></label>
+	<input type="radio" name="lock" class="visuallyhidden" id="lockStart" /><label for="lockStart">
+    <svg data-icon="lock"><title>locked</title></svg>
+    <svg data-icon="unlocked"><title>unlocked</title></svg>
+  </label>
+	<input type="radio" name="lock" class="visuallyhidden" id="lockEnd" /><label for="lockEnd">
+    <svg data-icon="lock"><title>locked</title></svg>
+    <svg data-icon="unlocked"><title>unlocked</title></svg>
+  </label>
 	<input type="radio" name="lock" class="visuallyhidden" id="lockNone" />
 	<div class="range">
     <div class="before"></div>
@@ -195,8 +202,9 @@ create(
        */
       function onElementClick(e){
         const {target} = e
-        if (target.nodeName==='LABEL') {
-          const input = document.getElementById(target.getAttribute('for'))
+        const parentLock = parentQuerySelector(target, '[for^=lock]')
+        if (parentLock) {
+          const input = document.getElementById(parentLock.getAttribute('for'))
           if (input.checked) {
             e.preventDefault()
             lockNone.checked = true

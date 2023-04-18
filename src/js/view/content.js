@@ -3,14 +3,18 @@
  * @module content
  */
 
-import {create} from './component'
+import {create, initComponents} from './component'
 import {stringToElement,clearChildren} from '../util'
-import {currentRange, entryShown, editEvent, api} from '../model'
+import {currentRange, entryShown, editEvent} from '../model'
 import {select} from '../style'
 import {formatAnnum} from '../time'
 import {collections} from '../collections'
+import {parentQuerySelector} from '../utils/html'
+import {ENV} from '../config'
 
 const writable = true
+
+const initString = s=>initComponents(stringToElement(s))
 
 export const content = create(
   'data-content'
@@ -38,10 +42,12 @@ export const content = create(
       element.appendChild(elmContentWrapper)
 
       // close view
-      element.addEventListener('click',({target})=>{
-        if (target.nodeName==='BUTTON') {
-          target.hasAttribute('data-close')&&entryShown.dispatch()
-          target.hasAttribute('data-edit')&&editEvent.dispatch(this.currentEntry)
+      element.addEventListener('click',e=>{
+        const {target} = e
+        const button = parentQuerySelector(target, 'button')
+        if (button) {
+          button.hasAttribute('data-close')&&entryShown.dispatch()
+          button.hasAttribute('data-edit')&&editEvent.dispatch(this.currentEntry)
         }
       })
 
@@ -126,12 +132,12 @@ export const content = create(
        * @returns {HTMLElement}
        */
       function createContent(name,slug,time,img,text,wikimediakey){
-        return stringToElement(`<article class="article-${slug}">
+        return initString(`<article class="article-${slug}">
           <header>
             <h3>${name}</h3>
             <time>${time}</time>
-            <button class="icn-cross" data-close></button>
-            ${api.exists?'<button class="icn-pencil" data-edit></button>':''}
+            <button data-close><svg data-icon="cross"></svg></button>
+            ${ENV.development?'<button data-edit><svg data-icon="pencil"></svg></button>':''}
           </header>
           <img alt="${name}" src="${img}"/>
           ${text}

@@ -1,5 +1,6 @@
 import {create} from './component'
 import {getFragment} from '../util'
+import {ENV} from '../config'
 
 const writable = true
 let oldLog
@@ -8,26 +9,39 @@ create(
   'data-console'
   ,{
     init(element){
-      element.appendChild(
-        getFragment('<h3>foo<h3><pre><pre>')
-      )
-      this._pre = element.querySelector('pre')
-      this.output('console')
-      oldLog = console.log
-      console.log = this.output.bind(this)
-      /*window.addEventListener('error',e=>{
-        this.output(JSON.stringify(e))
-      })*/
-      window.addEventListener('error', (msg, url, line, col, error)=>{
-        this.output('err',msg, url, line, col, error)
-      })
+      if (ENV.development){
 
-      Object.assign(this._pre.style,{
-        width: '100%',
-        backgroundColor: '#888',
-        border: '1px solid gray',
-        font: '8px/8px Monospace'
-      })
+        element.appendChild(
+          getFragment('<pre><pre>')
+        )
+        this._pre = element.querySelector('pre')
+        this.output('console')
+        oldLog = console.log
+        console.log = this.output.bind(this)
+        /*window.addEventListener('error',e=>{
+          this.output(JSON.stringify(e))
+        })*/
+        window.addEventListener('error', e=>{
+          const {message, filename, lineno, colno, error} = e
+          this.output('err',
+            message,'\n',
+            filename,
+            lineno,
+            colno,
+            error)
+        })
+
+        Object.assign(this._pre.style,{
+          width: '100%',
+          overflow: 'scroll',
+          backgroundColor: '#888',
+          border: '1px solid gray',
+          font: '8px/8px Monospace',
+          whiteSpace: 'wrap',
+          color: 'black'
+        })
+       
+      }
     }
     ,output(...s){
       const text = this._pre.textContent + '\n' + s.join(' ') //Array.prototype.slice.call(arguments).join(' ')

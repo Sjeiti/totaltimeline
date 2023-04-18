@@ -83,11 +83,11 @@ function splitSubject(subject){
 		aTempPar.forEach(function(s){
 			var a = s.split('-')
 			if (a.length>1) {
-				for (var i=parseInt(a[0],10),l=parseInt(a[1],10);i<=l;i++) {
+				for (var i=parseFloat(a[0]),l=parseFloat(a[1]);i<=l;i++) {
 					aPar.push(i)
 				}
 			} else {
-				aPar.push(parseInt(s,10))
+				aPar.push(parseFloat(s))
 			}
 		})
 		oSubject.page = sSubject
@@ -143,6 +143,7 @@ function getImageThumb(fileName){
 }
 
 function getWikiJson(url, json=true){
+  const fetch = require('node-fetch')
   return fetch(url).then(response=>response.json())
   /*return new Promise((resolve,reject)=>{
     request({url,json}, (error, response, body)=>{

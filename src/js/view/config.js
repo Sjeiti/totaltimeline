@@ -50,7 +50,7 @@ create(
       const {target} = e
       map.get(target)?.show(target.checked)
     }
-    ,_onChangeDark(e){
+    ,_onChangeDark(){
       const isDark = !!localStorage.dark
       isDark?localStorage.removeItem('dark'):localStorage.setItem('dark',1)
       this._setDarkmode(!isDark)

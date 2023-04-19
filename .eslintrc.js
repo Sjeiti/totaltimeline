@@ -19,7 +19,7 @@ module.exports = {
     'no-var': 'error',
     'prefer-const': 'error',
     'prefer-arrow-callback': 'error',
-    'no-unused-expressions': ['error', { 'allowShortCircuit': true }],
+    'no-unused-expressions': ['error', { 'allowShortCircuit': true, 'allowTernary': true }],
     'no-unused-vars': 'error'/*,
     'no-default-export': 'error'*/
   }

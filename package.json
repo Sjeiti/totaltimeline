@@ -18,7 +18,8 @@
     "clean": "rimraf dist",
     "_icomoon": "node task/icomoon",
     "icons": "node task/img2css --source ./src/icon/ --target ./src/style/icons.less",
-    "version": "next-version package.json src/serviceWorker.js"
+    "version": "next-version package.json src/serviceWorker.js",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
@@ -58,7 +59,7 @@
     "eslint-plugin-html": "^6.1.2",
     "express": "^4.17.3",
     "file-loader": "^6.2.0",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "less": "^4.1.1",
     "less-loader": "^8.0.0",
     "less-plugin-glob": "^3.0.0",

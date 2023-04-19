@@ -41,7 +41,7 @@
     background-color: var(--color-back);
     //box-shadow: -4px 8px 16px fade(black, 30%);
     list-style: none;
-    &.visible { display: block; }
+    //&.visible { display: block; }
     &.visible { display: inline-table; }
     li {
       &:nth-child(even) {
@@ -74,7 +74,7 @@
     height: 1rem;
     margin: 0.3rem 0 0 0.3rem;
   }
-  input {
+  input#config-checkbox {
     &+*{
       position: absolute;
       right: 0;
@@ -90,7 +90,7 @@
     }
   }
   ul {
-    padding: 0 0 0 1rem;
+    padding: 0;
     list-style: none;
   }
   li {
@@ -99,6 +99,9 @@
   }
   input {
     transform: translateY(0.15rem);
+  }
+  [data-dark]~svg {
+    margin-top: 1rem;
   }
   //@media only screen and (min-device-width: 768px) {
   /*@media only screen and (min-width: 768px) {

@@ -1,10 +1,6 @@
-const CACHE_NAME = 'TotalTimeline-v1.0.26'
+const CACHE_NAME = 'TotalTimeline-v1.0.27'
 const urlsToCache = [
   '/',
-  '/fonts/icomoon.eot',
-  '/fonts/icomoon.svg',
-  '/fonts/icomoon.ttf',
-  '/fonts/icomoon.woff',
   '/js/index.js',
   '/static/Epica-tpt-co2.csv',
   '/static/eras.json',

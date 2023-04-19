@@ -3,7 +3,7 @@
 node_modules
 build
 dist
-src/fonts
 temp/
 *.swp
 *.swo
+/design/

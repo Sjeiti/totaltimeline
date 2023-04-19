@@ -9,11 +9,17 @@ create(
   ,{
     init(element){
       const html = getFragment(`<label for="config-checkbox"><svg data-icon="cog"></svg></label>
-<input type="checkbox" id="config-checkbox" class="visuallyhidden" />
+  <input type="checkbox" id="config-checkbox" class="visuallyhidden" />
 <div>
-<h4>collections</h4>
-<ul></ul>
-<h4><label><input type=checkbox data-dark /> dark mode</label></h4>
+  <h4>collections</h4>
+  <ul></ul>
+
+  <label>
+    <input type=checkbox data-dark class="visuallyhidden" />
+    <svg data-icon="sun"><title>dark mode</title></svg>
+    <svg data-icon="moon"><title>dark mode</title></svg>
+  </label>
+
 </div>`)
       this._initConfig(html)
       this._initCollections(html)

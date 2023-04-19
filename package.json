@@ -2,7 +2,7 @@
   "name": "totaltimeline",
   "description": "Total Timeline",
   "author": "Ron Valstar",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "start": "run-p build serve",
@@ -16,7 +16,7 @@
     "serve": "node ./task/serve dist 8385",
     "json": "node ./task/wiki ./src/static/events.json",
     "clean": "rimraf dist",
-    "icomoon": "node task/icomoon",
+    "_icomoon": "node task/icomoon",
     "icons": "node task/img2css --source ./src/icon/ --target ./src/style/icons.less",
     "version": "next-version package.json src/serviceWorker.js"
   },
@@ -58,6 +58,7 @@
     "eslint-plugin-html": "^6.1.2",
     "express": "^4.17.3",
     "file-loader": "^6.2.0",
+    "husky": "^8.0.3",
     "less": "^4.1.1",
     "less-loader": "^8.0.0",
     "less-plugin-glob": "^3.0.0",
@@ -83,7 +84,6 @@
   "dependencies": {
     "signals": "^1.0.0"
   },
-  "optionalDependencies": {},
   "postcss": {
     "plugins": {
       "autoprefixer": {}
@@ -93,8 +93,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ],
-  "gitHooks": {
-    "pre-commit": "npm run version"
-  }
+  ]
 }

@@ -15,9 +15,10 @@
   }
   time {
     font: @fontTime;
-    padding: 2px 5px;
+    padding: 0.5rem 0.5rem;
     white-space: nowrap;
     overflow: hidden;
+    height: 100%;
   }
   label {
     .lb(-@screenPadding,0);
@@ -67,28 +68,13 @@
     }
   }
   .range {
-    @markW: 4px;
     position: relative;
+    z-index: 1;
     overflow: hidden;
     .lt;
     .size(100%);
     min-width: 1px;
-    box-shadow: 0 16px 32px fade(black, 50%) inset;
-    .before, .after {
-      position: absolute;
-      bottom: 0;
-      width: @markW;
-      height: @markW;
-      box-shadow: 0 0 0 @markW rgba(0,0,0,0.3) inset;
-    }
-    .before {
-      left: 0;
-      transform: translate(-(@markW/2),@markW/2) rotate(-45deg);
-    }
-    .after {
-      right: 0;
-      transform: translate(@markW/2,@markW/2) rotate(45deg);
-    }
+    box-shadow: 1px 0 0 #FFFFFF33 inset, -1px 0 0 #FFFFFF33 inset, 0 16px 32px fade(black, 50%) inset;
     > time {
       &:nth-of-type(2) {
         display: block;

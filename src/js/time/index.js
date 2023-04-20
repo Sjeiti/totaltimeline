@@ -77,7 +77,7 @@ export function unformatAnnum(formatted){
  * @param {number} round
  * @returns {string}
  */
-export function duration(years,round){
+export function duration(years,round=0){
   // todo: rounding sometimes off: split at . truncate and join
   if (round===undefined) round = 0
   let i

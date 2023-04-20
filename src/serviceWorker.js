@@ -1,4 +1,4 @@
-const CACHE_NAME = 'TotalTimeline-v1.0.28'
+const CACHE_NAME = 'TotalTimeline-v1.0.29'
 const urlsToCache = [
   '/',
   '/js/index.js',

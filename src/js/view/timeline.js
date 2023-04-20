@@ -1,6 +1,6 @@
 import {create} from './component'
 import {view} from './'
-import {getFragment} from '../util'
+import {getFragment, getPercentage} from '../util'
 import {collections} from '../collections'
 import {currentRange} from '../model'
 import {touch} from '../touch'
@@ -17,12 +17,14 @@ create(
       const body = document.body
       const elements = getFragment(`<time></time><time></time>
 <div class="before"></div><div class="after"></div>
-<div class="overlay"></div>`)
+<div class="overlay"></div>
+<div class="now"></div>`)
       const elmOverlay = elements.querySelector('.overlay')
       const elmTimeFrom = elements.querySelector('time')
       const elmTimeTo = elements.querySelector('time:nth-child(2)')
       const elmBefore = elements.querySelector('.before')
       const elmAfter = elements.querySelector('.after')
+      const elmNow = elements.querySelector('.now')
 
       let backgroundPos = 0
       let viewW
@@ -55,6 +57,7 @@ create(
       // range
       currentRange.change.add(onRangeChange)
       currentRange.change.add(moveBackgroundOverlay)
+      currentRange.change.add(moveNow)
 
       // Initialise view
       element.appendChild(elements)
@@ -238,6 +241,23 @@ create(
         // background-size is contain so mod by viewH to prevent errors
         backgroundPos = (backgroundPos + Math.round(offset))%viewH
         elmOverlay.style.backgroundPosition = backgroundPos+'px 0'
+      }
+
+      /**
+       * Move now
+       * @param {timeRange} range
+       */
+      function moveNow(range){
+        const rangeStart = range.start.ago
+        const rangeEnd = range.end.ago
+        const duration = range.duration
+        const ago = 0
+        const isInside = ago<=rangeStart&&ago>=rangeEnd
+        if (isInside) {
+          const relative = 1-((ago-rangeEnd)/duration)
+          elmNow.style.left = getPercentage(relative)
+        }
+        elmNow.style.display = isInside?'block':'none'
       }
     }
   }

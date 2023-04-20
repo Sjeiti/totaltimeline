@@ -74,7 +74,7 @@ export function unformatAnnum(formatted){
  * @name totaltimeline.time.duration
  * @method
  * @param {number} years
- * @param {number} round
+ * @param {number} [round=0]
  * @returns {string}
  */
 export function duration(years,round=0){

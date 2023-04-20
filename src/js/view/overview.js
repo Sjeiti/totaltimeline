@@ -137,7 +137,7 @@ create(
           ,left: getPercentage(1-currentRange.start.ago/span.duration)
           ,backgroundImage: view.rangeGradient
         })
-        elmTime.textContent = duration(currentRange.duration,2)
+        elmTime.textContent = duration(currentRange.duration)
         elmTimeFrom.textContent = currentRange.start.toString()
         elmTimeTo.textContent = currentRange.end.toString()
       }

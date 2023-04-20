@@ -139,6 +139,7 @@ create(
         })
         elmTime.textContent = duration(currentRange.duration)
         elmTimeFrom.textContent = currentRange.start.toString()
+        elmTimeFrom.setAttribute('title', (currentRange.start.ago).toString().replace(/\d(?=(\d{3})+$)/g, '$&,'))
         elmTimeTo.textContent = currentRange.end.toString()
       }
 

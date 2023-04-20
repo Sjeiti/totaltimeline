@@ -75,6 +75,7 @@
     .size(100%);
     min-width: 1px;
     box-shadow: 1px 0 0 #FFFFFF33 inset, -1px 0 0 #FFFFFF33 inset, 0 16px 32px fade(black, 50%) inset;
+    container-type: inline-size;
     > time {
       &:nth-of-type(2) {
         display: block;
@@ -84,6 +85,7 @@
       &:first-of-type, &:last-of-type {
         .lb;
         max-width: 50%;
+        transition: color 300ms linear;
       }
       &:first-of-type {
         text-align: left;
@@ -93,6 +95,13 @@
         right: 0;
         text-align: right;
       }
+      //
+      @container (width<11rem){
+        &:first-of-type, &:last-of-type {
+          color: #FFFFFF00;
+        }
+      }
+      //
     }
   }
 }

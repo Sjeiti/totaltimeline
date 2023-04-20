@@ -28,16 +28,12 @@ create(
   </label>
 	<input type="radio" name="lock" class="visuallyhidden" id="lockNone" />
 	<div class="range">
-    <div class="before"></div>
 		<time></time>
 		<time></time>
 		<time></time>
-    <div class="after"></div>
 	</div>
 </div>`)
       const elmRange = elmSpan.querySelector('.range')
-      const elmBefore = elmRange.querySelector('.before')
-      const elmAfter = elmRange.querySelector('.after')
       const rangeStyle = elmRange.style
       const [elmTimeFrom,elmTime,elmTimeTo] = elmRange.querySelectorAll('time')
 
@@ -141,10 +137,6 @@ create(
           ,left: getPercentage(1-currentRange.start.ago/span.duration)
           ,backgroundImage: view.rangeGradient
         })
-        //
-        elmBefore.style.backgroundColor = view.colorFirst
-        elmAfter.style.backgroundColor = view.colorLast
-        //
         elmTime.textContent = duration(currentRange.duration,2)
         elmTimeFrom.textContent = currentRange.start.toString()
         elmTimeTo.textContent = currentRange.end.toString()

@@ -60,6 +60,7 @@ create(
       element.appendChild(elements)
       onResize()
       onRangeChange()
+      requestAnimationFrame(moveOrSetCurrentRange.bind(this,0))
 
       /**
        * Handle resize Signal

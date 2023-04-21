@@ -20,11 +20,13 @@
       background-color: inherit;
   }
   .now {
-      width: 1rem;
-      transform: translateX(-0.5rem) scaleX(0.5);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M14-1.078L16,0c8,8,8,8,0,16c-8,8-8,8,0,16l1,1' stroke='%239CFFEF' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+      --size-now: 1rem;
+      --size-now-h: calc(var(--size-now)/2);
+      width: var(--size-now);
+      transform: translateX(calc(var(--size-now)*-0.5)) scaleX(0.5);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M14-1.078L16,0c8,8,8,8,0,16c-8,8-8,8,0,16l1,1' stroke='%23FFA' stroke-width='3' fill='none'/%3E%3C/svg%3E");
       background-repeat: repeat-y;
-      background-size: 1rem 1rem;
+      background-size: var(--size-now) var(--size-now);
       background-color: transparent;
       color: #9cffef;
   }

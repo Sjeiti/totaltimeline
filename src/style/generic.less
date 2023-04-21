@@ -65,17 +65,15 @@ ul.list {
   padding-left: 20px;
 }
 
-input {
-  &[type=text] {
-    padding: 0 .8rem;
-    border: 0;
-    background-color: var(--color-back);
-    color: var(--color-fore);
-    box-shadow: 1px 0 0 var(--color-mid) inset, -1px 0 0  var(--color-mid) inset;
-    line-height: @headerHeight;
-    transition: box-shadow;
-    &:focus { outline: none; }
-  }
+select, input {
+  padding: 0 .8rem;
+  border: 0;
+  background-color: var(--color-back);
+  color: var(--color-fore);
+  box-shadow: 1px 0 0 var(--color-mid) inset, -1px 0 0  var(--color-mid) inset;
+  line-height: @headerHeight;
+  transition: box-shadow;
+  &:focus { outline: none; }
   &[type=checkbox] {
     background-color: var(--color-back);
     color: var(--color-anchor);

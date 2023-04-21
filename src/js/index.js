@@ -10,7 +10,7 @@ import './view/timeline'
 import './view/content'
 import './view/config'
 import './view/icon'
-import './api'
+import './cms'
 
 import './collections/events'
 import './collections/periods'

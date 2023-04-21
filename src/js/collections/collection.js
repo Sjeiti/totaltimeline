@@ -50,8 +50,10 @@ const collectionViewInstancePrototype = Object.assign({
   init(slug,dataFileName,callback){
     this.wrapper.classList.add(slug)
     this.wrapper.addEventListener('click', this._onWrapperClick, false)
-    this.dataLoaded.addOnce(this._onDataLoaded.bind(this))
-    dataFileName&&fetchFile(dataFileName).then(callback.bind(this))||callback.call(this)
+
+    const onDataLoaded = this._onDataLoaded.bind(this, callback.bind(this))
+    dataFileName&&fetchFile(dataFileName).then(onDataLoaded)||onDataLoaded()
+
     this._setVisibility(this._hidden)
     return this
   }
@@ -62,8 +64,10 @@ const collectionViewInstancePrototype = Object.assign({
   ,render(range){
     this.isDataLoaded&&this._render.call(this,range)
   }
-  ,_onDataLoaded(){
+  ,_onDataLoaded(callback, data){
     this.isDataLoaded = true
+    callback(data)
+    this.dataLoaded.dispatch(this)
   }
   ,_populateElements(elements){
     Array.from(this.wrapper.children).forEach(elm=>elements.includes(elm)||this.wrapper.removeChild(elm))
@@ -107,8 +111,32 @@ export function collection(slug,dataFileName,callback,render){
     ,name: {value:slug}
     ,wrapper: {value:document.createElement('div')}
     ,fragment: {value:document.createDocumentFragment()}
-    ,dataLoaded: {value:new Signal()}
+    ,dataLoaded: {value:getSignal()}
+    // ,dataLoaded: {value:new Signal()}
     ,isDataLoaded: {value:false,writable:true}
     ,_render: {value:render}
   })).init(slug,dataFileName,callback)
 }
+
+
+function getSignal() {
+  const signal = new Signal()
+  const dispatchedData = []
+  return {
+    ...signal
+    , dispatch: (...data)=>{
+      dispatchedData.push(...data)
+      return signal.dispatch(...data)
+    }
+    , add: cb=>{
+      dispatchedData.length&&cb(...dispatchedData)
+      return signal.add(cb)
+    }
+    , addOnce: cb=>{
+      dispatchedData.length&&cb(...dispatchedData)
+      return signal.addOnce(cb)
+    }
+  }
+}
+
+getSignal()

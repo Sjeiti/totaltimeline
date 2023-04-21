@@ -39,7 +39,6 @@ collection(
         ))
       }
     })
-    this.dataLoaded.dispatch(this)
   }
   ,function(range){
     const rangeEnd = range.end.ago

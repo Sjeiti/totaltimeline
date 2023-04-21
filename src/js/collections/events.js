@@ -35,7 +35,7 @@ export const events = collection(
     this.sort((eventA, eventB)=> {
       return eventA.moment.ago>eventB.moment.ago?-1:1
     })
-    this.dataLoaded.dispatch(this)
+    // this.dataLoaded.dispatch(this)
   }
   ,function(range){
     const rangeStart = range.start.ago

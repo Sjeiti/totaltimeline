@@ -1,4 +1,3 @@
-
 import {editEvent,newEvent} from './model'
 import {stringToElement} from './util'
 import {postForm,del} from './fetchProxy'
@@ -11,44 +10,63 @@ import {parentQuerySelector} from "./utils/html"
 import {ENV} from './config'
 
 const noop = ()=>{}
-const eventKeys = ['ago','since','year','accuracy','name','exclude','importance','icon','category','tags','wikimediakey','explanation','wikimedia','image','thumb','imagename','imageinfo','wikijson','links','example','remark']
-const eventLists = { category: [], icon: [] }
+const eventKeys = {
+  ago:           {type: 'number'}
+  ,since:        {type: 'number'}
+  ,year:         {type: 'number'}
+  ,accuracy:     {type: 'text'}
+  ,name:         {type: 'text'}
+  ,exclude:      {type: 'text'}
+  ,importance:   {type: 'text'}
+  ,icon:         {type: 'select', options:[]}
+  ,category:     {type: 'select', options:[]}
+  ,tags:         {type: 'text'}
+  ,wikimediakey: {type: 'text'}
+  ,explanation:  {type: 'text'}
+  ,wikimedia:    {type: 'text'}
+  ,image:        {type: 'text'}
+  ,thumb:        {type: 'text'}
+  ,imagename:    {type: 'text'}
+  ,imageinfo:    {type: 'text'}
+  ,wikijson:     {type: 'text'}
+  ,links:        {type: 'text'}
+  ,example:      {type: 'text'}
+  ,remark:       {type: 'text'}
+}
 
 const initString = s=>initComponents(stringToElement(s))
 
 ENV.development&&fetch('/api')
   .then(response=>response.json(),noop)
-  .then(data=>data.success&&initApi(),noop)
+  // .then(data=>new Promise(resolve=>setTimeout(resolve.bind(null, data),5000)))
+  .then(data=>data.success&&initCMS(),noop)
 
-function initApi(){
+function initCMS(){
   editEvent.add(onEditEvent)
   newEvent.add(onNewEvent)
   // get list of available icons
   Array.from(document.styleSheets).forEach(sheet=>{
     Array.from(sheet.cssRules).forEach(rule=>{
       const match = rule.selectorText&&rule.selectorText.match(/^\.event\.icon-([a-z0-9\-]+)$/)
-      match && eventLists.icon.push(match[1])
+      match && eventKeys.icon.options.push(match[1])
     })
   })
   // category
   events.dataLoaded.add(()=>{
-    events.forEach(event=>{
-      const category = event.entry.category
-      eventLists.category.indexOf(category)===-1&&eventLists.category.push(category)
-    })
+    eventKeys.category.options = [...new Set(events.map(event=>event.entry.category).filter(cat=>cat))]
   })
 }
 
 function onEditEvent(event){
-  const inputs = []
-  eventKeys.forEach(prop=>{
-    let list
-    if (eventLists.hasOwnProperty(prop)) {
-      list = `<datalist id="${prop}list">${eventLists[prop].map(value=>`<option value="${value}" />`).join('')}</datalist>`
-    }
-    const value = (event.entry[prop]?.toString()||'').replace(/(["<>\n])/g,'\\$1')||''
-    inputs.push(`<label><span>${prop}</span><input type="text" name="${prop}" value="${value}" ${list&&`list="${prop}list"`||''} />${list&&list||''}</label>`)
+  const inputs = Object.entries(eventKeys).map(entry=>{
+    const [name, {type, options}] = entry
+    const value = (event.entry[name]?.toString()||'').replace(/(["<>\n])/g,'\\$1')||''
+    return `<label>
+      <span>${name}</span>
+      ${getInput(name, value, type, options)}
+    </label>`
   })
+  /*<input type="${type}" name="${name}" value="${value}" ${list&&`list="${name}list"`||''} />${list&&list||''}*/
   const element = initString(`<div class="modal"><div class="modal-content">
   <button class="btn-icon float-right" data-close><svg data-icon="cross"></svg></button>
   <h4>Edit event</h4>
@@ -85,6 +103,12 @@ function onClick(element,e){
     ||button.hasAttribute('data-new')&&onNewEvent()
     ||button.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
   }
+}
+
+function getInput(name, value, type, options=[]){
+  return type==='select'
+  &&`<select name="${name}" value="${value}">${options.map(option=>`<option value="${option}" ${option===value?'selected':''}>${option}</option>`).join('')}</select>`
+  ||`<input type="${type}" name="${name}" value="${value}" />`
 }
 
 function reload(){

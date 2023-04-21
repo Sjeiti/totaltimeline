@@ -11,7 +11,10 @@ import {className} from '../utils/html'
 const {selected} = className
 
 const proto = {
-  toString(){return '[event \''+this.info.name+'\', '+this.moment.value+' '+this.moment.type+']'}
+  toString(){
+    // console.log('this',this) // todo: remove log
+    return '[event \''+this.info.name+'\', '+this.moment.value+' '+this.moment.type.toString()+']'
+  }
   ,inside(is){
     // if (!is&&this.element.classList.contains(selected)) {
     if (!is&&this.selected) {

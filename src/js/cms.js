@@ -22,8 +22,8 @@ const eventKeys = {
   ,category:     {type: 'select', options:[]}
   ,tags:         {type: 'text'}
   ,wikimediakey: {type: 'text'}
-  ,explanation:  {type: 'text'}
   ,wikimedia:    {type: 'text'}
+  ,explanation:  {type: 'text'}
   ,image:        {type: 'text'}
   ,thumb:        {type: 'text'}
   ,imagename:    {type: 'text'}
@@ -64,6 +64,7 @@ function onEditEvent(event){
     return `<label>
       <span>${name}</span>
       ${getInput(name, value, type, options)}
+      ${name==='wikimedia'&&'<button className="btn float-right" type="button" data-wikimedia-reload>r</button>'||''}
     </label>`
   })
   /*<input type="${type}" name="${name}" value="${value}" ${list&&`list="${name}list"`||''} />${list&&list||''}*/
@@ -84,6 +85,7 @@ function onEditEvent(event){
   document.body.appendChild(element)
   element.querySelector('form').addEventListener('submit',onSubmit)
   element.addEventListener('click',onClick.bind(null,element))
+  element.querySelector('[data-wikimedia-reload]').addEventListener('click',onReloadWikiMedia)
 }
 
 function onSubmit(e){
@@ -103,6 +105,10 @@ function onClick(element,e){
     ||button.hasAttribute('data-new')&&onNewEvent()
     ||button.hasAttribute('data-delete')&&deleteEvent(target.form.action,event)
   }
+}
+
+function onReloadWikiMedia(){
+  console.log('onReloadWikiMedia',document.querySelector('[name=wikimediakey]').value) // todo: remove log
 }
 
 function getInput(name, value, type, options=[]){

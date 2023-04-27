@@ -109,7 +109,17 @@ function onClick(element,e){
 
 function onReloadWikiMedia(){
   console.log('onReloadWikiMedia',document.querySelector('[name=wikimediakey]').value) // todo: remove log
+  fetch('https://en.wikipedia.org/wiki/Formation_and_evolution_of_the_Solar_System')
+    .then(res=>{
+      console.log('onReloadWikiMedia response',res) // todo: remove log
+    })
 }
+
+// async function onReloadWikiMedia(){
+//   console.log('onReloadWikiMedia',document.querySelector('[name=wikimediakey]').value) // todo: remove log
+//   const response = await fetch('https://en.wikipedia.org/wiki/Formation_and_evolution_of_the_Solar_System')
+//   console.log('response', response) // todo: remove log
+// }
 
 function getInput(name, value, type, options=[]){
   return type==='select'

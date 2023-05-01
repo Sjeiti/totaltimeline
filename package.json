@@ -13,8 +13,16 @@
     "webpack": "npx webpack --config webpack.config.js",
     "lint": "eslint src/js/**/*.js",
     "lint:fix": "eslint src/js/**/*.js --fix",
-    "serve": "nodemon -x \"task/serve dist 8385\"",
+
+
+    "serveE": "node task/serve --root dist --port 8385",
+    "serve": "nodemon task/serve --root dist --port 8385",
+
+    "servex": "nodemon server/index.ts --root public --port 5137",
+    "serve__": "nodemon -x \"task/serve dist 8385\"",
     "serve_": "nodemon server/index.ts --root dist --port 8385",
+
+
     "json": "node ./task/wiki ./src/static/events.json",
     "clean": "rimraf dist",
     "_icomoon": "node task/icomoon",

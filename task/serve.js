@@ -30,6 +30,8 @@ express()
   .post('/api/events', onPostEvent)
   .delete('/api/events', onDeleteEvent)
   .get('/api/events/importance', onSetImportance)
+  .get('/api/wikimedia', onGetWiki)
+  .get('/api/wikimedia/:key', onGetWiki)
   .get('/*', (req, res) => res.sendFile(path.join(__dirname + '/../dist/index.html')))
   .use(bodyParser.json())
   .use('/api', router)
@@ -183,6 +185,17 @@ function calculateImportance(events) {
     const timeframe = getAgo(eventP) - getAgo(eventN)
     event.importance = timeframe // / 13798000000
   }
+}
+
+function onGetWiki(req,res){
+  //const key = req.query.key
+  const key = req.params.key
+  console.log('onGetWiki',key)
+  fetch('https://en.wikipedia.org/wiki/'+key)
+    .then(response=>{
+
+    })
+  res.json({key})
 }
 
 function getAgo(event){

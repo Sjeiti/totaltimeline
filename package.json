@@ -2,7 +2,7 @@
   "name": "totaltimeline",
   "description": "Total Timeline",
   "author": "Ron Valstar",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "repository": "https://xp-dev.com/git/totaltimeline",
   "scripts": {
     "start": "run-p build serve",

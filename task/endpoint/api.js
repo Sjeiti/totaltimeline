@@ -8,7 +8,6 @@ module.exports = {
 
     .get('/events/importance', onSetImportance)
 
-    .get('/wikimedia', onGetWiki)
     .get('/wikimedia/:page?/:section?/:index?', onGetWiki)
 }
 
@@ -27,72 +26,39 @@ const err = res=>(a)=>res.json({error: true,a})
 
 //
 
+/**
+ * Returns true if API is present
+ * @param req {Request}
+ * @param res {Response}
+ */
 function getApi(req, res) {
   res.json({success: true})
 }
 
-
-function getEvents(req, res){
+/**
+ * Return all events
+ * @param req {Request}
+ * @param res {Response}
+ */
+async function getEvents(req, res){
   return read(jsonSrc)
     .then(s=>res.json(JSON.parse(s)))
     .catch(err(res))
 }
 
-
 /**
  * Post event to save in json
- * @param request
- * @param response
+ * @param req {Request}
+ * @param res {Response}
  */
-function onDeleteEvent(request, response) {
-  const query = request.query
-  const index = parseInt(query.index, 10)
-  /*console.log('request'
-    ,JSON.stringify(request.params)
-    ,JSON.stringify(request.body)
-    ,JSON.stringify(request.query)
-  );*/ // todo: remove log
-  read(jsonSrc)
-    .then(JSON.parse)
-    .then(data => {
-      if (index >= 0 && index < data.length) {
-        data.splice(index, 1)
-      } else {
-        throw new Error(`Index ${index} out of bounds`)
-      }
-      return Promise.all([
-        save(jsonDist, JSON.stringify(data))
-        , save(jsonSrc, JSON.stringify(data))
-      ])
-    })
-    .then(
-      () => response.status(200).json({success: true})
-      , err => response.status(400).json({error: err})
-    )
-}
-
-/**
- * Result event
- * @typedef {object} ResultEvent
- * @param {string} wikimedia -
- * @param {string} thumb -
- * @param {string} imagename -
- * @param {string} imageinfo -
- */
-
-/**
- * Post event to save in json
- * @param request
- * @param response
- */
-function onPostEvent(request, response) {
-  const body = request.body
+function onPostEvent(req, res) {
+  const body = req.body
   const index = parseInt(body.index, 10)
   //
-  /*console.log('request'
-    ,JSON.stringify(request.params)
-    ,JSON.stringify(request.body)
-    ,JSON.stringify(request.query)
+  /*console.log('req'
+    ,JSON.stringify(req.params)
+    ,JSON.stringify(req.body)
+    ,JSON.stringify(req.query)
   );*/ // todo: remove log
   //
   const hasTime = isValidNumber(body.ago) || isValidNumber(body.since) || isValidNumber(body.year)
@@ -120,7 +86,7 @@ function onPostEvent(request, response) {
         })
     ])
       .then(() => saveJsonEntry(resultEvent, index))
-      .then(() => response.status(200).json(resultEvent), warn)
+      .then(() => res.status(200).json(resultEvent), warn)
 
   } else {
     const errors = []
@@ -128,9 +94,103 @@ function onPostEvent(request, response) {
     hasName || errors.push('Event has no name.')
     hasWiki || errors.push('Event has no wiki.')
     hasImage || errors.push('Event has no image.')
-    response.status(400).json({error: errors.join(' ')})
+    res.status(400).json({error: errors.join(' ')})
   }
 }
+
+/**
+ * Delete an event
+ * @param req {Request}
+ * @param res {Response}
+ */
+function onDeleteEvent(req, res) {
+  const query = req.query
+  const index = parseInt(query.index, 10)
+  /*console.log('req'
+    ,JSON.stringify(req.params)
+    ,JSON.stringify(req.body)
+    ,JSON.stringify(req.query)
+  );*/ // todo: remove log
+  read(jsonSrc)
+    .then(JSON.parse)
+    .then(data => {
+      if (index >= 0 && index < data.length) {
+        data.splice(index, 1)
+      } else {
+        throw new Error(`Index ${index} out of bounds`)
+      }
+      return Promise.all([
+        save(jsonDist, JSON.stringify(data))
+        , save(jsonSrc, JSON.stringify(data))
+      ])
+    })
+    .then(
+      () => res.status(200).json({success: true})
+      , err => res.status(400).json({error: err})
+    )
+}
+
+/**
+ * Set the importance of an event
+ * @param req {Request}
+ * @param res {Response}
+ */
+function onSetImportance(req, res){
+  read(jsonSrc)
+    .then(JSON.parse)
+    .then(data => {
+      calculateImportance(data)
+      saveSrcAndDist(data)
+      res.json(data)
+    })
+}
+
+/**
+ * Retreive article text content from Wikipedia
+ * @param req {Request}
+ * @param res {Response}
+ * @return {Promise<void>}
+ */
+async function onGetWiki(req,res){
+  const {page, section, index} = req.params
+  console.log('onGetWiki', page, ':', section, ':', index)
+  try {
+    const response = await fetch('http://en.wikipedia.org/w/api.php?action=parse&format=json&page='+page)
+    const responseJSON = await response.json()
+    const {parse:{sections:_sections, text:{'*':body}}} = responseJSON
+    const sections = _sections.map(section=>section.linkAnchor)
+
+    const dom = new JSDOM(`<!DOCTYPE html>${body}`)
+    const {window: {document}} = dom
+
+    const firstParagraph = document.querySelector('.mw-parser-output>p')
+
+    // (h3>span#section)+div+p+p ...
+    const {parentNode} = document.querySelector(`[id="${section}"]`)||{}
+    const paragraphsFrom = parentNode||firstParagraph
+    const paragraphsAll = paragraphsFrom&&nextQuerySelector(paragraphsFrom, ':not(h3)')
+      .filter(elm=>elm.matches('p'))
+      .map(elm=>{
+        elm.querySelectorAll('.reference').forEach(ref=>ref.remove())
+        return elm.textContent.replace(/\[citation needed]/g,'')
+      })
+      ||[]
+
+    const paragraphs = index===undefined?paragraphsAll:index
+      .split(/,/g)
+      .map(s=>paragraphsAll[parseInt(s,10)])
+
+    res.json({
+      sections
+      , paragraphs
+    })
+  } catch (error) {
+    console.error('error',error)
+    res.json({error})
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 
 function saveJsonEntry(entry, index) {
   read(jsonSrc)
@@ -178,15 +238,6 @@ function saveSrcAndDist(data){
   ])
 }
 
-function onSetImportance(req, res){
-  read(jsonSrc)
-    .then(JSON.parse)
-    .then(data => {
-      calculateImportance(data)
-      saveSrcAndDist(data)
-      res.json(data)
-    })
-}
 function calculateImportance(events) {
   for (let i=1,l=events.length-1;i<l;i++) {
     const event = events[i]
@@ -199,50 +250,6 @@ function calculateImportance(events) {
 
 // const domutils = require('domutils')
 // console.log('domutils',domutils) // todo: remove log
-
-async function onGetWiki(req,res){
-  const {page, section, index} = req.params
-  console.log('onGetWiki', page, ':', section, ':', index)
-  try {
-    const response = await fetch('http://en.wikipedia.org/w/api.php?action=parse&format=json&page='+page)
-    const responseJSON = await response.json()
-    const {parse:{sections:_sections, text:{'*':body}}} = responseJSON
-    const sections = _sections.map(section=>section.linkAnchor)
-
-    const dom = new JSDOM(`<!DOCTYPE html>${body}`)
-    const {window: {document}} = dom
-
-    const firstParagraph = document.querySelector('.mw-parser-output>p')
-    // const ids = Array.from(document.querySelectorAll('[id]'))
-    //   .map(elm=>elm.getAttribute('id'))
-    //   .filter(id=>!/^cite/i.test(id))
-    //   .join('\n')
-    // console.log('ids',ids) // todo: remove log
-
-    // (h3>span#section)+div+p+p ...
-    const {parentNode} = document.querySelector(`[id="${section}"]`)||{}
-    const paragraphsFrom = parentNode||firstParagraph
-    const paragraphsAll = paragraphsFrom&&nextQuerySelector(paragraphsFrom, ':not(h3)')
-      .filter(elm=>elm.matches('p'))
-      .map(elm=>{
-        elm.querySelectorAll('.reference').forEach(ref=>ref.remove())
-        return elm.textContent
-      })
-      ||[]
-
-    const paragraphs = index===undefined?paragraphsAll:index
-      .split(/,/g)
-      .map(s=>paragraphsAll[parseInt(s,10)])
-
-    res.json({
-      sections
-      , paragraphs
-    })
-  } catch (error) {
-    console.error('error',error)
-    res.json({error})
-  }
-}
 
 function nextQuerySelector(subject, query, result=[]){
   const next = subject.nextElementSibling

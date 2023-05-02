@@ -65,13 +65,13 @@ ul.list {
   padding-left: 20px;
 }
 
-select, input {
-  padding: 0 .8rem;
+select, input, textarea {
+  padding: 0.25rem 0.8rem;
   border: 0;
   background-color: var(--color-back);
   color: var(--color-fore);
   box-shadow: 1px 0 0 var(--color-mid) inset, -1px 0 0  var(--color-mid) inset;
-  line-height: @headerHeight;
+  line-height: 1.25rem;
   transition: box-shadow;
   &:focus { outline: none; }
   &[type=checkbox] {
@@ -98,7 +98,7 @@ select, input {
 }
 
 .float-right { float: right; }
-
+.vertical-align-top { vertical-align: top; }
 
 [data-before]:before {
   content: attr(data-before);

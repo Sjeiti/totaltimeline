@@ -3,8 +3,13 @@
 const {program} = require('commander')
 const {api} = require('./endpoint/api.js')
 const express     = require('express')
+const bodyParser = require('body-parser')
 const serveStatic = require('serve-static')
 
+
+/**
+ * node task/serve --root dist --port 8383
+ */
 const {root, port} = program
   .option('--port [port]', 'the port', process.env.PORT||'8183')
   .option('--root [root]', 'the root directory', 'dist')
@@ -12,18 +17,23 @@ const {root, port} = program
   .opts()
 
 express()
-  .use('/api', api)
   .use(serveStatic(`./${root}/`))
-  .get('*', (req, res) => {
-    res.sendFile('index.html', {root: `${process.cwd()}/${root}/`})
-  })
+  .use(bodyParser.urlencoded({extended: true}))
+  .use(bodyParser.json())
+  .use('/api', api)
+  .get('*', getAll)
   .listen(port)
 
 console.log('http://localhost:'+port)
 
 /**
- * node task/serve dist 8383
+ * All other than `api` serves index
+ * @param req
+ * @param res
  */
+function getAll(req, res){
+  res.sendFile('index.html', {root: `${process.cwd()}/${root}/`})
+}
 
 // const express = require('express')
 // const bodyParser = require('body-parser')

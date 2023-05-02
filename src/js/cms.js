@@ -22,7 +22,7 @@ const eventKeys = {
   ,category:     {type: 'select', options:[]}
   ,tags:         {type: 'text'}
   ,wikimediakey: {type: 'text'}
-  ,wikimedia:    {type: 'text'}
+  ,wikimedia:    {type: 'textarea'}
   ,explanation:  {type: 'text'}
   ,image:        {type: 'text'}
   ,thumb:        {type: 'text'}
@@ -64,7 +64,7 @@ function onEditEvent(event){
     return `<label>
       <span>${name}</span>
       ${getInput(name, value, type, options)}
-      ${name==='wikimedia'&&'<button className="btn float-right" type="button" data-wikimedia-reload>r</button>'||''}
+      ${name==='wikimedia'&&'<button className="btn float-right" type="button" data-wikimedia-reload><svg class="vertical-align-top" data-icon="refresh"></svg></button>'||''}
     </label>`
   })
   /*<input type="${type}" name="${name}" value="${value}" ${list&&`list="${name}list"`||''} />${list&&list||''}*/
@@ -107,13 +107,18 @@ function onClick(element,e){
   }
 }
 
-function onReloadWikiMedia(){
+async function onReloadWikiMedia(){
   const wikiMediaKey = document.querySelector('[name=wikimediakey]').value
+  const wikiMedia = document.querySelector('[name=wikimedia]')
   console.log('onReloadWikiMedia',wikiMediaKey) // todo: remove log
-  fetch('/api/wikimedia/Formation_and_evolution_of_the_Solar_System')
-    .then(res=>{
-      console.log('onReloadWikiMedia response',res) // todo: remove log
-    })
+  const response = await fetch('/api/wikimedia/'+wikiMediaKey)
+  const responseValue = await response.json()
+  if (!responseValue.error) {
+    wikiMedia.value = responseValue.paragraphs.map(p=>`<p>${p}</p>`).join('')
+  } else {
+    console.error(responseValue)
+  }
+  console.log('onReloadWikiMedia response',responseValue) // todo: remove log
   /*fetch('https://en.wikipedia.org/wiki/Formation_and_evolution_of_the_Solar_System')
     .then(res=>{
       console.log('onReloadWikiMedia response',res) // todo: remove log
@@ -127,8 +132,8 @@ function onReloadWikiMedia(){
 // }
 
 function getInput(name, value, type, options=[]){
-  return type==='select'
-  &&`<select name="${name}" value="${value}">${options.map(option=>`<option value="${option}" ${option===value?'selected':''}>${option}</option>`).join('')}</select>`
+  return type==='select'&&`<select name="${name}" value="${value}">${options.map(option=>`<option value="${option}" ${option===value?'selected':''}>${option}</option>`).join('')}</select>`
+  ||type==='textarea'&&`<textarea name="${name}">${value}</textarea>`
   ||`<input type="${type}" name="${name}" value="${value}" />`
 }
 

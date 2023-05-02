@@ -9,10 +9,12 @@ module.exports = {
     .get('/events/importance', onSetImportance)
 
     .get('/wikimedia', onGetWiki)
-    .get('/wikimedia/:key', onGetWiki)
+    .get('/wikimedia/:page?/:section?/:index?', onGetWiki)
 }
 
 //
+
+const {JSDOM} = require('jsdom')
 
 const {read, save, warn} = require('../utils')
 
@@ -195,21 +197,59 @@ function calculateImportance(events) {
   }
 }
 
+// const domutils = require('domutils')
+// console.log('domutils',domutils) // todo: remove log
+
 async function onGetWiki(req,res){
-  //const key = req.query.key
-  const key = req.params.key
-  console.log('onGetWiki',key)
+  const {page, section, index} = req.params
+  console.log('onGetWiki', page, ':', section, ':', index)
   try {
-    const response = await fetch('https://en.wikipedia.org/wiki/'+key)
-    console.log('onGetWiki',response)
-    res.json(response)
+    const response = await fetch('http://en.wikipedia.org/w/api.php?action=parse&format=json&page='+page)
+    const responseJSON = await response.json()
+    const {parse:{sections:_sections, text:{'*':body}}} = responseJSON
+    const sections = _sections.map(section=>section.linkAnchor)
+
+    const dom = new JSDOM(`<!DOCTYPE html>${body}`)
+    const {window: {document}} = dom
+
+    const firstParagraph = document.querySelector('.mw-parser-output>p')
+    // const ids = Array.from(document.querySelectorAll('[id]'))
+    //   .map(elm=>elm.getAttribute('id'))
+    //   .filter(id=>!/^cite/i.test(id))
+    //   .join('\n')
+    // console.log('ids',ids) // todo: remove log
+
+    // (h3>span#section)+div+p+p ...
+    const {parentNode} = document.querySelector(`[id="${section}"]`)||{}
+    const paragraphsFrom = parentNode||firstParagraph
+    const paragraphsAll = paragraphsFrom&&nextQuerySelector(paragraphsFrom, ':not(h3)')
+      .filter(elm=>elm.matches('p'))
+      .map(elm=>{
+        elm.querySelectorAll('.reference').forEach(ref=>ref.remove())
+        return elm.textContent
+      })
+      ||[]
+
+    const paragraphs = index===undefined?paragraphsAll:index
+      .split(/,/g)
+      .map(s=>paragraphsAll[parseInt(s,10)])
+
+    res.json({
+      sections
+      , paragraphs
+    })
   } catch (error) {
+    console.error('error',error)
     res.json({error})
   }
-  // .then(response=>{
-  //
-  // })
-  //res.json({key})
+}
+
+function nextQuerySelector(subject, query, result=[]){
+  const next = subject.nextElementSibling
+  next?.matches(query)
+    &&result.push(next)
+    &&nextQuerySelector(next, query, result)
+  return result
 }
 
 function getAgo(event){

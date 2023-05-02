@@ -195,15 +195,21 @@ function calculateImportance(events) {
   }
 }
 
-function onGetWiki(req,res){
+async function onGetWiki(req,res){
   //const key = req.query.key
   const key = req.params.key
   console.log('onGetWiki',key)
-  fetch('https://en.wikipedia.org/wiki/'+key)
+  try {
+    const response = await fetch('https://en.wikipedia.org/wiki/'+key)
+    console.log('onGetWiki',response)
+    res.json(response)
+  } catch (error) {
+    res.json({error})
+  }
   // .then(response=>{
   //
   // })
-  res.json({key})
+  //res.json({key})
 }
 
 function getAgo(event){
